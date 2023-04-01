@@ -1,0 +1,1 @@
+export {default as vwMain} from '../views/Vw-Main.vue';
