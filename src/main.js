@@ -3,7 +3,7 @@ import './style.css'
 import App from './App.vue'
 
 //Router
-import { router } from '../routes'
+import { router } from './routes'
 
 //Vuetify
 import 'vuetify/styles'
@@ -16,4 +16,4 @@ const vuetify = createVuetify({
     directives,
   })
 
-createApp(App).use(router).use(vuetify).mount('#app')
+createApp(App).use(router).use(vuetify).use(MdiSvg).mount('#app')

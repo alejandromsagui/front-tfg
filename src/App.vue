@@ -6,7 +6,7 @@
 
 <script setup>
 
-import { vwMain } from '../views';
+import { vwMain } from './views';
 
 </script>
 
