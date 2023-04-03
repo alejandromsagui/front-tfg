@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <vwMain />
+    <CHeader />
   </v-app>
 </template>
 
 <script setup>
 
-import { vwMain } from './views';
+import { CHeader } from './components';
 
 </script>
 

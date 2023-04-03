@@ -1,0 +1,1 @@
+export { default as CHeader } from '../components/C-Header.vue'
