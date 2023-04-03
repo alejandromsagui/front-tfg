@@ -8,4 +8,6 @@ import { router } from './routes'
 //Vuetify
 import vuetify from './plugins/vuetify'
 
+import './style.css'
+
 createApp(App).use(router).use(vuetify).mount('#app')
