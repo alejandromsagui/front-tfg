@@ -1,39 +1,28 @@
 <template>
-<div class="card-center">
-    <div class="card">
-  <v-card
-    max-width="400"
- >
-    <v-img
-      class="align-end text-white"
-      height="200"
-      src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-      cover
-    >
-      <v-card-title>Top 10 Australian beaches</v-card-title>
-    </v-img>
+  <div class="background">
+    <div class="blur"></div>
+    <div class="card-center">
+      <div class="card">
+        <v-card width="800" height="400">
+          <div class="div1">
+              <img src="../assets/images/gif.gif" alt="">
+          </div>
+          <div class="div2">
+            <v-card-text>
+              <v-form>
+                  <v-text-field label="Usuario">
 
-    <v-card-subtitle class="pt-4">
-      Number 10
-    </v-card-subtitle>
+                  </v-text-field>
+                  <v-text-field label="Contraseña" type="password">
 
-    <v-card-text>
-      <div>Whitehaven Beach</div>
-
-      <div>Whitsunday Island, Whitsunday Islands</div>
-    </v-card-text>
-
-    <v-card-actions>
-      <v-btn color="orange">
-        Share
-      </v-btn>
-
-      <v-btn color="orange">
-        Explore
-      </v-btn>
-    </v-card-actions>
-  </v-card>
-  </div>
+                  </v-text-field>
+              </v-form>
+            </v-card-text>
+            <v-btn color="orange">Iniciar sesión</v-btn>
+          </div>
+        </v-card>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -42,18 +31,51 @@
 </script>
 
 <style scoped>
-/* .card{
-    position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  margin: auto;
-} */
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+*{
+    font-family: 'Roboto', sans-serif;
+}
+.div1 img{
+  width: 50%;
+  float:left;  
+  background-image: url();
+  width: 450px;
+  height: 400px;
+  position: fixed;
+}   
+.div2{
+  float: right;
+  width: 50%;
+  width: 300px;
+  margin-top: 70px;
+  align-items: center;
+}
 .card-center{
-    display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 50px;
+}
+.background{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
+.blur{
+background-image: url(../assets/images/test.png);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  filter: blur(2px);
+  transform: scale(1.1); 
+
 }
 </style>
