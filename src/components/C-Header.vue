@@ -2,7 +2,7 @@
     <v-app-bar class="app-bar">
     <v-toolbar color="black" density="comfortable" class="toolbar">
       <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
-      <h4 class="logo">Logo</h4>
+      <img src="../assets/images/logo.png" alt="logo" class="logo">
       <v-toolbar-title class="title"
         >Namekians<span>Games</span></v-toolbar-title
       >
@@ -44,8 +44,9 @@
 }
 .logo{
     color: white;
-    width: 140px;
-    margin-left: 10px;
+    width: 80px;
+    margin-left: 20px;
+    height: 65px;
 }
 .items {
   display: none;
