@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { vwMain } from '../views'
+import { vwMain, vwLogin } from '../views'
 
 const routes = [
-    { path: '/', name: 'Home', component: vwMain }
+    { path: '/', name: 'Home', component: vwMain },
+    { path: '/login', name: 'Login', component: vwLogin }
 ]
 
 const router = createRouter({

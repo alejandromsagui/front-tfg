@@ -1,26 +1,24 @@
- <template>
-  <div class="cover">
-    <v-app-bar color="transparent" elevation="0">
-      <img src="../assets/images/logo.png" alt="logo" class="logo" />
+<template>
+     <v-app-bar  color="grey-darken-4">
+    <v-toolbar color="grey-darken-4" density="comfortable" class="toolbar">
+      <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
+      <img src="../assets/images/logo.png" alt="logo" class="logo">
       <v-toolbar-title class="title"
         >Namekians<span>Games</span></v-toolbar-title
       >
       <v-spacer></v-spacer>
       <v-toolbar-items class="items">
-        <v-btn variant="plain" class="link" text>Explorar</v-btn>
-        <v-btn variant="plain" class="link" text>Login</v-btn>
-        <v-btn variant="plain" class="link" text>Registro</v-btn>
-        <v-btn variant="plain" class="link" text>Contacto</v-btn>
+        <v-btn class="link" text>Explorar</v-btn>
+        <v-btn class="link" text>Login</v-btn>
+        <v-btn class="link" text>Registro</v-btn>
+        <v-btn class="link" text>Contacto</v-btn>
       </v-toolbar-items>
+    </v-toolbar>
     </v-app-bar>
-
-  </div>
 </template>
-
 <script setup>
 </script>
-
-<style lang="css" scoped>
+<style scoped>
 * {
   padding: 0;
   margin: 0;
