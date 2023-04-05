@@ -1,31 +1,31 @@
 <template>
   <v-container fluid class="background">
     <div class="background-image"></div>
-    <div class="center">
-      <v-sheet
-        class="d-flex align-center justify-center flex-wrap text-center"
-        elevation="4"
+    <v-sheet
+        class="d-flex align-center justify-center flex-wrap text-center mt-10 ml-12"
+        elevation="8"
         rounded
-        :width="800"
+        color="#F80808"
+        :width="370"
+        height="370"
         style="margin-bottom: 10%"
       >
-        <v-card width="800px" height="400">
-          <v-row align-content="center">
-            <v-col align-self="center" cols="8">
-              <v-img
-                src="../src/assets/images/gif.gif"
-                width="100%"
-                cover
-                height="400"
-              ></v-img>
-            </v-col>
-            <v-col align-self="center" class="my-10" cols="4">
-              <v-form>
+        <v-card width="350px" height="350" elevation="8">
+            <v-card-title id="title">Registro</v-card-title>
+            <v-form id="center-form">
                 <v-text-field
                   clearable
                   label="Usuario"
                   type="text"
                   prepend-icon="fa-solid fa-user"
+                  variant="underlined"
+                  class="input"
+                ></v-text-field>
+                <v-text-field
+                  clearable
+                  label="Email"
+                  type="text"
+                  prepend-icon="fa-solid fa-envelope"
                   variant="underlined"
                   class="input"
                 ></v-text-field>
@@ -39,11 +39,8 @@
                 ></v-text-field>
                 <v-btn color="#F80808" class="mt-5" variant="elevated" id="button">Iniciar sesión</v-btn>
               </v-form>
-            </v-col>
-          </v-row>
         </v-card>
-      </v-sheet>
-    </div>
+    </v-sheet>
   </v-container>
 </template>
 
@@ -57,37 +54,34 @@
   font-family: "Roboto", sans-serif;
 }
 
-.center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.input {
-  width: 230px;
-  margin-right: 20px !important;
-  padding: 3px;
-  color: black !important;
-}
-
 .background {
-  width: 100%;
+  background-image: url(../assets/images/treasure-map.jpg);
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  max-height: 100%;
   height: 100%;
+}
+.background-image{
+  background-color: black;
   position: fixed;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
-}
-
-.background-image {
-  background-image: url(../assets/images/test.png);
-  width: 100%;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-position: center center;
   filter: blur(2px);
   transform: scale(1.1);
+  opacity: 30%;
+}
+#title{
+    font-weight: bold !important;
+}
+#center-form{
+    margin-top: 10px;
+}
+.input{
+    width: 70%;
+    margin: 0 auto;
 }
 #button{
   color: #fff;

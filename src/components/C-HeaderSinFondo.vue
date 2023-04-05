@@ -9,14 +9,24 @@
       <v-spacer></v-spacer>
       <v-toolbar-items class="items">
         <v-btn class="link" text>Explorar</v-btn>
-        <v-btn class="link" text>Login</v-btn>
-        <v-btn class="link" text>Registro</v-btn>
+        <v-btn class="link" text v-on:click="goLogin()">Login</v-btn>
+        <v-btn class="link" text v-on:click="goSignUp()">Registro</v-btn>
         <v-btn class="link" text>Contacto</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     </v-app-bar>
 </template>
 <script setup>
+import { useRouter } from 'vue-router';
+const router = useRouter()
+
+const goLogin = () => {
+  router.push({path:'/login'})
+}
+
+const goSignUp = () => {
+  router.push({path:'/registro'})
+}
 </script>
 <style scoped>
 * {
