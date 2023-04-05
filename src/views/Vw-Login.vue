@@ -1,63 +1,77 @@
 <template>
-  <div class="background">
-    <div class="blur"></div>
-    <div class="card-center">
-      <div class="card">
-        <v-card width="800" height="400">
-          <div class="div1">
-              <img src="../assets/images/gif.gif" alt="">
-          </div>
-          <div class="div2">
-            <v-card-text>
+  <v-container fluid class="background">
+    <div class="background-image"></div>
+    <div class="center">
+      <v-sheet
+        class="d-flex align-center justify-center flex-wrap text-center"
+        elevation="4"
+        rounded
+        :width="800"
+        style="margin-bottom: 10%"
+      >
+        <v-card width="800px" height="400">
+          <v-row align-content="center">
+            <v-col align-self="center" cols="8">
+              <v-img
+                src="../src/assets/images/gif.gif"
+                width="100%"
+                cover
+                height="400"
+              ></v-img>
+            </v-col>
+            <v-col align-self="center" class="my-10" cols="4">
               <v-form>
-                  <v-text-field label="Usuario">
-
-                  </v-text-field>
-                  <v-text-field label="Contraseña" type="password">
-
-                  </v-text-field>
+                <v-text-field
+                  clearable
+                  label="Usuario"
+                  type="text"
+                  prepend-icon="fa-solid fa-user"
+                  variant="underlined"
+                  class="input"
+                ></v-text-field>
+                <v-text-field
+                  clearable
+                  label="Contraseña"
+                  type="password"
+                  prepend-icon="fa-sharp fa-solid fa-key"
+                  variant="underlined"
+                  class="input"
+                ></v-text-field>
+                <v-btn color="#F80808" class="mt-5" variant="elevated" id="button">Iniciar sesión</v-btn>
               </v-form>
-            </v-card-text>
-            <v-btn color="orange">Iniciar sesión</v-btn>
-          </div>
+            </v-col>
+          </v-row>
         </v-card>
-      </div>
+      </v-sheet>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script setup>
-
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
-*{
-    font-family: 'Roboto', sans-serif;
+* {
+  font-family: "Roboto", sans-serif;
 }
-.div1 img{
-  width: 50%;
-  float:left;  
-  background-image: url();
-  width: 450px;
-  height: 400px;
-  position: fixed;
-}   
-.div2{
-  float: right;
-  width: 50%;
-  width: 300px;
-  margin-top: 70px;
-  align-items: center;
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
-.card-center{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 50px;
+.input {
+  width: 230px;
+  margin-right: 20px !important;
+  padding: 3px;
+  color: rgb(248, 8, 8);
+  text-align: center;
 }
-.background{
+
+.background {
   width: 100%;
   height: 100%;
   position: fixed;
@@ -66,8 +80,8 @@
   background-position: center center;
 }
 
-.blur{
-background-image: url(../assets/images/test.png);
+.background-image {
+  background-image: url(../assets/images/test.png);
   width: 100%;
   height: 100%;
   position: fixed;
@@ -75,7 +89,15 @@ background-image: url(../assets/images/test.png);
   background-size: cover;
   background-position: center center;
   filter: blur(2px);
-  transform: scale(1.1); 
-
+  transform: scale(1.1);
+}
+#button{
+  color: #fff;
+  font-weight: bold;
+}
+#button:hover{
+  background-color: #fff !important;
+  color: #F80808;
+  transition: 0.3s;
 }
 </style>
