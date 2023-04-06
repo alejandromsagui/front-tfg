@@ -8,61 +8,95 @@
         rounded
         :width="900"
       >
-      <div class="center2">
-        <v-card width="900px" height="540">
-          <v-row align-content="center">
-            <v-col align-self="center" cols="8">
-              <div class="image-container">
-                <div class="color-overlay">
-                  <div id="center">
-                  <v-card-text class="card-text">¿Te atreves a unirte a nuestra</v-card-text>
-                    <span id="space-word">comunidad</span><span class="card-text">?</span>
+        <div class="center2">
+          <v-card width="900px" height="540">
+            <v-row align-content="center">
+              <v-col align-self="center" cols="8">
+                <div class="image-container">
+                  <div class="color-overlay">
+                    <div id="center">
+                      <v-card-text class="card-text"
+                        >¿Te atreves a unirte a nuestra</v-card-text
+                      >
+                      <span id="space-word">comunidad</span
+                      ><span class="card-text">?</span>
                     </div>
                   </div>
-              <v-img
-                src="../src/assets/images/register.jpg"
-                width="100%"
-                cover
-                height="540"
-                style="margin-bottom: 80px;"
-              ></v-img>
-              </div>
-            </v-col>
-            <v-col align-self="center" class="my-10" cols="4">
-              <div id="form">
-              <v-form>
-                <v-avatar image="../src/assets/images/avatar.jpg" size="80" class="mb-12"></v-avatar>
-                <v-text-field
-                  clearable
-                  label="Usuario"
-                  type="text"
-                  prepend-icon="fa-solid fa-user"
-                  variant="underlined"
-                  class="input"
-                ></v-text-field>
-                <v-text-field
-                  clearable
-                  label="Email"
-                  type="email"
-                  prepend-icon="fa-solid fa-envelope"
-                  variant="underlined"
-                  class="input"
-                ></v-text-field>
-                <v-text-field
-                  clearable
-                  label="Contraseña"
-                  type="password"
-                  prepend-icon="fa-sharp fa-solid fa-key"
-                  variant="underlined"
-                  class="input"
-                ></v-text-field>
-                <v-file-input clearable label="Escoge tu avatar" variant="underlined" class="input"></v-file-input>
-                <v-btn color="#F80808" class="mt-5" variant="elevated" id="button">Registro</v-btn>
-              </v-form>
-              </div>
-            </v-col>
-          </v-row>
-        </v-card>
+                  <v-img
+                    src="../src/assets/images/register.jpg"
+                    width="100%"
+                    cover
+                    height="540"
+                    style="margin-bottom: 80px"
+                  ></v-img>
+                </div>
+              </v-col>
+              <v-col align-self="center" class="my-10" cols="4">
+                <div id="form">
+                  <v-form @submit="onSubmit" @reset="onReset">
+                    <v-avatar
+                      image="../src/assets/images/avatar.jpg"
+                      size="80"
+                      class="mb-12"
+                    ></v-avatar>
+                    <v-text-field
+                      clearable
+                      label="Usuario"
+                      type="text"
+                      prepend-icon="fa-solid fa-user"
+                      variant="underlined"
+                      class="input"
+                      v-model="userForm.user"
+                      :rules="[
+                        val => val && val.length > 0 || 'Este campo es obligatorio',
+                        val => val && val.length > 4 || 'El nombre de usuario debe ser superior a 4 caracteres'
+                      ]"
+                    ></v-text-field>
+                    <v-text-field
+                      clearable
+                      label="Email"
+                      type="email"
+                      prepend-icon="fa-solid fa-envelope"
+                      variant="underlined"
+                      class="input"
+                      v-model="userForm.email"
+                      :rules="[
+                        val => val && val.length > 0 || 'Este campo es obligatorio',
+                        isValidEmail
+                      ]"
+                    ></v-text-field>
+                    <v-text-field
+                      clearable
+                      label="Contraseña"
+                      type="password"
+                      prepend-icon="fa-sharp fa-solid fa-key"
+                      variant="underlined"
+                      class="input"
+                      v-model="userForm.password"
+                      :rules="[
+                        val => val && val.length > 0 || 'Este campo es obligatorio',
+                        val => val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres'
+                      ]"
+                    ></v-text-field>
+                    <v-file-input
+                      clearable
+                      label="Escoge tu avatar"
+                      variant="underlined"
+                      class="input"
+                    ></v-file-input>
+                    <v-btn
+                      color="#F80808"
+                      class="mt-5"
+                      variant="elevated"
+                      id="button"
+                      type="submit"
+                      >Registro</v-btn
+                    >
+                  </v-form>
+                </div>
+              </v-col>
+            </v-row>
+          </v-card>
         </div>
       </v-sheet>
     </div>
@@ -70,6 +104,35 @@
 </template>
 
 <script setup>
+import { ref, defineEmits } from "vue";
+
+const { emit } = defineEmits(["submit"]);
+
+const userForm = ref({
+  user: "",
+  email: "",
+  password: "",
+  avatar: "",
+});
+
+const onSubmit = (event) => {
+  event.preventDefault();
+  console.log(userForm.value);
+};
+
+const onReset = (event) => {
+  userForm.value = {
+    user: "",
+    email: "",
+    password: "",
+    avatar: "",
+  };
+};
+
+const isValidEmail = ( val ) => {
+    const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
+    return emailPattern.test(val) || 'El email no es válido';
+}
 </script>
 
 <style scoped>
@@ -111,13 +174,13 @@
   filter: blur(4px);
   transform: scale(1.1);
 }
-#button{
+#button {
   color: #fff;
   font-weight: bold;
 }
-#button:hover{
+#button:hover {
   background-color: #fff !important;
-  color: #F80808;
+  color: #f80808;
   transition: 0.3s;
 }
 .image-container {
@@ -132,32 +195,31 @@
   width: 100%;
   height: 100%;
   background-color: rgba(255, 0, 0, 0.5);
-  z-index: 1; 
+  z-index: 1;
   opacity: 60%;
 }
-.card-text{
-color: #fff;
-font-weight: bold;
-font-size: 2em;
-font-display: initial;
+.card-text {
+  color: #fff;
+  font-weight: bold;
+  font-size: 2em;
+  font-display: initial;
 }
 
-#space-word{
+#space-word {
   color: #fff;
-font-weight: bold;
-font-size: 2em;
-font-display: initial;
+  font-weight: bold;
+  font-size: 2em;
+  font-display: initial;
 }
-#center{
+#center {
   position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-#form{
+#form {
   margin: 0 auto;
   display: block;
   margin-bottom: 50px;
 }
-
 </style>
