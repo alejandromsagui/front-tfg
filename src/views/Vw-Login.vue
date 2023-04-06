@@ -20,6 +20,8 @@
               ></v-img>
             </v-col>
             <v-col align-self="center" class="my-10" cols="4">
+              <div id="form">
+                <v-card-title style="font-weight: bold;" class="mb-6">Iniciar sesión</v-card-title>
               <v-form>
                 <v-text-field
                   clearable
@@ -37,8 +39,9 @@
                   variant="underlined"
                   class="input"
                 ></v-text-field>
-                <v-btn color="#F80808" class="mt-5" variant="elevated" id="button">Iniciar sesión</v-btn>
+                <v-btn color="#F80808" class="mt-5" variant="elevated" id="button">Acceder</v-btn>
               </v-form>
+              </div>
             </v-col>
           </v-row>
         </v-card>
@@ -65,11 +68,13 @@
 }
 .input {
   width: 230px;
-  margin-right: 20px !important;
   padding: 3px;
   color: black !important;
 }
-
+#form{
+  margin: 0 auto;
+  display: block;
+}
 .background {
   width: 100%;
   height: 100%;
@@ -86,7 +91,7 @@
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center center;
-  filter: blur(2px);
+  filter: blur(4px);
   transform: scale(1.1);
 }
 #button{
