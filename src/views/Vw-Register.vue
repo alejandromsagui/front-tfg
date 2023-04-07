@@ -1,6 +1,7 @@
 <template>
   <v-container fluid class="background">
     <div class="background-image"></div>
+
     <div class="center">
       <v-sheet
         class="d-flex align-center justify-center text-center"
@@ -22,16 +23,34 @@
                       ><span class="card-text">?</span>
                     </div>
                   </div>
+
                   <v-img
                     src="../src/assets/images/register.jpg"
                     cover
                     height="100%"
                   ></v-img>
                 </div>
+                <v-alert
+                  type="success"
+                  style="margin-bottom: 350px;"
+                  class="v-alert"
+                  v-if="dataIsValid"
+                  closable
+                  text="¡Bienvenido/a a nuestra comunidad de gamers!"
+                ></v-alert>
+                <v-alert
+                  type="error"
+                  style="margin-bottom: 350px;"
+                  class="v-alert"
+                  v-if="dataIsNotValid"
+                  closable
+                  :text="test"
+                ></v-alert>
               </v-col>
+
               <v-col align-self="center" class="my-10" cols="4">
                 <div id="form">
-                  <v-form ref="form">
+                  <v-form ref="form" fast-fail>
                     <v-avatar
                       image="../src/assets/images/avatar.jpg"
                       size="80"
@@ -44,7 +63,7 @@
                       prepend-icon="fa-solid fa-user"
                       variant="underlined"
                       class="input"
-                      v-model="userForm.user"
+                      v-model="userForm.nickname"
                       :rules="[
                         (val) =>
                           (val && val.length > 0) ||
@@ -92,13 +111,14 @@
                       variant="underlined"
                       class="input"
                     ></v-file-input>
+
                     <v-btn
                       color="#F80808"
                       class="mt-5"
                       variant="elevated"
                       id="button"
                       type="button"
-                      @click="onSubmit()"
+                      @click= "onSubmit()"
                       >Registro</v-btn
                     >
                   </v-form>
@@ -113,35 +133,46 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import axios from "axios";
 
 const form = ref(null);
+const dataIsValid = ref(false);
+const dataIsNotValid = ref(false);
 
-const userForm = ref({
-  user: "",
+const userForm = reactive({
+  nickname: "",
   email: "",
   password: "",
-  avatar: "",
+  // avatar: "",
 });
 
-const onSubmit = async () => {
-  // console.log(await form.value.validate());
-  let formIsValid = await form.value.validate();
 
+const onSubmit = async () => {
+
+  let formIsValid = await form.value.validate();
+  console.log('¿Datos válidos?: '+formIsValid);
   if (formIsValid.valid) {
+    dataIsValid.value = true;
+
     try {
-      axios.post("http://127.0.0.1:3000/newUser", userForm).then((response) => {
-        console.log(response);
-        //Poner mensaje de éxito
-      });
+
+      console.log('Datos añadidos: '+userForm);
+      await axios.post('http://localhost:3000/newUser', 
+      userForm
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+
+      form.value.reset();
     } catch (error) {
       console.log(error);
-      //Poner mensaje de error
+      dataIsNotValid = true;
     }
   } else {
     console.log("Formulario no válido");
-    //Poner mensaje de que el formulario no es válido
+    dataIsNotValid.value = true;
+    
   }
 };
 
@@ -241,5 +272,12 @@ const isValidEmail = (val) => {
   margin: 0 auto;
   display: block;
   margin-bottom: 50px;
+}
+.v-alert{
+  position: fixed;
+  left: 50%;
+  bottom: 50px;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
 }
 </style>
