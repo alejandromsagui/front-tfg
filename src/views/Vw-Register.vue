@@ -24,16 +24,14 @@
                   </div>
                   <v-img
                     src="../src/assets/images/register.jpg"
-                    width="100%"
                     cover
-                    height="540"
-                    style="margin-bottom: 80px"
+                    height="100%"
                   ></v-img>
                 </div>
               </v-col>
               <v-col align-self="center" class="my-10" cols="4">
                 <div id="form">
-                  <v-form @submit="onSubmit" @reset="onReset">
+                  <v-form ref="form">
                     <v-avatar
                       image="../src/assets/images/avatar.jpg"
                       size="80"
@@ -48,8 +46,12 @@
                       class="input"
                       v-model="userForm.user"
                       :rules="[
-                        val => val && val.length > 0 || 'Este campo es obligatorio',
-                        val => val && val.length > 4 || 'El nombre de usuario debe ser superior a 4 caracteres'
+                        (val) =>
+                          (val && val.length > 0) ||
+                          'Este campo es obligatorio',
+                        (val) =>
+                          (val && val.length > 4) ||
+                          'El nombre de usuario debe ser superior a 4 caracteres',
                       ]"
                     ></v-text-field>
                     <v-text-field
@@ -61,8 +63,10 @@
                       class="input"
                       v-model="userForm.email"
                       :rules="[
-                        val => val && val.length > 0 || 'Este campo es obligatorio',
-                        isValidEmail
+                        (val) =>
+                          (val && val.length > 0) ||
+                          'Este campo es obligatorio',
+                        isValidEmail,
                       ]"
                     ></v-text-field>
                     <v-text-field
@@ -74,8 +78,12 @@
                       class="input"
                       v-model="userForm.password"
                       :rules="[
-                        val => val && val.length > 0 || 'Este campo es obligatorio',
-                        val => val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres'
+                        (val) =>
+                          (val && val.length > 0) ||
+                          'Este campo es obligatorio',
+                        (val) =>
+                          (val && val.length > 5) ||
+                          'La contraseña debe ser superior a 5 caracteres',
                       ]"
                     ></v-text-field>
                     <v-file-input
@@ -89,7 +97,8 @@
                       class="mt-5"
                       variant="elevated"
                       id="button"
-                      type="submit"
+                      type="button"
+                      @click="onSubmit()"
                       >Registro</v-btn
                     >
                   </v-form>
@@ -104,9 +113,10 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
+import axios from "axios";
 
-const { emit } = defineEmits(["submit"]);
+const form = ref(null);
 
 const userForm = ref({
   user: "",
@@ -115,24 +125,31 @@ const userForm = ref({
   avatar: "",
 });
 
-const onSubmit = (event) => {
-  event.preventDefault();
-  console.log(userForm.value);
+const onSubmit = async () => {
+  // console.log(await form.value.validate());
+  let formIsValid = await form.value.validate();
+
+  if (formIsValid.valid) {
+    try {
+      axios.post("http://127.0.0.1:3000/newUser", userForm).then((response) => {
+        console.log(response);
+        //Poner mensaje de éxito
+      });
+    } catch (error) {
+      console.log(error);
+      //Poner mensaje de error
+    }
+  } else {
+    console.log("Formulario no válido");
+    //Poner mensaje de que el formulario no es válido
+  }
 };
 
-const onReset = (event) => {
-  userForm.value = {
-    user: "",
-    email: "",
-    password: "",
-    avatar: "",
-  };
+const isValidEmail = (val) => {
+  const emailPattern =
+    /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
+  return emailPattern.test(val) || "El email no es válido";
 };
-
-const isValidEmail = ( val ) => {
-    const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-    return emailPattern.test(val) || 'El email no es válido';
-}
 </script>
 
 <style scoped>
@@ -184,8 +201,11 @@ const isValidEmail = ( val ) => {
   transition: 0.3s;
 }
 .image-container {
-  position: relative;
-  margin-right: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 67%;
+  height: 100%;
 }
 
 .color-overlay {
