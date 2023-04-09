@@ -85,14 +85,13 @@ const userForm = reactive({
 const onSubmit = async () => {
 
   let formIsValid = await form.value.validate();
-  console.log('¿Datos válidos?: ' + formIsValid);
   if (formIsValid.valid) {
     dataIsValid.value = true;
 
     try {
 
       console.log('Datos añadidos: ' + userForm);
-      await axios.post('http://localhost:3000/newUser',
+      await axios.post('http://localhost:3000/register',
         userForm
       )
         .then((res) => console.log(res))
