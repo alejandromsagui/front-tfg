@@ -20,4 +20,14 @@ export default createVuetify({
           fa,
         },
       },
+      display: {
+        mobileBreakpoint: 'sm',
+        thresholds: {
+          xs: 0,
+          sm: 340,
+          md: 540,
+          lg: 800,
+          xl: 1280,
+        },
+      }
 });

@@ -24,7 +24,7 @@
 
               <v-col align-self="center" class="my-10" cols="4">
                 <div id="form">
-                  <v-form ref="form" fast-fail>
+                  <v-form ref="form" fast-fail @submit.prevent="onSubmit()">
                     <v-avatar image="../src/assets/images/avatar.jpg" size="80" class="mb-12"></v-avatar>
                     <v-text-field clearable label="Usuario" type="text" prepend-icon="fa-solid fa-user"
                       variant="underlined" class="input" v-model="userForm.nickname" :rules="[
@@ -53,8 +53,8 @@
                       ]"></v-text-field>
                     <v-file-input clearable label="Escoge tu avatar" variant="underlined" class="input"></v-file-input>
 
-                    <v-btn color="#F80808" class="mt-5" variant="elevated" id="button" type="button"
-                      @click="onSubmit()">Registro</v-btn>
+                    <v-btn color="#F80808" class="mt-5" variant="elevated" id="button" type="submit"
+                     >Registro</v-btn>
                   </v-form>
                 </div>
               </v-col>

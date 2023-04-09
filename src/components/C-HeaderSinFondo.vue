@@ -1,5 +1,5 @@
 <template>
-     <v-app-bar  color="grey-darken-4">
+     <v-app-bar  color="grey-darken-4" >
     <v-toolbar color="grey-darken-4" density="comfortable" class="toolbar">
       <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
       <img src="../assets/images/logo.png" alt="logo" class="logo">
