@@ -1,13 +1,16 @@
 <template>
-  <v-app-bar>
-    <v-toolbar color="grey-darken-4" clipped-left>
-      <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" v-if="isMobile"></v-app-bar-nav-icon>
-      <img src="../assets/images/logo.png" alt="logo" class="logo">
+  <v-app-bar app>
+    <v-toolbar color="grey-darken-4" prominent clipped-left>
+      <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" class="d-sm-flex d-md-none"></v-app-bar-nav-icon>
+      <img src="../assets/images/logo.png" alt="logo" class="logo d-none d-sm-block">
 
-      <v-toolbar-title class="title" truncate>Namekians<span>Games</span></v-toolbar-title>
+      <v-toolbar-title class="title d-none d-md-block">Namekians
+        <span class="text-no-wrap" style="width: 8rem;">Games</span></v-toolbar-title>
 
+        <v-toolbar-title class="title d-sm-flex d-md-none">Namekians<br>
+        <span class="text-no-wrap" style="width: 8rem;">Games</span></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="items" v-if="!isMobile" justify-end>
+      <v-toolbar-items class="d-none d-md-block" justify-end>
         <v-btn class="link" text>Explorar</v-btn>
         <v-btn class="link" text @click="goLogin()">Login</v-btn>
         <v-btn class="link" text @click="goSignUp()">Registro</v-btn>
@@ -22,13 +25,17 @@
         <template v-slot:prepend>
           <v-icon :icon="item.icon"></v-icon>
         </template>
-        <v-list-item-title v-text="item.title"></v-list-item-title>
+        <v-list-item-title>{{ item.title }}</v-list-item-title>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
+
 <script setup>
-import { ref, watch, computed } from 'vue'
+import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router';
+const router = useRouter()
+
 
 const drawer = ref(false)
 const group = ref(null)
@@ -56,14 +63,17 @@ const items = [
   },
 ]
 
-const isMobile = computed(() => {
-  const width = window.innerWidth
-  return width < 960
-})
-
 watch(group, () => {
   drawer.value = false
 })
+
+const goLogin = () => {
+  router.push({ path: '/login' })
+}
+
+const goSignUp = () => {
+  router.push({ path: '/registro' })
+}
 
 </script>
 <style scoped>
@@ -94,15 +104,6 @@ watch(group, () => {
   z-index: -1;
 }
 
-.items {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 30px;
-  color: #fff;
-  transition: all 0.5s;
-}
-
 .logo {
   color: white;
   width: 80px;
@@ -127,12 +128,11 @@ watch(group, () => {
 .title {
   color: #fff;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .title span {
   color: rgb(248, 8, 8);
   font-size: 1.1em;
 }
+
 </style>
