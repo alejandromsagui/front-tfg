@@ -4,11 +4,16 @@
       <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" class="d-sm-flex d-md-none"></v-app-bar-nav-icon>
       <img src="../assets/images/logo.png" alt="logo" class="logo d-none d-sm-block">
 
-      <v-toolbar-title class="title d-none d-md-block">Namekians
-        <span class="text-no-wrap" style="width: 8rem;">Games</span></v-toolbar-title>
+      <v-toolbar-title class="title d-none d-md-flex">
+  <div class="d-flex">
+    <span style="color: #fff;">Namekians</span>
+    <span>Games</span>
+  </div>
+</v-toolbar-title>
+
 
         <v-toolbar-title class="title d-sm-flex d-md-none">Namekians<br>
-        <span class="text-no-wrap" style="width: 8rem;">Games</span></v-toolbar-title>
+        <span class="text-no-wrap">Games</span></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="d-none d-md-block" justify-end>
         <v-btn class="link" text>Explorar</v-btn>
@@ -124,15 +129,9 @@ const goSignUp = () => {
   color: rgb(248, 8, 8);
   transition: 0.3s;
 }
-
-.title {
-  color: #fff;
-  white-space: nowrap;
-}
-
 .title span {
   color: rgb(248, 8, 8);
-  font-size: 1.1em;
+  
 }
 
 </style>
