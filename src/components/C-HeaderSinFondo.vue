@@ -5,22 +5,25 @@
       <img src="../assets/images/logo.png" alt="logo" class="logo d-none d-sm-block">
 
       <v-toolbar-title class="title d-none d-md-flex">
-  <div class="d-flex">
-    <span style="color: #fff;">Namekians</span>
-    <span>Games</span>
-  </div>
-</v-toolbar-title>
+        <div class="d-flex">
+          <span style="color: #fff;">Namekians</span>
+          <span>Games</span>
+        </div>
+      </v-toolbar-title>
 
 
-        <v-toolbar-title class="title d-sm-flex d-md-none">Namekians<br>
+      <v-toolbar-title class="title d-sm-flex d-md-none">Namekians<br>
         <span class="text-no-wrap">Games</span></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="d-none d-md-block" justify-end>
-        <v-btn class="link" text>Explorar</v-btn>
-        <v-btn class="link" text @click="goLogin()">Login</v-btn>
-        <v-btn class="link" text @click="goSignUp()">Registro</v-btn>
-        <v-btn class="link" text>Contacto</v-btn>
+        <v-btn class="link" text @click="goLogin()">
+          <i class="fas fa-right-to-bracket mr-1"></i> Login
+        </v-btn>
+        <v-btn class="link mr-12" text @click="goSignUp()">
+          <i class="fa-solid fa-user-plus mr-1"></i> Registro</v-btn>
+        <v-icon class="link fas fa-search mr-5" size="14"></v-icon>
       </v-toolbar-items>
+
     </v-toolbar>
   </v-app-bar>
 
@@ -129,9 +132,9 @@ const goSignUp = () => {
   color: rgb(248, 8, 8);
   transition: 0.3s;
 }
+
 .title span {
   color: rgb(248, 8, 8);
-  
-}
 
+}
 </style>
