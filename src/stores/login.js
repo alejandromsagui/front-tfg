@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { router } from '../routes';
 import { instance_axios } from '../middlewares/axios';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export const useLoginStore = defineStore({
     id: 'user',
@@ -21,10 +23,19 @@ export const useLoginStore = defineStore({
                 this.user = user;
                 localStorage.setItem('token', JSON.stringify(user.data.data.token));
                 this.authenticated = true
+
+                toast.success("¡Bienvenido de nuevo, "+nickname+"!", {
+                    autoClose: 2000,
+                    theme: 'colored'
+                  }); 
                 router.push('/')
             } catch (error) {
                 console.log(error);
                 this.authenticated = false
+                toast.error("Nombre de usuario o contraseña incorrectos", {
+                    autoClose: 2000,
+                    theme: 'colored'
+                  }); 
             }
         },
 
@@ -33,7 +44,8 @@ export const useLoginStore = defineStore({
             localStorage.removeItem('token')
             this.authenticated = false
             router.push('/login')
-        }
+        },
+        
     }
 
 })

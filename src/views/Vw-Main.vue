@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid class="">
-    <v-row>
+  <v-container>
+    <v-row align="center" align-content="center">
       <v-col v-for="videogame in videogamesWithUsers" :key="videogame.id" cols="12" sm="6" md="4">
-        <v-card class="card mx-auto mb-4 mt-7 ml-4 mr-4" :margin="16" elevation="10" max-width="500" height=350>
+        <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" height=350>
           <v-img :src="videogame.thumbnail" height=250 cover></v-img>
           <v-card-title>{{ videogame.title }}</v-card-title>
           <v-card-text>

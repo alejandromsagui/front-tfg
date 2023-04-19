@@ -65,7 +65,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router';
 import { useLoginStore } from '../stores/login';
 import { storeToRefs } from 'pinia';
@@ -75,6 +75,21 @@ const router = useRouter()
 
 const userStore = useLoginStore()
 const { authenticated } = storeToRefs(userStore)
+const token = localStorage.getItem('token')
+
+onMounted(() => {
+  if(token){
+    authenticated.value = true
+  }else{
+    authenticated.value = false
+  }
+})
+
+onBeforeUnmount(() => {
+  if(!token){
+    router.push({ path: '/login' })
+  }
+})
 
 console.log('Logado? ' + authenticated.value);
 
@@ -113,6 +128,12 @@ const itemsLogged = [{
 ]
 watch(group, () => {
   drawer.value = false
+})
+
+watch(authenticated, () => {
+  if(authenticated.value === false){
+    router.push({ path: '/login'})
+  }
 })
 
 const menuActionClick = (action) => {
