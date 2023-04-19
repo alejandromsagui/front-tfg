@@ -21,6 +21,7 @@
 import { reactive, computed } from 'vue';
 import axios from 'axios';
 
+
 const videogames = reactive([]);
 const users = reactive([]);
 
@@ -35,9 +36,7 @@ const options = {
 };
 
 axios.request(options).then(function (response) {
-  console.log(response.data);
   videogames.push(...response.data.map(videogame => {
-    // Agrega un identificador de usuario único a cada videojuego
     videogame.userId = Math.floor(Math.random() * users.length) + 1;
     return videogame;
   }));
@@ -47,7 +46,6 @@ axios.request(options).then(function (response) {
 
 axios.get('https://jsonplaceholder.typicode.com/users')
   .then(res => {
-    console.log(res.data);
     users.push(...res.data);
   })
   .catch(err => {
@@ -55,7 +53,6 @@ axios.get('https://jsonplaceholder.typicode.com/users')
   })
 
 const videogamesWithUsers = computed(() => {
-  // Crea una nueva matriz de videojuegos que incluya información de usuario
   return videogames.map(videogame => {
     const user = users.find(user => user.id === videogame.userId);
     return {
@@ -64,8 +61,6 @@ const videogamesWithUsers = computed(() => {
     }
   });
 });
-
-
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');

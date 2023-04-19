@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <CHeaderSin />
+      <CHeader />
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -9,8 +9,7 @@
 
 
 <script setup>
-import { CHeader } from "./components";
-import {CHeaderSin} from "./components";
+import {CHeader} from "./components";
 </script>
 
 <style scoped>

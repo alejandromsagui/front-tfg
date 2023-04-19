@@ -7,7 +7,8 @@ export const useLoginStore = defineStore({
 
     state: () => ({
         token: JSON.parse(localStorage.getItem("token")),
-        returnUrl: null
+        returnUrl: null,
+        authenticated: false
     }),
 
     actions: {
@@ -19,15 +20,18 @@ export const useLoginStore = defineStore({
                 //Se actualiza el estado del usuario (no es necesario mutations)
                 this.user = user;
                 localStorage.setItem('token', JSON.stringify(user.data.data.token));
+                this.authenticated = true
                 router.push('/')
             } catch (error) {
                 console.log(error);
+                this.authenticated = false
             }
         },
 
         logout() {
             this.user = null;
             localStorage.removeItem('token')
+            this.authenticated = false
             router.push('/login')
         }
     }
