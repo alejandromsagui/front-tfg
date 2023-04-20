@@ -5,7 +5,7 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 export const useLoginStore = defineStore({
-    id: 'user',
+    id: 'login',
 
     state: () => ({
         token: JSON.parse(localStorage.getItem("token")),
@@ -30,7 +30,6 @@ export const useLoginStore = defineStore({
                   }); 
                 router.push('/')
             } catch (error) {
-                console.log(error);
                 this.authenticated = false
                 toast.error("Nombre de usuario o contraseña incorrectos", {
                     autoClose: 2000,

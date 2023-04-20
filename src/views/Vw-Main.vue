@@ -1,5 +1,13 @@
 <template>
   <v-container>
+    <v-row class="mt-7" align="center" justify="center">
+  <v-carousel hide-delimiters cycle style="width: 94%">
+    <v-carousel-item src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" cover></v-carousel-item>
+    <v-carousel-item src="https://cdn.vuetifyjs.com/images/cards/hotel.jpg" cover></v-carousel-item>
+    <v-carousel-item src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" cover></v-carousel-item>
+  </v-carousel>
+</v-row>
+
     <v-row align="center" align-content="center">
       <v-col v-for="videogame in videogamesWithUsers" :key="videogame.id" cols="12" sm="6" md="4">
         <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" height=350>
@@ -8,7 +16,7 @@
           <v-card-text>
             <p>Fecha de lanzamiento: {{ videogame.release_date }}</p>
             <div class="user">
-            <p><v-icon class="fa-regular fa-user mr-1"></v-icon>{{ videogame.user.username }}</p>
+            <!-- <p><v-icon class="fa-regular fa-user mr-1"></v-icon>{{ videogame.user.username }}</p> -->
           </div>
           </v-card-text>
         </v-card>

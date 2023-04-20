@@ -17,7 +17,7 @@
         <v-spacer></v-spacer>
         <v-toolbar-items class="d-none d-md-block" justify-end>
           <v-btn class="link" text @click="goLogin()">
-            <i class="fas fa-right-to-bracket mr-2"></i> Login
+            <i class="fas fa-right-to-bracket mr-2"></i> Acceder
           </v-btn>
           <v-btn class="link mr-12" text @click="goSignUp()">
             <i class="fa-solid fa-user-plus mr-2"></i> Registro</v-btn>
@@ -27,17 +27,26 @@
 
       <template v-else>
         <v-spacer></v-spacer>
-        <v-btn class="link" text>
-          <i class="fa-solid fa-user"></i> Perfil
-        </v-btn>
-        <v-btn class="link" text @click="logout()">
-          <i class="fa-solid fa-right-from-bracket"></i> Desconectar
-        </v-btn>
+        <v-toolbar-items class="d-none d-md-block">
+          <v-btn class="link" text>
+            <i class="fa-solid fa-upload mr-1"></i> Subir
+          </v-btn>
+          <v-btn class="link" text>
+            <i class="fa-solid fa-user mr-1"></i> Perfil
+          </v-btn>
+          <v-btn class="link" text>
+            <i class="fa-sharp fa-solid fa-shop mr-1"></i> Historial
+          </v-btn>
+          <v-btn class="link mr-10" text @click="logout()">
+            <i class="fa-solid fa-right-from-bracket mr-1"></i> Desconectar
+          </v-btn>
+        </v-toolbar-items>
+        <v-icon class="link fas fa-search mr-5" size="14"></v-icon>
       </template>
     </v-toolbar>
   </v-app-bar>
 
-  <v-navigation-drawer v-model="drawer" location="left" temporary>
+  <v-navigation-drawer v-model="drawer" location="left" temporary floating width="360" class="mx-0">
     <template v-if="!authenticated">
       <v-list>
         <v-list-item v-for="(item, i) in items" :key="i" :value="item" active-color="#F80808"
@@ -51,15 +60,40 @@
     </template>
 
     <template v-else>
-      <v-list>
-        <v-list-item v-for="(itemLogged, i) in itemsLogged" :key="i" :value="itemLogged" active-color="#F80808"
+      <v-list-item-title class="items pt-4">
+        <v-row no-gutters>
+          <v-col class="align-center" cols="auto">
+            <v-list-item class="pa-0">
+              <v-avatar image="../src/assets/images/avatar.jpg" size="80" class="ml-6"></v-avatar>
+            </v-list-item>
+          </v-col>
+          <v-col class="align-center" cols="auto">
+            <v-list-item class="pa-0 d-flex">
+              <p class="data ml-8 mt-4">nombre de usuario</p>
+              <p class="data ml-8">usuario@gmail.com</p>
+            </v-list-item>
+          </v-col>
+        </v-row>
+      </v-list-item-title>
+
+
+      <v-list class="options">
+        <v-list-item v-for="(itemLogged, i) in itemsLogged" :key="i" :value="itemLogged" active-color="#F44336"
           @click="menuActionClick(itemLogged.action)">
           <template v-slot:prepend>
             <v-icon :icon="itemLogged.icon"></v-icon>
           </template>
-          <v-list-item-title>{{ itemLogged.title }}</v-list-item-title>
+          <v-list-item-title class="mt-2" style="font-size: 1.1em">{{ itemLogged.title }}</v-list-item-title>
         </v-list-item>
       </v-list>
+
+    </template>
+    <template v-slot:append v-if="authenticated">
+      <div class="pa-2">
+        <v-btn block color="black" @click="logout()">
+          Desconectarse
+        </v-btn>
+      </div>
     </template>
   </v-navigation-drawer>
 </template>
@@ -78,15 +112,15 @@ const { authenticated } = storeToRefs(userStore)
 const token = localStorage.getItem('token')
 
 onMounted(() => {
-  if(token){
+  if (token) {
     authenticated.value = true
-  }else{
+  } else {
     authenticated.value = false
   }
 })
 
 onBeforeUnmount(() => {
-  if(!token){
+  if (!token) {
     router.push({ path: '/login' })
   }
 })
@@ -99,8 +133,8 @@ const group = ref(null)
 const items = [
 
   {
-    title: 'Login',
-    value: 'login',
+    title: 'Iniciar sesión',
+    value: 'Iniciar sesión',
     icon: 'fa-solid fa-right-to-bracket',
     action: "login"
   },
@@ -120,10 +154,16 @@ const itemsLogged = [{
   action: "profile"
 },
 {
-  title: 'Desconectar',
-  value: 'desconectar',
-  icon: 'fa-solid fa-right-from-bracket',
-  action: "logout"
+  title: 'Subir juego',
+  value: 'subir',
+  icon: 'fa-solid fa-upload',
+  action: '#'
+},
+{
+  title: 'Historial de compras',
+  value: 'historial de compras',
+  icon: 'fa-sharp fa-solid fa-shop',
+  action: '#'
 }
 ]
 watch(group, () => {
@@ -131,8 +171,8 @@ watch(group, () => {
 })
 
 watch(authenticated, () => {
-  if(authenticated.value === false){
-    router.push({ path: '/login'})
+  if (authenticated.value === false) {
+    router.push({ path: '/login' })
   }
 })
 
@@ -163,6 +203,8 @@ const logout = () => {
 
 </script>
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
 * {
   padding: 0;
   margin: 0;
@@ -214,5 +256,22 @@ const logout = () => {
 .title span {
   color: rgb(248, 8, 8);
 
+}
+
+.items {
+  background-color: #F44336;
+  color: #fff;
+  font-size: 1.5em;
+  margin: 0;
+  letter-spacing: 10px;
+  padding-bottom: 15px;
+}
+.data {
+  letter-spacing: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.7em;
+}
+.options{
+  font-size: 1em;
 }
 </style>

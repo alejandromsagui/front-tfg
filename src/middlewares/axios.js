@@ -8,3 +8,11 @@ export const instance_axios = axios.create({
         'Content-Type': 'application/json'
     }
 })
+
+export default function headers(esArchivo) {
+    return {
+        'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+        'Content-Type': esArchivo ? 'application/octet-stream' : 'application/json'
+    }
+}
