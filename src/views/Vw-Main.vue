@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <v-row align="end" justify="end" sm="6" md="4" d-flex flex-row>
-      <v-col col="10">
-        <v-img cover src="../src/assets/images/GamingZone.jpg" class="mx-auto" :width="550" />
+    <v-row align="center" justify="center" sm="6" md="4" d-flex flex-row>
+      <v-col col="2" class="d-none d-lg-block">
+        <v-img cover src="../src/assets/images/GamingZone.jpg" class="mx-auto mt-7" :width="550" />
       </v-col>
-      <v-col col="2" style="width: 75%" class="mr-10">
-        <v-carousel hide-delimiters cycle>
+      <v-col col="10" style="width: 75%">
+        <v-carousel hide-delimiters cycle height="auto">
           <v-carousel-item v-for="(videogame, index) in videogames.slice(0, 4)" :key="index" :src="videogame.thumbnail"
             cover />
         </v-carousel>
