@@ -16,7 +16,8 @@
                     </div>
                   </div>
 
-                  <v-img src="../src/assets/images/register.jpg" cover height="100%"></v-img>
+                  <!-- <v-img src="../src/assets/images/register.jpg" cover height="100%"></v-img> -->
+                  <img src="../assets/images/register.jpg" style="object-fit: cover; height: 100%; width: 602px;">
                 </div>
                 <v-alert type="success" style="margin-bottom: 350px;" class="v-alert" v-if="dataIsValid" closable
                   text="¡Bienvenido/a a nuestra comunidad de gamers!"></v-alert>

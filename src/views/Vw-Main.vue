@@ -2,7 +2,8 @@
   <v-container>
     <v-row align="center" justify="center" sm="6" md="4" d-flex flex-row>
       <v-col col="2" class="d-none d-lg-block">
-        <v-img cover src="../src/assets/images/GamingZone.jpg" class="mx-auto mt-7" :width="550" />
+        <!-- <v-img cover src="../src/assets/images/GamingZone.jpg" class="mx-auto mt-7" :width="550" /> -->
+        <img src="../assets/images/GamingZone.jpg" alt="Game Zone" class="mt-7 ml-9" style="object-fit: cover; width: 550px; height: 500px;">
       </v-col>
       <v-col col="10" style="width: 75%">
         <v-carousel hide-delimiters cycle height="auto">

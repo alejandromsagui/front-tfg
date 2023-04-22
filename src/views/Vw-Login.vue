@@ -1,6 +1,8 @@
 <template>
   <v-container fluid class="background">
+    <v-lazy :options="{ 'threshold': 0.5 }" transition="fade-transition">
     <div class="background-image"></div>
+  </v-lazy>
     <div class="center">
       <v-sheet class="d-flex align-center justify-center flex-wrap text-center" elevation="4" rounded :width="800"
         style="margin-bottom: 10%">
