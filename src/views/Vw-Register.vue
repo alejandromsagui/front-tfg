@@ -24,7 +24,7 @@
 
               <v-col align-self="center" class="my-10" cols="4">
                 <div id="form">
-                  <v-form ref="form" fast-fail @submit.prevent="onSubmit()">
+                  <v-form ref="form" fast-fail @submit.prevent="onSubmit()" @keyup.enter="onSubmit">
                     <v-avatar image="../src/assets/images/avatar.jpg" size="80" class="mb-12"></v-avatar>
                     <v-text-field clearable label="Usuario" type="text" prepend-icon="fa-solid fa-user"
                       variant="underlined" class="input" v-model="userForm.nickname" :rules="[

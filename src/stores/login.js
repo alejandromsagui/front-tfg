@@ -12,7 +12,11 @@ export const useLoginStore = defineStore({
         returnUrl: null,
         authenticated: false
     }),
-
+    getters: {
+        isAuthenticated() {
+            return this.authenticated;
+        }
+    },
     actions: {
 
         async login(nickname, password) {
@@ -24,17 +28,17 @@ export const useLoginStore = defineStore({
                 localStorage.setItem('token', JSON.stringify(user.data.data.token));
                 this.authenticated = true
 
-                toast.success("¡Bienvenido de nuevo, "+nickname+"!", {
+                toast.success("¡Bienvenido de nuevo, " + nickname + "!", {
                     autoClose: 2000,
                     theme: 'colored'
-                  }); 
+                });
                 router.push('/')
             } catch (error) {
                 this.authenticated = false
                 toast.error("Nombre de usuario o contraseña incorrectos", {
                     autoClose: 2000,
                     theme: 'colored'
-                  }); 
+                });
             }
         },
 
@@ -44,7 +48,7 @@ export const useLoginStore = defineStore({
             this.authenticated = false
             router.push('/login')
         },
-        
+
     }
 
 })

@@ -12,7 +12,7 @@
             <v-col align-self="center" class="my-10" cols="4">
               <div id="form">
                 <v-card-title style="font-weight: bold;" class="mb-6">Iniciar sesión</v-card-title>
-                <v-form>
+                <v-form @keyup.enter="sendData">
                   <v-text-field clearable label="Usuario" type="text" prepend-icon="fa-solid fa-user" variant="underlined"
                     class="input" v-model="userLogin.nickname"></v-text-field>
                   <v-text-field clearable label="Contraseña" type="password" prepend-icon="fa-sharp fa-solid fa-key"

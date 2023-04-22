@@ -6,8 +6,9 @@
       </v-col>
       <v-col col="10" style="width: 75%">
         <v-carousel hide-delimiters cycle height="auto">
-          <v-carousel-item v-for="(videogame, index) in videogames.slice(0, 4)" :key="index" :src="videogame.thumbnail"
-            cover />
+          <v-carousel-item v-for="(videogame, index) in videogames.slice(0, 4)" :key="index">
+            <v-img cover :src="videogame.thumbnail" class="rounded"></v-img>
+            </v-carousel-item>
         </v-carousel>
       </v-col>
     </v-row>

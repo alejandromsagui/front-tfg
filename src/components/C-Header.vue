@@ -2,14 +2,18 @@
   <v-app-bar app>
     <v-toolbar color="grey-darken-4" prominent clipped-left>
       <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" class="d-sm-flex d-md-none"></v-app-bar-nav-icon>
+      <router-link to="/">
       <img src="../assets/images/logo.png" alt="logo" class="logo d-none d-sm-block">
+    </router-link>
 
+      <router-link to="/">
       <v-toolbar-title class="title d-none d-md-flex">
         <div class="d-flex">
           <span style="color: #fff;">Namekians</span>
           <span>Games</span>
         </div>
       </v-toolbar-title>
+    </router-link>
 
       <v-toolbar-title class="title d-sm-flex d-md-none">Namekians<br>
         <span class="text-no-wrap">Games</span></v-toolbar-title>
@@ -117,6 +121,7 @@ onMounted(() => {
   } else {
     authenticated.value = false
   }
+  console.log('Logado? ' + authenticated.value);
 })
 
 onBeforeUnmount(() => {
@@ -125,7 +130,7 @@ onBeforeUnmount(() => {
   }
 })
 
-console.log('Logado? ' + authenticated.value);
+
 
 const drawer = ref(false)
 const group = ref(null)
