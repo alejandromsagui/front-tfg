@@ -1,15 +1,15 @@
-const express = require('express')
-const serveStatic = require('serve-static')
-const path = require('path')
-
+import express from 'express';
 const app = express()
 
-app.use('/', serveStatic(path.join(__dirname, '/dist')))
+// Sirve los archivos de la carpeta `dist`
+app.use(express.static('dist'))
 
-app.get(/.*/, function (req, res) {
-    res.sendFile(path.join(__dirname, '/dist/index.html'))
+// Redirige todas las rutas a `index.html`, para que Vue Router maneje la navegación
+app.get('*', (req, res) => {
+  res.sendFile(__dirname + '/dist/index.html')
 })
 
 const port = process.env.PORT || 5000
-app.listen(port)
-console.log(`app is listening on port: ${port}`)
+app.listen(port, () => {
+  console.log(`App is running on port ${port}`)
+})
