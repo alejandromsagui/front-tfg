@@ -7,7 +7,7 @@
         <v-card width="800px" height="400">
           <v-row align-content="center">
             <v-col align-self="center" cols="8">
-              <v-img src="../src/assets/images/gif.gif" width="100%" cover height="400"></v-img>
+              <v-img src="../assets/images/gif.gif" width="100%" cover height="400"></v-img>
             </v-col>
             <v-col align-self="center" class="my-10" cols="4">
               <div id="form">
