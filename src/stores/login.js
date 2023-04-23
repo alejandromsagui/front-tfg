@@ -46,7 +46,7 @@ export const useLoginStore = defineStore({
             this.user = null;
             localStorage.removeItem('token')
             this.authenticated = false
-            router.push('/login')
+            router.push('/acceso')
         },
 
     }

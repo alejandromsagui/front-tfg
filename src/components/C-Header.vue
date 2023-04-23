@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app>
+  <v-app-bar app color="transparent">
     <v-toolbar color="grey-darken-4" prominent clipped-left>
       <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" class="d-sm-flex d-md-none"></v-app-bar-nav-icon>
       <router-link to="/">
@@ -19,12 +19,10 @@
         <span class="text-no-wrap">Games</span></v-toolbar-title>
       <template v-if="!authenticated">
         <v-spacer></v-spacer>
-        <v-toolbar-items class="d-none d-md-block" justify-end>
+        <v-toolbar-items class="d-none d-md-block mr-4" justify-end>
           <v-btn class="link" text @click="goLogin()">
-            <i class="fas fa-right-to-bracket mr-2"></i> Acceder
+            <i class="fas fa-right-to-bracket mr-2"></i> Acceso
           </v-btn>
-          <v-btn class="link mr-12" text @click="goSignUp()">
-            <i class="fa-solid fa-user-plus mr-2"></i> Registro</v-btn>
           <v-icon class="link fas fa-search mr-5" size="14"></v-icon>
         </v-toolbar-items>
       </template>
@@ -135,7 +133,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (!token) {
-    router.push({ path: '/login' })
+    router.push({ path: '/acceso' })
   }
 })
 
@@ -192,24 +190,24 @@ watch(group, () => {
 
 watch(authenticated, () => {
   if (authenticated.value === false) {
-    router.push({ path: '/login' })
+    router.push({ path: '/acceso' })
   }
 })
 
 const menuActionClick = (action) => {
   if (action === "login") {
-    router.push({ path: '/login' })
+    router.push({ path: '/acceso' })
   } else if (action === "register") {
     router.push({ path: '/registro' })
   } else if (action === "profile") {
     router.push({ path: '#' })
   } else {
     logout()
-    router.push({ path: '/login' })
+    router.push({ path: '/acceso' })
   }
 }
 const goLogin = () => {
-  router.push({ path: '/login' })
+  router.push({ path: '/acceso' })
 }
 
 const goSignUp = () => {
