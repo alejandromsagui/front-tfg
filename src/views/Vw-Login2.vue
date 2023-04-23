@@ -2,7 +2,7 @@
     <div class="background"></div>
         <div class="dark-layer"></div>
     <v-container fluid class="fill-height">
-        <v-row align="start" justify="start" class="ml-14">
+        <v-row align="start" justify="start">
             <v-col cols="12" sm="8" md="6">
                     <v-window v-model="transition">
                         <v-window-item :value="1">
@@ -24,19 +24,20 @@
                                     </div>
                                 </v-col>
                             </v-row> 
-                            <v-row v-else justify="center">
-                                <v-col cols="12" md="8" class="text-center">
+                          
+                            <v-row v-else justify="center" align="center">
+                                <v-col cols="12" md="8" class="text-center mx-auto">
                                         <h2 class="text-center text-white mb-15">
                                             Inicia sesión en Namekians<span style="color:red;">Games</span>
                                         </h2>
                                         <v-form class="mx-auto">
                                             <v-text-field label="Usuario" name="usuario" prepend-icon="fa-solid fa-user"
-                                                type="text" class="text-center mr-3 text-white"/>
+                                                type="text" class="text-center text-white mr-3"/>
                                             <v-text-field id="contraseña" label="Contraseña" name="Contraseña"
                                                 prepend-icon="fa-solid fa-key" class="text-center text-white mr-3"/>
                                         </v-form>
-                                        <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" href="/" class="password-recovery">¿Has olvidado tu contraseña?</v-btn></h3>
-                                        <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery" @click="transition++">Registrate aquí</v-btn></h3>
+                                        <h3 class="text-center mt-3 text-white"><v-btn variant="plain" href="/" class="password-recovery">¿Has olvidado tu contraseña?</v-btn></h3>
+                                        <h3 class="text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery" @click="transition++">Registrate aquí</v-btn></h3>
                                     <div class="text-center mt-3">
                                         <v-btn rounded color="#F80808" dark class="button mb-6">Iniciar sesión</v-btn>
                                     </div>
