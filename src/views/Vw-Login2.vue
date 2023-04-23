@@ -1,5 +1,6 @@
 <template>
-    <div class="background"></div>
+    <div class="background">
+        <div class="dark-layer"></div>
     <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
             <v-col cols="12" sm="8" md="6">
@@ -19,7 +20,7 @@
                                 </v-col>
                                 <v-col cols="12" md="8" class="text-center">
                                     <v-card-text class="mt-12" align="center" justify="center">
-                                        <h2 class="text-center mb-9">
+                                        <h2 class="text-center mb-15">
                                             Inicia sesión en Namekians<span style="color:#F80808;">Games</span>
                                         </h2>
                                         <v-form>
@@ -28,7 +29,7 @@
                                             <v-text-field id="contraseña" label="Contraseña" name="Contraseña"
                                                 prepend-icon="fa-solid fa-key" type="password" class="text-center mr-3"/>
                                         </v-form>
-                                        <h3 class="text-center mt-3">¿Has olvidado tu contraseña?</h3>
+                                        <h3 class="password-recovery text-center mt-3"><v-btn variant="plain" href="/">¿Has olvidado tu contraseña?</v-btn></h3>
                                     </v-card-text>
                                     <div class="text-center mt-3">
                                         <v-btn rounded color="#F80808" dark class="button mb-6">Iniciar sesión</v-btn>
@@ -38,14 +39,14 @@
                             <v-row v-else>
                                 <v-col cols="12" md="8" class="text-center">
                                     <v-card-text class="mt-12" align="center" justify="center">
-                                        <h2 class="text-center mb-9">
+                                        <h2 class="text-center mb-15">
                                             Inicia sesión en Namekians<span style="color:red;">Games</span>
                                         </h2>
                                         <v-form>
                                             <v-text-field label="Usuario" name="usuario" prepend-icon="fa-solid fa-user"
-                                                type="text" class="shrink" />
+                                                type="text" class="text-center mr-3" />
                                             <v-text-field id="contraseña" label="Contraseña" name="Contraseña"
-                                                prepend-icon="fa-solid fa-key" />
+                                                prepend-icon="fa-solid fa-key" class="text-center mr-3"/>
                                         </v-form>
                                         <h3 class="text-center mt-3">¿Has olvidado tu contraseña?</h3>
                                         <h4 class="text-center mt-3">También puedes registrarte <span @click="transition++" style="color: #0074D9;">aquí</span></h4>
@@ -103,6 +104,7 @@
             </v-col>
         </v-row>
     </v-container>
+</div>
 </template>
 
 <script setup>
@@ -122,13 +124,21 @@ const isMobile = computed(() => window.innerWidth <= 960)
 }
 
 .background{
-    background-image: url(../assets/images/test.png);
+    background-image: url(../assets/images/spiderman.jpg);
     height: 100%;
     width: 100%;
     display: block;
     position: absolute;
     top: 0;
     background-size: cover;
+}
+.dark-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .button{
     color: #fff;
@@ -139,9 +149,10 @@ const isMobile = computed(() => window.innerWidth <= 960)
     color: #F80808;
     font-weight: bold;
 }
-/* .button-register:hover{
-    background-color: #fff !important;
-    color: #F80808;
-    font-weight
-} */
+.password-recovery{
+    color: black;
+}
+.password-recovery:hover{
+    color: red;
+}
 </style>

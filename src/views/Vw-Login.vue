@@ -5,7 +5,7 @@
       <v-sheet class="d-flex align-center justify-center flex-wrap text-center" elevation="4" rounded :width="800"
         style="margin-bottom: 10%">
         <v-card width="800px" height="400">
-          <v-row align-content="center" v-if="!isMobile ">
+          <v-row align-content="center">
             <v-col align-self="center" cols="8">
               <!-- <v-img src="../src/assets/images/gif.gif" width="100%" cover height="400"></v-img> -->
               <img src="../assets/images/gif.gif" alt="login" style="width: 100%; height: 400px; object-fit: cover;">
@@ -79,7 +79,7 @@ console.log(isMobile);
 .background {
   width: 100%;
   height: 100%;
-  position: fixed;
+  position: relative;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
@@ -92,8 +92,17 @@ console.log(isMobile);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center center;
-  filter: blur(4px);
   transform: scale(1.1);
+}
+.background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 1); /* Ajusta la opacidad según tu preferencia */
+  z-index: 1;
 }
 
 #button {
