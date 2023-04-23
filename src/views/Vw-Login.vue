@@ -5,7 +5,7 @@
       <v-sheet class="d-flex align-center justify-center flex-wrap text-center" elevation="4" rounded :width="800"
         style="margin-bottom: 10%">
         <v-card width="800px" height="400">
-          <v-row align-content="center">
+          <v-row align-content="center" v-if="!isMobile ">
             <v-col align-self="center" cols="8">
               <!-- <v-img src="../src/assets/images/gif.gif" width="100%" cover height="400"></v-img> -->
               <img src="../assets/images/gif.gif" alt="login" style="width: 100%; height: 400px; object-fit: cover;">
@@ -30,9 +30,10 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref, computed } from 'vue';
 import { useLoginStore } from '../stores/login'
 
+const screenSize = ref(false);
 const userLogin = reactive({
   nickname: '',
   password: ''
@@ -44,6 +45,10 @@ const sendData = async () => {
   await authStore.login(userLogin.nickname, userLogin.password);
 };
 
+const isMobile = computed(() => window.innerWidth <= 960)
+  
+
+console.log(isMobile);
 </script>
 
 <style scoped>

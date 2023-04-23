@@ -38,11 +38,19 @@
           <v-btn class="link" text>
             <i class="fa-solid fa-user mr-1"></i> Perfil
           </v-btn>
+          <v-btn class="link" stacked v-if="hasNotifications">
+            <v-badge color="error" floating content="0">
+              <i class="fa-solid fa-message mr-1"></i> Chat
+            </v-badge>
+          </v-btn>
+          <v-btn class="link" text v-if="!hasNotifications">
+              <i class="fa-solid fa-message mr-1"></i> Chat
+          </v-btn>
           <v-btn class="link" text>
             <i class="fa-sharp fa-solid fa-shop mr-1"></i> Historial
           </v-btn>
           <v-btn class="link mr-10" text @click="logout()">
-            <i class="fa-solid fa-right-from-bracket mr-1"></i> Desconectar
+            <i class="fa-solid fa-right-from-bracket mr-1"></i> Salir
           </v-btn>
         </v-toolbar-items>
         <v-icon class="link fas fa-search mr-5" size="14"></v-icon>
@@ -115,13 +123,14 @@ const userStore = useLoginStore()
 const { authenticated } = storeToRefs(userStore)
 const token = localStorage.getItem('token')
 
+const hasNotifications = ref(false)
+
 onMounted(() => {
   if (token) {
     authenticated.value = true
   } else {
     authenticated.value = false
   }
-  console.log('Logado? ' + authenticated.value);
 })
 
 onBeforeUnmount(() => {
@@ -162,6 +171,12 @@ const itemsLogged = [{
   title: 'Subir juego',
   value: 'subir',
   icon: 'fa-solid fa-upload',
+  action: '#'
+},
+{
+  title: 'Chat',
+  value: 'chat',
+  icon: 'fa-solid fa-message',
   action: '#'
 },
 {

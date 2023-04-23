@@ -1,12 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { vwMain, vwLogin, vwRegister } from '../views'
+import { vwMain, vwLogin, vwRegister, vwLogin2 } from '../views'
 import { useLoginStore } from "../stores/login";
 
 
 const routes = [
     { path: '/', name: 'Home', component: vwMain },
     { path: '/login', name: 'Login', component: vwLogin},
-    { path: '/registro', name: 'Register', component: vwRegister }
+    { path: '/registro', name: 'Register', component: vwRegister },
+    { path: '/segundoLogin', name: 'loogin', component: vwLogin2 }
 ]
 
 const router = createRouter({
