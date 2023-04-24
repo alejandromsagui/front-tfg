@@ -22,6 +22,14 @@ export const useRegister = defineStore({
                 return error.response.status;
             }
         },
+        async getEmail(email) {
+            try {
+                const response = await instance_axios.get(`/getEmail/${email}`);
+                return response.status;
+            } catch (error) {
+                return error.response.status;
+            }
+        },
 
         async signIn(nickname, email, password) {
             try {
@@ -41,16 +49,3 @@ export const useRegister = defineStore({
         }
     }
 })
-
-
-
-
-     // try {
-            //     const nicknameExists = await instance_axios.get('/getNickname/' + nickname);
-            //     return nicknameExists.status
-            // } catch (error) {
-            //     if(error.response.status === 404){
-            //         console.log('El usuario no existe');
-            //     }
-            //     return error.response.status
-            // }

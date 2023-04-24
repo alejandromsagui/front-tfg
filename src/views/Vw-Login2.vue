@@ -151,19 +151,29 @@ const registerUser = async () => {
     if (formIsValid.valid) {
 
         const userExists = await registerStore.getNickname(userLogin.nickname);
-        console.log(userExists);
+        const emailExists = await registerStore.getEmail(userLogin.email);
 
+        console.log(userExists);
+        console.log(emailExists);
         if (userExists === 200) {
             toast.error('Ese nombre de usuario ya existe', {
                 autoClose: 2000,
                 theme: 'colored'
             });
-        } else {
+        }
+
+        if (emailExists === 200) {
+            toast.error('Ese email ya existe', {
+                autoClose: 2000,
+                theme: 'colored'
+            });
+        }
+
+        if (userExists === 404 && emailExists === 404) {
             await registerStore.signIn(userLogin.nickname, userLogin.email, userLogin.password)
             transition.value = 1;
             form.value.reset();
         }
-
     }
 }
 
@@ -244,4 +254,5 @@ const registerUser = async () => {
     position: absolute;
     top: 0;
     background-size: cover;
-}</style>
+}
+</style>
