@@ -16,39 +16,41 @@ export const useRegister = defineStore({
 
         async getNickname(nickname) {
             try {
-                const nicknameExists = await instance_axios.get('/getNickname/' + nickname);
-                return nicknameExists.status
+                const response = await instance_axios.get(`/getNickname/${nickname}`);
+                return response.status;
             } catch (error) {
-                console.error(error)
-                return error.response.status
+                return error.response.status;
             }
         },
-        async signIn(nickname, email, password) {
 
-            const getNickname = await this.getNickname(nickname)
-            
-            if (getNickname === 200) {
-                this.nicknameExists = true
-               
-            }
-            
-            if(getNickname !== 200){
-                nicknameExists = false
-                try {
-                    const user = await instance_axios.post('/register', { nickname, email, password })
+        async signIn(nickname, email, password) {
+            try {
+                const user = await instance_axios.post('/register', { nickname, email, password })
                     this.user = user;
 
                     toast.success("Te has registrado correctamente", {
                         autoClose: 2000,
                         theme: 'colored'
                     })
-                } catch (error) {
-                    toast.error("Ha ocurrido un error", {
-                        autoClose: 2000,
-                        theme: 'colored'
-                    });
-                }
+            } catch (error) {
+                toast.error("Ha ocurrido un error", {
+                    autoClose: 2000,
+                    theme: 'colored'
+                });
             }
-        },
+        }
     }
 })
+
+
+
+
+     // try {
+            //     const nicknameExists = await instance_axios.get('/getNickname/' + nickname);
+            //     return nicknameExists.status
+            // } catch (error) {
+            //     if(error.response.status === 404){
+            //         console.log('El usuario no existe');
+            //     }
+            //     return error.response.status
+            // }

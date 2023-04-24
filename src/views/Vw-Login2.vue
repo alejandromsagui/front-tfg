@@ -147,26 +147,26 @@ const isValidEmail = (val) => {
 const registerUser = async () => {
 
     let formIsValid = await form.value.validate();
-    
-    if(nicknameExists){
-        toast.error("Ese usuario ya existe", {
-                    autoClose: 2000,
-                    theme: 'colored'
-                });
-    }
 
     if (formIsValid.valid) {
-        await registerStore.signIn(userLogin.nickname, userLogin.email, userLogin.password)
-        transition.value = 1;
-        form.value.reset();
-    } else {
-        toast.error("Formulario no válido", {
-            autoClose: 2000,
-            theme: 'colored'
-        });
-    }
 
+        const userExists = await registerStore.getNickname(userLogin.nickname);
+        console.log(userExists);
+
+        if (userExists === 200) {
+            toast.error('Ese nombre de usuario ya existe', {
+                autoClose: 2000,
+                theme: 'colored'
+            });
+        } else {
+            await registerStore.signIn(userLogin.nickname, userLogin.email, userLogin.password)
+            transition.value = 1;
+            form.value.reset();
+        }
+
+    }
 }
+
 
 </script>
 
