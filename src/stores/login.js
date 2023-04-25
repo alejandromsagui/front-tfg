@@ -20,27 +20,28 @@ export const useLoginStore = defineStore({
     actions: {
 
         async login(nickname, password) {
-
             try {
-                const user = await instance_axios.post('/login', { nickname, password });
-                //Se actualiza el estado del usuario (no es necesario mutations)
-                this.user = user;
-                localStorage.setItem('token', JSON.stringify(user.data.data.token));
-                this.authenticated = true
-
-                toast.success("¡Bienvenido de nuevo, " + nickname + "!", {
-                    autoClose: 2000,
-                    theme: 'colored'
-                });
-                router.push('/')
+              const user = await instance_axios.post('/login', { nickname, password });
+              //Se actualiza el estado del usuario (no es necesario mutations)
+              this.user = user;
+              localStorage.setItem('token', JSON.stringify(user.data.data.token));
+              this.authenticated = true;
+          
+              toast.success("¡Bienvenido de nuevo, " + nickname + "!", {
+                autoClose: 2000,
+                theme: 'colored'
+              });
+              router.push('/');
             } catch (error) {
-                this.authenticated = false
+              if (error.response && error.response.status === 400) {
+                this.authenticated = false;
                 toast.error("Nombre de usuario o contraseña incorrectos", {
-                    autoClose: 2000,
-                    theme: 'colored'
+                  autoClose: 2000,
+                  theme: 'colored'
                 });
+              }
             }
-        },
+          },
 
         logout() {
             this.user = null;
