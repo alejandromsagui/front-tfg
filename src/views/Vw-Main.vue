@@ -1,16 +1,17 @@
 <template>
   <v-container>
     <v-row align="center" justify="center" sm="6" md="4" d-flex flex-row>
-      <v-col col="2" class="d-none d-lg-block">
-        <!-- <v-img cover src="../src/assets/images/GamingZone.jpg" class="mx-auto mt-7" :width="550" /> -->
+      <!-- <v-col col="2" class="d-none d-lg-block">
         <img src="../assets/images/GamingZone.jpg" alt="Game Zone" class="mt-7 ml-9" style="object-fit: cover; width: 550px; height: 500px;">
-      </v-col>
-      <v-col col="10" style="width: 75%">
-        <v-carousel hide-delimiters cycle height="auto">
-          <v-carousel-item v-for="(videogame, index) in videogames.slice(0, 4)" :key="index">
-            <v-img cover :src="videogame.thumbnail" class="rounded"></v-img>
+      </v-col> -->
+      <v-col col="12">
+        <div style="background-color: #f5f5f5;">
+          <v-carousel hide-delimiters cycle>
+            <v-carousel-item v-for="(videogame, index) in videogames.slice(0, 4)" :key="index">
+              <v-img contain :src="videogame.thumbnail" class="rounded"></v-img>
             </v-carousel-item>
-        </v-carousel>
+          </v-carousel>
+        </div>
       </v-col>
     </v-row>
 
@@ -22,6 +23,10 @@
             <v-card-title>{{ videogame.title }}</v-card-title>
             <v-card-text>
               <p>Fecha de lanzamiento: {{ videogame.release_date }}</p>
+              <div style="display: flex; align-items: center; justify-content: flex-end;">
+                <i class="fas fa-user fa-fw"></i>
+                <p style="margin-left: 5px;">Nombre de usuario</p>
+              </div>
             </v-card-text>
           </v-card>
         </v-lazy>

@@ -113,7 +113,7 @@
                             <v-col cols="12" md="8" sm="12" xs="12" class="text-center mx-auto">
                                 <h2 class="text-white mb-15">
                                     Proporciona un <span style="color:red; font-weight: bold;">email</span> o un <span style="color:red;font-weight: bold;">usuario</span> 
-                                    y te enviaremos un correo electrónico de recuperacion
+                                    y te enviaremos un correo electrónico de recuperación
                                 </h2>
                                 <v-form>
                                     <v-text-field label="Usuario o correo electrónico" name="usuario" prepend-icon="fa-solid fa-inbox" type="email"
