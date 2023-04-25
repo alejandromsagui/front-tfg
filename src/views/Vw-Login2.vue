@@ -123,6 +123,7 @@ const authStore = useLoginStore();
 const registerStore = useRegister();
 const { nicknameExists } = storeToRefs(registerStore)
 
+console.log('test');
 const transition = ref(1)
 const form = ref(null);
 
