@@ -19,7 +19,7 @@ export const useRegister = defineStore({
                 const response = await instance_axios.get(`/getNickname/${nickname}`);
                 return response.status;
             } catch (error) {
-                return error.response.status;
+                console.log(error);
             }
         },
         async getEmail(email) {
@@ -27,7 +27,7 @@ export const useRegister = defineStore({
                 const response = await instance_axios.get(`/getEmail/${email}`);
                 return response.status;
             } catch (error) {
-                return error.response.status;
+                console.log(error);
             }
         },
 
@@ -41,10 +41,12 @@ export const useRegister = defineStore({
                         theme: 'colored'
                     })
             } catch (error) {
-                toast.error("Ha ocurrido un error", {
-                    autoClose: 2000,
-                    theme: 'colored'
-                });
+                if(error.response && error.response.status === 500){
+                    toast.error("Ha ocurrido un error", {
+                        autoClose: 2000,
+                        theme: 'colored'
+                    });
+                }
             }
         }
     }
