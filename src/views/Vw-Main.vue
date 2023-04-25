@@ -1,19 +1,19 @@
 <template>
   <v-container>
-    <v-row align="center" justify="center" sm="6" md="4" d-flex flex-row>
-      <!-- <v-col col="2" class="d-none d-lg-block">
+    <!-- <v-row align="center" justify="center" sm="6" md="4" d-flex flex-row>
+      <v-col col="2" class="d-none d-lg-block">
         <img src="../assets/images/GamingZone.jpg" alt="Game Zone" class="mt-7 ml-9" style="object-fit: cover; width: 550px; height: 500px;">
-      </v-col> -->
+      </v-col>
       <v-col col="12">
-        <div style="background-color: #f5f5f5;">
-          <v-carousel hide-delimiters cycle>
+        <div style="height: 50%;">
+          <v-carousel hide-delimiters cycle height="auto">
             <v-carousel-item v-for="(videogame, index) in videogames.slice(0, 4)" :key="index">
               <v-img contain :src="videogame.thumbnail" class="rounded"></v-img>
             </v-carousel-item>
           </v-carousel>
         </div>
       </v-col>
-    </v-row>
+    </v-row> -->
 
     <v-row align="center" align-content="center">
       <v-col v-for="videogame in videogames" :key="videogame.id" cols="12" sm="6" md="4">

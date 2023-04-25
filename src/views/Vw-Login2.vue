@@ -91,7 +91,7 @@
                             <v-col cols="12" md="8" class="text-center mx-auto">
                                 <h2 class="text-white mb-15 text-center">Crea una nueva <span
                                         style="color: #F80808;">cuenta</span></h2>
-                                <v-form>
+                                <v-form ref="form" @submit.prevent="registerUser">
                                     <v-text-field label="Usuario" name="Usuario" prepend-icon="fa-solid fa-user" type="text"
                                         class="text-white" />
                                     <v-text-field label="Email" name="email" prepend-icon="fa-solid fa-envelope" type="text"
@@ -102,7 +102,7 @@
                                 <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
                                         @click="transition--">Inicia sesión aquí</v-btn></h3>
                                 <div class="text-center mt-3">
-                                    <v-btn rounded color="#F80808" dark class="button mb-6 mt-2">Registro</v-btn>
+                                    <v-btn rounded color="#F80808" dark class="button mb-6 mt-2" type="submit">Registro</v-btn>
                                 </div>
                             </v-form>
                             </v-col>
