@@ -3,6 +3,7 @@
     <div class="background-mobile" v-else></div>
     <div class="background-register" v-if="transition == 2 && !isMobile"></div>
     <div class="background-register-mobile" v-if="transition == 2 && isMobile"></div>
+    <div class="background-recovery" v-if="transition == 3"></div>
     <div class="dark-layer"></div>
     <v-container fluid class="fill-height">
         <v-row align="center" justify="center">
@@ -275,6 +276,16 @@ const registerUser = async () => {
 
 .background-register-mobile {
     background-image: url(../assets/images/god-of-war2.jpg);
+    height: 100%;
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    background-size: cover;
+}
+
+.background-recovery {
+    background-image: url(../assets/images/horizon.jpg);
     height: 100%;
     width: 100%;
     display: block;
