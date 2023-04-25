@@ -19,12 +19,7 @@ export const useRegister = defineStore({
                 const response = await instance_axios.get(`/getNickname/${nickname}`);
                 return response.status;
             } catch (error) {
-                if (error.response) {
-                    return error.response.status;
-                } else {
-                    console.log(error);
-                    return 500;
-                }
+                return error.response.status;
             }
         },
         async getEmail(email) {
@@ -32,12 +27,7 @@ export const useRegister = defineStore({
                 const response = await instance_axios.get(`/getEmail/${email}`);
                 return response.status;
             } catch (error) {
-                if (error.response) {
-                    return error.response.status;
-                } else {
-                    console.log(error);
-                    return 500;
-                }
+                return error.response.status;
             }
         },
 

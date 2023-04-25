@@ -91,20 +91,29 @@
                             <v-col cols="12" md="8" class="text-center mx-auto">
                                 <h2 class="text-white mb-15 text-center">Crea una nueva <span
                                         style="color: #F80808;">cuenta</span></h2>
-                                <v-form ref="form" @submit.prevent="registerUser">
-                                    <v-text-field label="Usuario" name="Usuario" prepend-icon="fa-solid fa-user" type="text"
-                                        class="text-white" />
-                                    <v-text-field label="Email" name="email" prepend-icon="fa-solid fa-envelope" type="text"
-                                        class="text-white" />
-                                    <v-text-field label="Contraseña" name="contraseña" prepend-icon="fa-solid fa-key"
-                                        type="password" class="text-white" />
-                                
-                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
-                                        @click="transition--">Inicia sesión aquí</v-btn></h3>
-                                <div class="text-center mt-3">
-                                    <v-btn rounded color="#F80808" dark class="button mb-6 mt-2" type="submit">Registro</v-btn>
+                                <div>
+                                    <v-form ref="form" @submit.prevent="registerUser">
+                                        <v-text-field label="Usuario" prepend-icon="fa-solid fa-user" type="text"
+                                            class="text-white" v-model="userLogin.nickname"
+                                            :rules="[(val) => (val && val.length > 0 || 'Este campo es obligatorio')]" />
+
+                                        <v-text-field label="Email" prepend-icon="fa-solid fa-envelope" type="text"
+                                            class="text-white" v-model="userLogin.email" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
+                                                    isValidEmail]" />
+                                        <v-text-field label="Contraseña" prepend-icon="fa-solid fa-key" type="password"
+                                            class="text-white" v-model="userLogin.password" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
+                                                (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
+                                                ]" />
+                                        <h3 class=" text-center mt-3 text-white"><v-btn variant="plain"
+                                                class="password-recovery" @click="transition--">Inicia sesión aquí</v-btn>
+                                        </h3>
+                                        <div class="text-center mt-3">
+                                            <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
+                                                type="submit">Registro</v-btn>
+                                        </div>
+                                    </v-form>
+
                                 </div>
-                            </v-form>
                             </v-col>
                         </v-row>
                     </v-window-item>
