@@ -145,16 +145,10 @@ const group = ref(null)
 const items = [
 
   {
-    title: 'Iniciar sesión',
-    value: 'Iniciar sesión',
+    title: 'Acceder',
+    value: 'Acceder',
     icon: 'fa-solid fa-right-to-bracket',
     action: "login"
-  },
-  {
-    title: 'Registro',
-    value: 'registro',
-    icon: 'fa-solid fa-user-plus',
-    action: "register"
   }
 ]
 
