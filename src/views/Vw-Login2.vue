@@ -181,8 +181,8 @@ const registerUser = async () => {
         const userExists = await registerStore.getNickname(userLogin.nickname);
         const emailExists = await registerStore.getEmail(userLogin.email);
 
-        console.log(userExists);
-        console.log(emailExists);
+        console.log('Codigo de estado usuario: '+ userExists);
+        console.log('Codigo de estado email:' +emailExists);
         if (userExists === 200) {
             toast.error('Ese nombre de usuario ya existe', {
                 autoClose: 2000,
