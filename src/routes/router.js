@@ -1,12 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { vwMain, vwLogin, vwRegister } from '../views'
+import { vwMain, vwLogin } from '../views'
 import { useLoginStore } from "../stores/login";
 
 
 const routes = [
     { path: '/', name: 'Home', component: vwMain },
-    // { path: '/login', name: 'Login', component: vwLogin},
-    // { path: '/registro', name: 'Register', component: vwRegister },
     { path: '/acceso', name: 'acceso', component: vwLogin }
 ]
 
