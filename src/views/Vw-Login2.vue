@@ -16,7 +16,7 @@
                                     Inicia sesión en Namekians<span style="color:#F80808;">Games</span>
                                 </h2>
                                 <v-form>
-                                    <v-text-field label="Usuario" name="usuario" prepend-icon="fa-solid fa-user" type="text"
+                                    <v-text-field label="Email o nombre de usuario" name="usuario" prepend-icon="fa-solid fa-user" type="text"
                                         class="user-data text-center text-white mr-3"  v-model="userLogin.email" v-if="!isEmail"/>
                                         <v-text-field label="Usuario" name="usuario" prepend-icon="fa-solid fa-user" type="text"
                                         class="user-data text-center text-white mr-3" v-else v-model="userLogin.email"/>
@@ -41,8 +41,10 @@
                                     Inicia sesión en Namekians<span style="color:red;">Games</span>
                                 </h2>
                                 <v-form class="mx-auto">
-                                    <v-text-field label="Usuario" name="usuario" prepend-icon="fa-solid fa-user" type="text"
-                                        class="text-center text-white mr-3" v-model="userLogin.nickname" />
+                                    <v-text-field label="Email o nombre de usuario" name="usuario" prepend-icon="fa-solid fa-user" type="text"
+                                        class="user-data text-center text-white mr-3"  v-model="userLogin.email" v-if="!isEmail"/>
+                                        <v-text-field label="Usuario" name="usuario" prepend-icon="fa-solid fa-user" type="text"
+                                        class="user-data text-center text-white mr-3" v-else v-model="userLogin.email"/>
                                     <v-text-field id="contraseña" label="Contraseña" name="Contraseña"
                                         prepend-icon="fa-solid fa-key" class="text-center text-white mr-3" type="password"
                                         v-model="userLogin.password" />

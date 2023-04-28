@@ -27,7 +27,7 @@ export const useLoginStore = defineStore({
               this.user = user;
               localStorage.setItem('token', JSON.stringify(user.data.data.token));
               this.authenticated = true;
-          
+
               toast.success("¡Bienvenido de nuevo, " + nickname + "!", {
                 autoClose: 2000,
                 theme: 'colored'
@@ -43,13 +43,29 @@ export const useLoginStore = defineStore({
               }
             }
           },
+
+          async getTokenDecoded(){
+            const token = localStorage.getItem('token');
+
+            if (token) {
+              instance_axios.defaults.headers.common['token'] = JSON.parse(token);
+            }
+
+            const res = await instance_axios.get('/decode');
+            return res.data.nickname
+          },
+          
           async loginEmail(email, password) {
+            localStorage.removeItem('token')
             try {
               const user = await instance_axios.post('/login', { email, password });
               this.user = user;
               localStorage.setItem('token', JSON.stringify(user.data.data.token));
               this.authenticated = true;
-              toast.success("¡Bienvenido de nuevo, " + email + "!", {
+
+              const nickname = await this.getTokenDecoded()
+
+              toast.success("¡Bienvenido de nuevo, " + nickname + "!", {
                 autoClose: 2000,
                 theme: 'colored'
               });
@@ -68,6 +84,7 @@ export const useLoginStore = defineStore({
         logout() {
             this.user = null;
             localStorage.removeItem('token')
+            delete instance_axios.defaults.headers.common['token'];
             this.authenticated = false
             router.push('/acceso')
         },
