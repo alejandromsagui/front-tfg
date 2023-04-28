@@ -17,7 +17,9 @@
                                 </h2>
                                 <v-form>
                                     <v-text-field label="Usuario" name="usuario" prepend-icon="fa-solid fa-user" type="text"
-                                        class="text-center text-white mr-3" v-model="userLogin.nickname" />
+                                        class="user-data text-center text-white mr-3"  v-model="userLogin.email" v-if="!isEmail"/>
+                                        <v-text-field label="Usuario" name="usuario" prepend-icon="fa-solid fa-user" type="text"
+                                        class="user-data text-center text-white mr-3" v-else v-model="userLogin.email"/>
                                     <v-text-field id="contraseña" label="Contraseña" name="Contraseña"
                                         prepend-icon="fa-solid fa-key" type="password" class="text-center text-white mr-3"
                                         v-model="userLogin.password" />
@@ -70,7 +72,7 @@
 
                                         <v-text-field label="Email" prepend-icon="fa-solid fa-envelope" type="text"
                                             class="text-white" v-model="userLogin.email" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                                                    isValidEmail]" />
+                                                    isValidEmailRule]" />
                                         <v-text-field label="Contraseña" prepend-icon="fa-solid fa-key" type="password"
                                             class="text-white" v-model="userLogin.password" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
                                                 (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
@@ -99,7 +101,7 @@
 
                                         <v-text-field label="Email" prepend-icon="fa-solid fa-envelope" type="text"
                                             class="text-white" v-model="userLogin.email" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                                                    isValidEmail]" />
+                                                    isValidEmailRule]" />
                                         <v-text-field label="Contraseña" prepend-icon="fa-solid fa-key" type="password"
                                             class="text-white" v-model="userLogin.password" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
                                                 (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
@@ -127,7 +129,7 @@
                                 <v-form>
                                     <v-text-field label="Usuario o correo electrónico" name="usuario" prepend-icon="fa-solid fa-inbox" type="email"
                                         class="text-center text-white mr-3" v-model="userLogin.nickname"
-                                        :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio', isValidEmail]"
+                                        :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio', isValidEmailRule]"
                                         />
                                 
                                 <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition=1"
@@ -162,6 +164,7 @@ const { nicknameExists } = storeToRefs(registerStore)
 
 const transition = ref(1)
 const form = ref(null);
+const isEmail = ref(false)
 
 const userLogin = reactive({
     nickname: '',
@@ -171,15 +174,37 @@ const userLogin = reactive({
 
 const isMobile = computed(() => window.innerWidth <= 960)
 
-const authUser = async () => {
-    await authStore.login(userLogin.nickname, userLogin.password);
+const isValidEmailRule = (val) => {
+    const emailPattern =
+        /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
+    return emailPattern.test(val) || "El email no es válido";
 };
 
 const isValidEmail = (val) => {
     const emailPattern =
         /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-    return emailPattern.test(val) || "El email no es válido";
+    return emailPattern.test(val);
 };
+
+
+const authUser = async () => {
+
+    const usuarioField = document.querySelector('.user-data input[type="text"]');
+    const usuarioValue = usuarioField.value;
+
+    console.log(usuarioValue);
+    if (isValidEmail(usuarioValue)) {
+        isEmail.value = true
+        await authStore.loginEmail(usuarioValue, userLogin.password)
+    } else {
+        isEmail.value = false
+        console.log('No es email');
+        await authStore.loginUser(usuarioValue, userLogin.password)
+        console.log('No es email nickname: ' + userLogin.nickname);
+        console.log('Passwd no es email:' + userLogin.password);
+    }
+
+}
 
 const registerUser = async () => {
 
