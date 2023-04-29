@@ -11,20 +11,19 @@
                 <v-window v-model="transition">
                     <v-window-item :value="1">
                         <v-row v-if="!isMobile">
-                            <v-col cols="12" md="8" sm="12" xs="12" class="text-center mx-auto">
+                            <template v-slot:data>
                                 <h2 class="text-white mb-15">
                                     Inicia sesión en Namekians<span style="color:#F80808;">Games</span>
                                 </h2>
                                 <v-form>
-                                    <v-text-field label="Email o nombre de usuario" name="usuario" prepend-icon="fa-solid fa-user" type="text"
-                                        class="user-data text-center text-white mr-3"  v-model="userLogin.email" v-if="!isEmail"/>
-                                        <v-text-field label="Email o nombre de usuario" name="usuario" prepend-icon="fa-solid fa-user" type="text"
-                                        class="user-data text-center text-white mr-3" v-else v-model="userLogin.email"/>
+                                    <v-text-field label="Email o nombre de usuario" name="usuario"
+                                        prepend-icon="fa-solid fa-user" type="text"
+                                        class="user-data text-center text-white mr-3" />
                                     <v-text-field id="contraseña" label="Contraseña" name="Contraseña"
                                         prepend-icon="fa-solid fa-key" type="password" class="text-center text-white mr-3"
                                         v-model="userLogin.password" />
                                 </v-form>
-                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition=3"
+                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 3"
                                         class="password-recovery">¿Has olvidado tu contraseña?</v-btn></h3>
                                 <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
                                         @click="transition++">Registrate aquí</v-btn></h3>
@@ -32,7 +31,7 @@
                                     <v-btn rounded color="#F80808" dark class="button mb-6 mt-2" @click="authUser()">Iniciar
                                         sesión</v-btn>
                                 </div>
-                            </v-col>
+                            </template>
                         </v-row>
 
                         <v-row v-else justify="center" align="center">
@@ -41,23 +40,26 @@
                                     Inicia sesión en Namekians<span style="color:red;">Games</span>
                                 </h2>
                                 <v-form class="mx-auto">
-                                    <v-text-field label="Email o nombre de usuario" name="usuario" prepend-icon="fa-solid fa-user" type="text"
-                                        class="user-data text-center text-white mr-3"  v-model="userLogin.email" v-if="!isEmail"/>
-                                        <v-text-field label="Email o nombre de usuario" name="usuario" prepend-icon="fa-solid fa-user" type="text"
-                                        class="user-data text-center text-white mr-3" v-else v-model="userLogin.email"/>
+                                    <v-text-field label="Email o nombre de usuario" name="usuario"
+                                        prepend-icon="fa-solid fa-user" type="text"
+                                        class="user-data text-center text-white mr-3" v-model="userLogin.email"
+                                        v-if="!isEmail" />
+                                    <v-text-field label="Email o nombre de usuario" name="usuario"
+                                        prepend-icon="fa-solid fa-user" type="text"
+                                        class="user-data text-center text-white mr-3" v-else v-model="userLogin.email" />
                                     <v-text-field id="contraseña" label="Contraseña" name="Contraseña"
                                         prepend-icon="fa-solid fa-key" class="text-center text-white mr-3" type="password"
                                         v-model="userLogin.password" />
-                                
-                                <h3 class="text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 3"
-                                        class="password-recovery">¿Has olvidado tu contraseña?</v-btn></h3>
-                                <h3 class="text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
-                                        @click="transition++">Registrate aquí</v-btn></h3>
-                                <div class="text-center mt-3">
-                                    <v-btn rounded color="#F80808" dark class="button mb-6" @click="authUser()">Iniciar
-                                        sesión</v-btn>
-                                </div>
-                            </v-form>
+
+                                    <h3 class="text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 3"
+                                            class="password-recovery">¿Has olvidado tu contraseña?</v-btn></h3>
+                                    <h3 class="text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
+                                            @click="transition++">Registrate aquí</v-btn></h3>
+                                    <div class="text-center mt-3">
+                                        <v-btn rounded color="#F80808" dark class="button mb-6" @click="authUser()">Iniciar
+                                            sesión</v-btn>
+                                    </div>
+                                </v-form>
                             </v-col>
                         </v-row>
                     </v-window-item>
@@ -125,24 +127,27 @@
                         <v-row>
                             <v-col cols="12" md="8" sm="12" xs="12" class="text-center mx-auto">
                                 <h2 class="text-white mb-15">
-                                    Proporciona un <span style="color:red; font-weight: bold;">email</span> o un <span style="color:red;font-weight: bold;">usuario</span> 
+                                    Proporciona un <span style="color:red; font-weight: bold;">email</span> o un <span
+                                        style="color:red;font-weight: bold;">usuario</span>
                                     y te enviaremos un correo electrónico de recuperación
                                 </h2>
-                                <v-form>
-                                    <v-text-field label="Usuario o correo electrónico" name="usuario" prepend-icon="fa-solid fa-inbox" type="email"
-                                        class="text-center text-white mr-3" v-model="userLogin.nickname"
-                                        :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio', isValidEmailRule]"
-                                        />
-                                
-                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition=1"
-                                        class="password-recovery">Inicia sesión aquí</v-btn></h3>
-                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
-                                        @click="transition=2">Registrate aquí</v-btn></h3>
-                                <div class="text-center mt-3">
-                                    <v-btn rounded color="#F80808" dark class="button mb-6 mt-2">Enviar
+                                <v-form @submit.prevent="sendEmailUser">
+                                    <v-text-field label="Usuario o correo electrónico" name="usuario"
+                                        prepend-icon="fa-solid fa-inbox" class="text-center text-white mr-3"
+                                        :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio']" v-if="!isEmail" v-model="userLogin.nickname"/>
+                                        <v-text-field label="Usuario o correo electrónico" name="usuario"
+                                        prepend-icon="fa-solid fa-inbox" type="email" class="text-center text-white mr-3"
+                                        :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio']" v-else v-model="userLogin.email"/>
+                                    <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 1"
+                                            class="password-recovery">Inicia sesión aquí</v-btn></h3>
+                                    <h3 class=" text-center mt-3 text-white"><v-btn variant="plain"
+                                            class="password-recovery" @click="transition = 2">Registrate aquí</v-btn></h3>
+                                    <div class="text-center mt-3">
+                                        <v-btn rounded color="#F80808" dark class="button mb-6 mt-2" type="submit">Enviar
                                         </v-btn>
-                                </div>
-                            </v-form>
+                                    </div>
+                                </v-form>
+                                
                             </v-col>
                         </v-row>
                     </v-window-item>
@@ -159,9 +164,11 @@ import { useRegister } from "../stores/register";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { storeToRefs } from "pinia";
+import { useEmailStore } from "../stores/sendEmail";
 
 const authStore = useLoginStore();
 const registerStore = useRegister();
+const emailStore = useEmailStore();
 const { nicknameExists } = storeToRefs(registerStore)
 
 const transition = ref(1)
@@ -208,6 +215,20 @@ const authUser = async () => {
 
 }
 
+const sendEmailUser = async () => {
+    const usuarioField = document.querySelector('.user-data input[type="text"]');
+    const usuarioValue = usuarioField.value;
+
+    if (isValidEmail(usuarioValue)) {
+        isEmail.value = true
+        await emailStore.sendMailByEmail(userLogin.email);
+    } else {
+        isEmail.value = false;
+        await emailStore.sendMailByUser(userLogin.nickname);
+    }
+}
+
+
 const registerUser = async () => {
 
     let formIsValid = await form.value.validate();
@@ -217,8 +238,8 @@ const registerUser = async () => {
         const userExists = await registerStore.getNickname(userLogin.nickname);
         const emailExists = await registerStore.getEmail(userLogin.email);
 
-        console.log('Codigo de estado usuario: '+ userExists);
-        console.log('Codigo de estado email:' +emailExists);
+        console.log('Codigo de estado usuario: ' + userExists);
+        console.log('Codigo de estado email:' + emailExists);
         if (userExists === 200) {
             toast.error('Ese nombre de usuario ya existe', {
                 autoClose: 2000,
@@ -259,6 +280,7 @@ const registerUser = async () => {
     position: absolute;
     top: 0;
     background-size: cover;
+    background-position: center center;
 }
 
 .dark-layer {
@@ -298,6 +320,7 @@ const registerUser = async () => {
     position: absolute;
     top: 0;
     background-size: cover;
+    background-position: center center;
 }
 
 .background-register {
@@ -308,6 +331,7 @@ const registerUser = async () => {
     position: absolute;
     top: 0;
     background-size: cover;
+    background-position: center center;
 }
 
 .background-register-mobile {
@@ -318,6 +342,7 @@ const registerUser = async () => {
     position: absolute;
     top: 0;
     background-size: cover;
+    background-position: center center;
 }
 
 .background-recovery {
@@ -328,5 +353,5 @@ const registerUser = async () => {
     position: absolute;
     top: 0;
     background-size: cover;
-}
-</style>
+    background-position: center center;
+}</style>

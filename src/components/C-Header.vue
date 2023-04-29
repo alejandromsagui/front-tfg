@@ -17,10 +17,10 @@
 
       <v-toolbar-title class="title d-sm-flex d-md-none">Namekians<br>
         <span class="text-no-wrap">Games</span></v-toolbar-title>
-      <template v-if="!authenticated">
+      <template v-if="!authenticated" style="font-family: 'Alegreya Sans SC', sans-serif !important;">
         <v-spacer></v-spacer>
         <v-toolbar-items class="d-none d-md-block mr-4" justify-end>
-          <v-btn class="link" text @click="goLogin()">
+          <v-btn text @click="goLogin()" class="link">
             <i class="fas fa-right-to-bracket mr-2"></i> Acceso
           </v-btn>
           <v-icon class="link fas fa-search mr-5" size="14"></v-icon>
@@ -215,7 +215,8 @@ const logout = () => {
 
 </script>
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@700&display=swap');
 
 * {
   padding: 0;
@@ -223,6 +224,7 @@ const logout = () => {
   text-decoration: none;
   list-style: none;
   box-sizing: border-box;
+  font-family: 'Alegreya Sans SC', sans-serif;
 }
 
 .cover {
@@ -252,7 +254,7 @@ const logout = () => {
 }
 
 .link {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -280,7 +282,6 @@ const logout = () => {
 }
 .data {
   letter-spacing: 0;
-  font-family: "Roboto", sans-serif;
   font-size: 0.7em;
 }
 .options{
