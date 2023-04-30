@@ -11,7 +11,7 @@
                 <v-window v-model="transition">
                     <v-window-item :value="1">
                         <v-row v-if="!isMobile">
-                            <template v-slot:data>
+                            <v-col cols="12" md="8" sm="12" xs="12" class="text-center mx-auto">
                                 <h2 class="text-white mb-15">
                                     Inicia sesión en Namekians<span style="color:#F80808;">Games</span>
                                 </h2>
@@ -31,7 +31,7 @@
                                     <v-btn rounded color="#F80808" dark class="button mb-6 mt-2" @click="authUser()">Iniciar
                                         sesión</v-btn>
                                 </div>
-                            </template>
+                            </v-col>
                         </v-row>
 
                         <v-row v-else justify="center" align="center">
@@ -131,24 +131,26 @@
                                         style="color:red;font-weight: bold;">usuario</span>
                                     y te enviaremos un correo electrónico de recuperación
                                 </h2>
-                                <v-form @submit.prevent="sendEmailUser">
-                                    <v-text-field label="Usuario o correo electrónico" name="usuario"
-                                        prepend-icon="fa-solid fa-inbox" class="text-center text-white mr-3"
-                                        :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio']" v-if="!isEmail" v-model="userLogin.nickname"/>
-                                        <v-text-field label="Usuario o correo electrónico" name="usuario"
-                                        prepend-icon="fa-solid fa-inbox" type="email" class="text-center text-white mr-3"
-                                        :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio']" v-else v-model="userLogin.email"/>
-                                    <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 1"
-                                            class="password-recovery">Inicia sesión aquí</v-btn></h3>
-                                    <h3 class=" text-center mt-3 text-white"><v-btn variant="plain"
-                                            class="password-recovery" @click="transition = 2">Registrate aquí</v-btn></h3>
-                                    <div class="text-center mt-3">
-                                        <v-btn rounded color="#F80808" dark class="button mb-6 mt-2" type="submit">Enviar
-                                        </v-btn>
-                                    </div>
+                                <v-form>
+                                    <v-text-field label="Email o nombre de usuario" name="user-data"
+                                        prepend-icon="fa-solid fa-user" type="text"
+                                        class="data-user text-center text-white mr-3" />
                                 </v-form>
-                                
+                                <div class="text-center mt-3">
+                                    <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
+                                        @click="sendEmailUser()">Enviar
+                                    </v-btn>
+                                </div>
+
+                                php
+
+                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 1"
+                                        class="password-recovery">Inicia sesión aquí</v-btn></h3>
+                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
+                                        @click="transition = 2">Registrate aquí</v-btn></h3>
+
                             </v-col>
+
                         </v-row>
                     </v-window-item>
                 </v-window>
@@ -203,9 +205,11 @@ const authUser = async () => {
 
     console.log(usuarioValue);
     if (isValidEmail(usuarioValue)) {
+        console.log('Es email');
         isEmail.value = true
         await authStore.loginEmail(usuarioValue, userLogin.password)
     } else {
+        console.log('No es email');
         isEmail.value = false
         console.log('No es email');
         await authStore.loginUser(usuarioValue, userLogin.password)
@@ -216,15 +220,20 @@ const authUser = async () => {
 }
 
 const sendEmailUser = async () => {
-    const usuarioField = document.querySelector('.user-data input[type="text"]');
+    const usuarioField = document.querySelector('.data-user input[type="text"]');
     const usuarioValue = usuarioField.value;
 
+    console.log(isValidEmail(usuarioValue))
+
     if (isValidEmail(usuarioValue)) {
+        console.log('Es email');
         isEmail.value = true
-        await emailStore.sendMailByEmail(userLogin.email);
+        await emailStore.sendMailByEmail(usuarioValue)
     } else {
-        isEmail.value = false;
-        await emailStore.sendMailByUser(userLogin.nickname);
+        console.log('No es email');
+        isEmail.value = false
+        await emailStore.sendMailByUser(usuarioValue)
+
     }
 }
 
@@ -236,7 +245,9 @@ const registerUser = async () => {
     if (formIsValid.valid) {
 
         const userExists = await registerStore.getNickname(userLogin.nickname);
+        console.log('Nickname existe?: ' + userLogin.nickname);
         const emailExists = await registerStore.getEmail(userLogin.email);
+        console.log('Nickname existe?: ' + userLogin.email);
 
         console.log('Codigo de estado usuario: ' + userExists);
         console.log('Codigo de estado email:' + emailExists);
@@ -354,4 +365,5 @@ const registerUser = async () => {
     top: 0;
     background-size: cover;
     background-position: center center;
-}</style>
+}
+</style>
