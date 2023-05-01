@@ -9,18 +9,25 @@ export const useEmailStore = defineStore({
     id: 'email',
 
     state: () => ({
-        sent: false
+        code: '',
+        nickname: ''
     }),
-
+    getters: {
+        getCode() {
+            return this.code;
+        },
+        getNickname(){
+            return this.nickname;
+        }
+    },
     actions: {
         async sendMailByEmail(email) {
             try {
-                await instance_axios.post('/recovery', {email})
-
-                router.push({ path: '/codigo'})
-                this.sent = true
+                const response = await instance_axios.post('/recovery', { email })
+                router.push({ path: '/codigo' })
+                this.code = response.data.code
+                this.nickname = response.data.nickname
             } catch (error) {
-                this.sent = false
                 toast.error("Ha ocurrido un error al enviar el correo electrónico", {
                     autoClose: 2000,
                     theme: 'colored'
@@ -28,14 +35,13 @@ export const useEmailStore = defineStore({
             }
         },
 
-        async sendMailByUser(nickname){
+        async sendMailByUser(nickname) {
             try {
-                await instance_axios.post('/recovery', {nickname})
-
-                router.push({ path: '/codigo'})
-                this.sent = true
+                const response = await instance_axios.post('/recovery', { nickname })
+                router.push({ path: '/codigo' })
+                this.code = response.data.code
+                this.nickname = response.data.nickname
             } catch (error) {
-                this.sent = false
                 toast.error("Ha ocurrido un error al enviar el correo electrónico", {
                     autoClose: 2000,
                     theme: 'colored'

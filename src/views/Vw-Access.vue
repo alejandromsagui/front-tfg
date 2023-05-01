@@ -170,7 +170,9 @@ import { useEmailStore } from "../stores/sendEmail";
 const authStore = useLoginStore();
 const registerStore = useRegister();
 const emailStore = useEmailStore();
+const { code } = storeToRefs(useEmailStore);
 const { nicknameExists } = storeToRefs(registerStore)
+
 
 const transition = ref(1)
 const form = ref(null);
