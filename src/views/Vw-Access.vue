@@ -59,6 +59,7 @@
                                         <v-btn rounded color="#F80808" dark class="button mb-6" @click="authUser()">Iniciar
                                             sesión</v-btn>
                                     </div>
+
                                 </v-form>
                             </v-col>
                         </v-row>
@@ -142,13 +143,11 @@
                                     </v-btn>
                                 </div>
 
-                                php
 
                                 <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 1"
                                         class="password-recovery">Inicia sesión aquí</v-btn></h3>
                                 <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
                                         @click="transition = 2">Registrate aquí</v-btn></h3>
-
                             </v-col>
 
                         </v-row>

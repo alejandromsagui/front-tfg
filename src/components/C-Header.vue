@@ -17,13 +17,14 @@
 
       <v-toolbar-title class="title d-sm-flex d-md-none">Namekians<br>
         <span class="text-no-wrap">Games</span></v-toolbar-title>
+        
       <template v-if="!authenticated" style="font-family: 'Alegreya Sans SC', sans-serif !important;">
         <v-spacer></v-spacer>
         <v-toolbar-items class="d-none d-md-block mr-4" justify-end>
           <v-btn text @click="goLogin()" class="link">
             <i class="fas fa-right-to-bracket mr-2"></i> Acceso
           </v-btn>
-          <v-icon class="link fas fa-search mr-5" size="14"></v-icon>
+          <CSearchBar/>
         </v-toolbar-items>
       </template>
 
@@ -110,6 +111,7 @@
 
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { CSearchBar } from '../components'
 import { useRouter } from 'vue-router';
 import { useLoginStore } from '../stores/login';
 import { storeToRefs } from 'pinia';

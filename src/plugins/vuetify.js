@@ -20,6 +20,9 @@ export default createVuetify({
           fa
         },
       },
+      theme: {
+        defaultTheme: 'dark'
+      },
       display: {
         mobileBreakpoint: 'sm',
         thresholds: {
