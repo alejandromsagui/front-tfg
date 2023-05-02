@@ -29,17 +29,18 @@
                         <v-row>
                             <v-col cols="12" md="8" sm="12" xs="12" class="text-center mx-auto" style="z-index: 1;">
                                 <h3 class="text-white mb-10">
-                                    Configura una <span style="color: #F80808;">contraseña robusta</span> para mantener la seguridad de tu cuenta
+                                    Configura una <span style="color: #F80808;">contraseña robusta</span> para mantener la
+                                    seguridad de tu cuenta
                                 </h3>
                                 <v-form ref="form" @submit.prevent="changePassword">
                                     <v-text-field label="Nueva contraseña" type="password" class="text-white mr-3" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
                                         (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
-                                        ]" v-model="userData.password"/>
+                                        ]" v-model="userData.password" />
 
                                     <v-text-field label="Repite la contraseña" type="password" class="text-white mr-3"
                                         :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
                                             (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
-                                            ]" v-model="userData.password"/>
+                                            ]" v-model="userData.confirmPassword" />
                                     <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
                                         type="submit">Continuar</v-btn>
                                 </v-form>
@@ -58,11 +59,12 @@ import { toast } from 'vue3-toastify';
 import { instance_axios } from "../middlewares/axios";
 import 'vue3-toastify/dist/index.css';
 import { useEmailStore } from "../stores/sendEmail";
+import { router } from "../routes";
 const emailStore = useEmailStore()
 
 
 const userCode = reactive({ code: '' })
-const userData = reactive({ password: ''})
+const userData = reactive({ password: '', confirmPassword: '' })
 const form = ref(null)
 const transition = ref(1)
 const isCorrect = ref(false)
@@ -94,20 +96,29 @@ const confirmCode = async () => {
 const changePassword = async () => {
     let formIsValid = await form.value.validate();
 
-    if(formIsValid){
+    const update = {
+        password: userData.password
+    }
+    console.log(emailStore.getNickname)
+
+    if (formIsValid) {
         try {
-            await instance_axios.put('/updatePassword/'+emailStore.getNickname, userData.password)
+            console.log(emailStore.getNickname);
+            console.log(userData.confirmPassword);
+            await instance_axios.put('/updatePassword/' + emailStore.getNickname, update);
 
             toast.success("¡Contraseña actualizada!", {
                 autoClose: 2000,
                 theme: 'colored'
             });
+
+            router.push({ path: '/acceso'})
         } catch (error) {
             toast.error("Ha habido un error al actualizar la contraseña", {
                 autoClose: 2000,
                 theme: 'colored'
             })
-            
+
         }
     }
 }

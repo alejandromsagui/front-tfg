@@ -10,13 +10,14 @@ export const useEmailStore = defineStore({
 
     state: () => ({
         code: '',
-        nickname: ''
+        nickname: '',
+        sent: false
     }),
     getters: {
         getCode() {
             return this.code;
         },
-        getNickname(){
+        getNickname() {
             return this.nickname;
         }
     },
@@ -27,11 +28,19 @@ export const useEmailStore = defineStore({
                 router.push({ path: '/codigo' })
                 this.code = response.data.code
                 this.nickname = response.data.nickname
-            } catch (error) {
-                toast.error("Ha ocurrido un error al enviar el correo electrónico", {
+
+                toast.success("En el caso de que exista, recibirás un correo electrónico con el código para recuperar tu contraseña", {
                     autoClose: 2000,
                     theme: 'colored'
                 })
+                this.sent = true
+            } catch (error) {
+                router.push({ path: '/codigo' })
+                toast.success("En el caso de que exista, recibirás un correo electrónico con el código para recuperar tu contraseña", {
+                    autoClose: 2000,
+                    theme: 'colored'
+                })
+                this.sent = true;
             }
         },
 
@@ -41,11 +50,19 @@ export const useEmailStore = defineStore({
                 router.push({ path: '/codigo' })
                 this.code = response.data.code
                 this.nickname = response.data.nickname
-            } catch (error) {
-                toast.error("Ha ocurrido un error al enviar el correo electrónico", {
+
+                toast.success("En el caso de que exista, recibirás un correo electrónico con el código para recuperar tu contraseña", {
                     autoClose: 2000,
                     theme: 'colored'
                 })
+                this.sent = true;
+            } catch (error) {
+                router.push({ path: '/codigo' })
+                toast.success("En el caso de que exista, recibirás un correo electrónico con el código para recuperar tu contraseña", {
+                    autoClose: 2000,
+                    theme: 'colored'
+                })
+                this.sent = true;
             }
         }
     }
