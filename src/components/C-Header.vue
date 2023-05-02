@@ -3,37 +3,37 @@
     <v-toolbar color="grey-darken-4" prominent clipped-left>
       <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" class="d-sm-flex d-md-none"></v-app-bar-nav-icon>
       <router-link to="/">
-      <img src="../assets/images/logo.png" alt="logo" class="logo d-none d-sm-block">
-    </router-link>
+        <img src="../assets/images/logo.png" alt="logo" class="logo d-none d-sm-block">
+      </router-link>
 
       <router-link to="/">
-      <v-toolbar-title class="title d-none d-md-flex">
-        <div class="d-flex">
-          <span style="color: #fff;">Namekians</span>
-          <span>Games</span>
-        </div>
-      </v-toolbar-title>
-    </router-link>
+        <v-toolbar-title class="title d-none d-md-flex">
+          <div class="d-flex">
+            <span style="color: #fff;">Namekians</span>
+            <span>Games</span>
+          </div>
+        </v-toolbar-title>
+      </router-link>
 
       <v-toolbar-title class="title d-sm-flex d-md-none">Namekians<br>
         <span class="text-no-wrap">Games</span></v-toolbar-title>
-        
+
       <template v-if="!authenticated">
         <v-spacer></v-spacer>
         <v-toolbar-items class="d-none d-md-block mr-4" justify-end>
           <v-btn text @click="goLogin()" class="link">
             <i class="fas fa-right-to-bracket mr-2"></i> Acceso
           </v-btn>
-          <CSearchBar/>
         </v-toolbar-items>
       </template>
 
       <template v-else>
         <v-spacer></v-spacer>
         <v-toolbar-items class="d-none d-md-block">
-          <v-btn class="link" text>
-            <i class="fa-solid fa-upload mr-1"></i> Subir
-          </v-btn>
+
+          <CDialog>
+            
+          </CDialog>
           <v-btn class="link" text>
             <i class="fa-solid fa-user mr-1"></i> Perfil
           </v-btn>
@@ -43,7 +43,7 @@
             </v-badge>
           </v-btn>
           <v-btn class="link" text v-if="!hasNotifications">
-              <i class="fa-solid fa-message mr-1"></i> Chat
+            <i class="fa-solid fa-message mr-1"></i> Chat
           </v-btn>
           <v-btn class="link" text>
             <i class="fa-solid fa-cart-shopping mr-1"></i> Carrito
@@ -111,11 +111,19 @@
 
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
-import { CSearchBar } from '../components'
 import { useRouter } from 'vue-router';
 import { useLoginStore } from '../stores/login';
 import { storeToRefs } from 'pinia';
 
+import { CDialog } from "../components";
+
+
+const emits = defineEmits(['open-modal']);
+
+let isActive = false;
+const openDialog = () => {
+  isActive = true;
+};
 
 const router = useRouter()
 
@@ -217,7 +225,6 @@ const logout = () => {
 
 </script>
 <style scoped>
-
 @import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@700&display=swap');
 
 * {
@@ -282,11 +289,13 @@ const logout = () => {
   letter-spacing: 10px;
   padding-bottom: 15px;
 }
+
 .data {
   letter-spacing: 0;
   font-size: 0.7em;
 }
-.options{
+
+.options {
   font-size: 1em;
 }
 </style>
