@@ -23,14 +23,14 @@
                                         prepend-icon="fa-solid fa-key" type="password" class="text-center text-white mr-3"
                                         v-model="userLogin.password" />
                                 </v-form>
-                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 3"
-                                        class="password-recovery">¿Has olvidado tu contraseña?</v-btn></h3>
-                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
-                                        @click="transition++">Registrate aquí</v-btn></h3>
                                 <div class="text-center mt-3">
                                     <v-btn rounded color="#F80808" dark class="button mb-6 mt-2" @click="authUser()">Iniciar
                                         sesión</v-btn>
                                 </div>
+                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 3"
+                                        class="password-recovery">¿Has olvidado tu contraseña?</v-btn></h3>
+                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
+                                        @click="transition++">Registrate aquí</v-btn></h3>
                             </v-col>
                         </v-row>
 
@@ -51,15 +51,14 @@
                                         prepend-icon="fa-solid fa-key" class="text-center text-white mr-3" type="password"
                                         v-model="userLogin.password" />
 
-                                    <h3 class="text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 3"
-                                            class="password-recovery">¿Has olvidado tu contraseña?</v-btn></h3>
-                                    <h3 class="text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
-                                            @click="transition++">Registrate aquí</v-btn></h3>
                                     <div class="text-center mt-3">
                                         <v-btn rounded color="#F80808" dark class="button mb-6" @click="authUser()">Iniciar
                                             sesión</v-btn>
                                     </div>
-
+                                    <h3 class="text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 3"
+                                            class="password-recovery">¿Has olvidado tu contraseña?</v-btn></h3>
+                                    <h3 class="text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
+                                            @click="transition++">Registrate aquí</v-btn></h3>
                                 </v-form>
                             </v-col>
                         </v-row>
@@ -82,13 +81,13 @@
                                             class="text-white" v-model="userLogin.password" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
                                                 (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
                                                 ]" />
-                                        <h3 class=" text-center mt-3 text-white"><v-btn variant="plain"
-                                                class="password-recovery" @click="transition--">Inicia sesión aquí</v-btn>
-                                        </h3>
                                         <div class="text-center mt-3">
                                             <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
                                                 type="submit">Registro</v-btn>
                                         </div>
+                                        <h3 class=" text-center mt-3 text-white"><v-btn variant="plain"
+                                                class="password-recovery" @click="transition--">Inicia sesión aquí</v-btn>
+                                        </h3>
                                     </v-form>
 
                                 </div>
@@ -111,13 +110,14 @@
                                             class="text-white" v-model="userLogin.password" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
                                                 (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
                                                 ]" />
-                                        <h3 class=" text-center mt-3 text-white"><v-btn variant="plain"
-                                                class="password-recovery" @click="transition--">Inicia sesión aquí</v-btn>
-                                        </h3>
+
                                         <div class="text-center mt-3">
                                             <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
                                                 type="submit">Registro</v-btn>
                                         </div>
+                                        <h3 class=" text-center mt-3 text-white"><v-btn variant="plain"
+                                                class="password-recovery" @click="transition--">Inicia sesión aquí</v-btn>
+                                        </h3>
                                     </v-form>
 
                                 </div>

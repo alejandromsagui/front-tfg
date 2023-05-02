@@ -18,7 +18,7 @@
       <v-toolbar-title class="title d-sm-flex d-md-none">Namekians<br>
         <span class="text-no-wrap">Games</span></v-toolbar-title>
         
-      <template v-if="!authenticated" style="font-family: 'Alegreya Sans SC', sans-serif !important;">
+      <template v-if="!authenticated">
         <v-spacer></v-spacer>
         <v-toolbar-items class="d-none d-md-block mr-4" justify-end>
           <v-btn text @click="goLogin()" class="link">
@@ -46,7 +46,7 @@
               <i class="fa-solid fa-message mr-1"></i> Chat
           </v-btn>
           <v-btn class="link" text>
-            <i class="fa-sharp fa-solid fa-shop mr-1"></i> Historial
+            <i class="fa-solid fa-cart-shopping mr-1"></i> Carrito
           </v-btn>
           <v-btn class="link mr-10" text @click="logout()">
             <i class="fa-solid fa-right-from-bracket mr-1"></i> Salir
