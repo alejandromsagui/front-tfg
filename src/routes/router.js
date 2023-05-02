@@ -19,13 +19,13 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const userStore = useLoginStore();
     const emailStore = useEmailStore();
-    
+
     if (to.name === 'acceso' && userStore.isAuthenticated) {
         next({ name: 'Home' });
     }
-    // else if (to.name === 'perfil' && !userStore.isAuthenticated) {
-    //     next({ name: 'Home' });
-    // }
+    else if (to.name === 'perfil' && !userStore.isAuthenticated) {
+        next({ name: 'acceso' });
+    }
 
     else if (to.name === 'codigo' && !emailStore.sent) {
         next({ name: 'acceso' });

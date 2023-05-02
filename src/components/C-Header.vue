@@ -31,12 +31,12 @@
         <v-spacer></v-spacer>
         <v-toolbar-items class="d-none d-md-block">
 
-          <CDialog>
+          <CDialog/>
             
-          </CDialog>
-          <v-btn class="link" text>
+          <v-btn class="link" text @click="goPerfil()">
             <i class="fa-solid fa-user mr-1"></i> Perfil
           </v-btn>
+
           <v-btn class="link" stacked v-if="hasNotifications">
             <v-badge color="error" floating content="0">
               <i class="fa-solid fa-message mr-1"></i> Chat
@@ -220,6 +220,10 @@ const goSignUp = () => {
 
 const logout = () => {
   userStore.logout()
+}
+
+const goPerfil = () => {
+  router.push({ path: '/perfil' })
 }
 
 
