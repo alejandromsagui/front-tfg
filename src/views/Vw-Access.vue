@@ -135,14 +135,14 @@
                                 <v-form>
                                     <v-text-field label="Email o nombre de usuario" name="user-data"
                                         prepend-icon="fa-solid fa-user" type="text"
-                                        class="data-user text-center text-white mr-3" />
+                                        class="data-user text-center text-white mr-3"
+                                        :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio']" />
                                 </v-form>
                                 <div class="text-center mt-3">
                                     <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
                                         @click="sendEmailUser()">Enviar
                                     </v-btn>
                                 </div>
-
 
                                 <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 1"
                                         class="password-recovery">Inicia sesión aquí</v-btn></h3>

@@ -34,13 +34,13 @@
                                 </h3>
                                 <v-form ref="form" @submit.prevent="changePassword">
                                     <v-text-field label="Nueva contraseña" type="password" class="text-white mr-3" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                                        (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
-                                        ]" v-model="userData.password" />
+                                    (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
+                                    ]" v-model="userData.password" />
 
                                     <v-text-field label="Repite la contraseña" type="password" class="text-white mr-3"
                                         :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                                            (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
-                                            ]" v-model="userData.confirmPassword" />
+                                        (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
+                                        ]" v-model="userData.confirmPassword" />
                                     <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
                                         type="submit">Continuar</v-btn>
                                 </v-form>
@@ -112,7 +112,7 @@ const changePassword = async () => {
                 theme: 'colored'
             });
 
-            router.push({ path: '/acceso'})
+            router.push({ path: '/acceso' })
         } catch (error) {
             toast.error("Ha habido un error al actualizar la contraseña", {
                 autoClose: 2000,
