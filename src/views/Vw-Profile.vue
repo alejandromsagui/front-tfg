@@ -50,23 +50,10 @@
     </CProfile>
 </template>
 <script setup>
-import { ref, reactive, onMounted, onBeforeMount } from 'vue';
+import { ref, reactive, onBeforeMount } from 'vue';
 import { CProfile } from "../components"
-import { userData } from "../stores/userData";
-const getData = userData();
-const nickname = ref()
-const email = ref()
 
-onBeforeMount(async () => {
-    await getData.getData()
-})
-onMounted(() => {
 
-    nickname.value = getData.getNickname
-    email.value = getData.getEmail
-    console.log(nickname.value);
-    console.log(email.value);
-})
 
 const isValidEmailRule = (val) => {
     const emailPattern =

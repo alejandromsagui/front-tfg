@@ -6,7 +6,7 @@
                 <img src="../assets/images/avatar.jpg" alt="Profile Picture" style="width: 100px">
             </v-avatar>
             <div>
-                <h4 class="ml-4">{{ fullName }}</h4>
+                <h4 class="ml-4">{{ nickname }}</h4>
             </div>
         </div>
         <v-row class="mt-4 ml-10">
@@ -38,7 +38,7 @@
                             <p class="text-center text-subtitle-2 mb-10 text-grey">Selecciona un nuevo nombre de usuario</p>
                             <div class="text-start mb-4">
                                 <p class="text-subtitle-2 text-grey">Nombre de usuario actual</p>
-                                <p>{{ fullName }}</p>
+                                <p>{{ nickname }}</p>
                             </div>
                             <slot name="username"></slot>
                         </div>
@@ -54,7 +54,7 @@
                             <p class="text-center text-subtitle-2 mb-10 text-grey">Selecciona un nuevo correo para acceder a tu cuenta</p>
                             <div class="text-start mb-4">
                                 <p class="text-subtitle-2 text-grey">Correo actual</p>
-                                <p>juan@gmail.com</p>
+                                <p>{{ email }}</p>
                             </div>
                             <slot name="email"></slot>
                         </div>
@@ -78,12 +78,25 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onBeforeMount } from 'vue';
 const fullName = ref('Juan Pérez');
 
 const showNickname = ref(false);
 const showEmail = ref(false);
 const showPassword = ref(false);
+
+import { userData } from "../stores/userData";
+const getData = userData();
+const nickname = ref()
+const email = ref()
+
+onBeforeMount(async () => {
+    await getData.getData()
+    nickname.value = getData.getNickname
+    email.value = getData.getEmail
+    console.log(nickname.value);
+    console.log(email.value);
+})
 
 const isValidEmailRule = (val) => {
     const emailPattern =
