@@ -15,10 +15,10 @@
       </v-col>
     </v-row> -->
 
-    <v-row align="center" align-content="center">
+    <v-row align-content="center">
       <v-col v-for="videogame in videogames" :key="videogame.id" cols="12" sm="6" md="4">
         <v-lazy :options="{ 'threshold': 0.5 }" transition="fade-transition">
-          <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" height=350>
+          <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" height=350 @click="dialog = true">
             <v-img :src="videogame.thumbnail" height=250 cover></v-img>
             <v-card-title>{{ videogame.title }}</v-card-title>
             <v-card-text>
@@ -32,19 +32,68 @@
         </v-lazy>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col cols="12" sm="6" md="4">
+        <v-dialog v-model="dialog" transition="dialog-bottom-transition" width="1400">
+          <v-card>
+            <v-row class="center mx-5 my-5">
+              <v-col cols="12" sm="6" md="4" xs="6">
+                <v-card-title class="text-center text-white text-h4 mb-2">Videojuego 1</v-card-title>
+                <img src="../assets/images/god-of-war.jpg" alt="" height="450" width="350" class="d-flex mx-auto rounded">
+              </v-col>
+              <v-col cols="12" sm="6" md="4" class="top-align">
+                <v-card-title class="text-center text-white text-h4 mb-2 my-6">Descripción</v-card-title>
+                <v-card-text class="text-subtitle-1 text-justify my-6">Lorem ipsum dolor sit amet consectetur adipiscing,
+                  elit eget magnis sociis et interdum, sapien fusce lobortis cras vitae. Hac proin leo vestibulum pulvinar
+                  dapibus ridiculus dictum elementum, eros etiam sollicitudin habitant tellus himenaeos magnis feugiat, in
+                  velit sociosqu dignissim viverra non semper. Sed nisl nunc ut in rhoncus ridiculus tempus eleifend
+                  tortor, suscipit consequat malesuada praesent conubia convallis tempor per nec lectus, est ligula dictum
+                  dictumst potenti sollicitudin rutrum luctus.</v-card-text>
+                <v-card-title class="text-center text-white text-h4 mb-2 my-6">Género</v-card-title>
+                <v-card-text class="text-subtitle- text-center my-6 text-body-1">
+                  Aventura</v-card-text>
+              </v-col>
+              <v-col cols="12" sm="6" md="4" class="top-align">
+                <v-card-title class="text-center text-white text-h4 mb-2 my-6">Opiniones de venta</v-card-title>
+                <v-card elevation="10" class="bg-red-lighten-1">
+                  <v-card-text>Pepe: Lorem ipsum dolor sit amet consectetur adipiscing,
+                    elit eget magnis sociis et interdum,</v-card-text>
+                  <v-card-text> Pepe:Lorem ipsum dolor sit amet consectetur adipiscing,
+                    elit eget magnis sociis et interdum,</v-card-text>
+                  <v-card-text>Manolo: Lorem ipsum dolor sit amet consectetur adipiscing,
+                    elit eget magnis sociis et interdum,</v-card-text>
+                </v-card>
+                <v-card-title class="text-center text-white text-h4 mb-2 my-6">Precio</v-card-title>
+                <v-card-text class="text-subtitle- text-center my-6 text-body-1">20€</v-card-text>
+                <v-btn block class="bg-red-lighten-1 text-white font-weight-bold">Comprar</v-btn>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-dialog>
+      </v-col>
+    </v-row>
+
   </v-container>
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue';
+import { reactive, onMounted, ref } from 'vue';
 import { getVideogames } from '../services/videogames';
 
-const videogames = reactive([]);
 
+const videogames = reactive([]);
+const dialog = ref(false)
 
 onMounted(async () => {
   videogames.push(...await getVideogames());
 });
+
+const videogame = reactive({
+  title: 'Videojuego',
+  thumbnail: 'https://via.placeholder.com/150',
+  release_date: '2022-01-01',
+  description: 'Descripción del videojuego'
+})
 
 </script>
 <style scoped>
@@ -62,5 +111,10 @@ onMounted(async () => {
   cursor: pointer;
   transform: translateY(-5px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.top-align {
+  align-self: flex-start;
+  margin-top: 16px;
 }
 </style>

@@ -52,13 +52,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from "vue";
-
-const props = defineProps({
-    value: {
-        type: Boolean
-    }
-})
+import { defineEmits } from "vue";
 
 const emit = defineEmits(['change-dialog-value'])
 

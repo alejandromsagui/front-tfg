@@ -18,7 +18,7 @@
             <v-form>
                 <v-text-field label="Nuevo email" variant="outlined" class="align-items-center mx-auto"
                     style="width: 400px;" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                            isValidEmailRule]"></v-text-field>
+                        isValidEmailRule]"></v-text-field>
                 <v-text-field label="Contraseña actual" variant="outlined" class="align-items-center mx-auto"
                     style="width: 400px;" type="password"
                     :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio']"></v-text-field>
@@ -35,12 +35,12 @@
                     :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio']"></v-text-field>
                 <v-text-field label="Nueva contraseña" variant="outlined" class="align-items-center mx-auto"
                     style="width: 400px;" type="password" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                        (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
-                        ]"></v-text-field>
+                    (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
+                    ]"></v-text-field>
                 <v-text-field label="Repite la nueva contraseña" variant="outlined" class="align-items-center mx-auto"
                     style="width: 400px;" type="password" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                        (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
-                        ]"></v-text-field>
+                    (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
+                    ]"></v-text-field>
                 <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
                     <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3">CAMBIAR
                         CONTRASEÑA</v-btn>
@@ -50,9 +50,23 @@
     </CProfile>
 </template>
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted, onBeforeMount } from 'vue';
 import { CProfile } from "../components"
+import { userData } from "../stores/userData";
+const getData = userData();
+const nickname = ref()
+const email = ref()
 
+onBeforeMount(async () => {
+    await getData.getData()
+})
+onMounted(() => {
+
+    nickname.value = getData.getNickname
+    email.value = getData.getEmail
+    console.log(nickname.value);
+    console.log(email.value);
+})
 
 const isValidEmailRule = (val) => {
     const emailPattern =
@@ -109,4 +123,5 @@ const handleItemClick = (item) => {
 
 .d-none.d-md-block.pa-0 {
     margin-left: -50px;
-}</style>
+}
+</style>
