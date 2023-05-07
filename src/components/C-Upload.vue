@@ -1,58 +1,78 @@
 <template>
     <v-card>
-        <v-card-title class="title d-none d-md-block">
-            <v-row>
-                <v-col cols="12" sm="6" md="6"></v-col>
-            </v-row>
-        </v-card-title>
-        <v-card-text>
-            <v-container fluid>
-                <div class="d-flex">
-                    <v-row align="center" justify="center">
-                        <v-col cols="12" sm="6" md="4">
-                            <v-text-field label="Título" required variant="underlined"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                            <v-select multiple chips variant="underlined" :items="['Acción', 'Carrera', 'Deportes', 'Exploración', 'Guerra', 'Lucha', 'Online', 'Rompecabezas', 'Simulador',
-                                'Violento', 'Anime', 'Casual', 'Fantasía', 'Indie', 'Multijugador', 'Plataforma', 'Sandbox', 'Supervivencia', 'Zombies',
-                                'Aventura', 'Cooperativo', 'Estrategia', 'FPS', 'JRPG', 'Mundo Abierto', 'Rol', 'Shooter', 'Terror'
-                            ]" label="Género" required></v-select>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                            <v-text-field label="Precio" required variant="underlined" type="number"></v-text-field>
+        <v-form ref="form" @submit.prevent="uploadVideogame">
+            <v-card-title class="title d-none d-md-block">
+                <v-row>
+                    <v-col cols="12" sm="6" md="6"></v-col>
+                </v-row>
+            </v-card-title>
+            <v-card-text>
+                <v-container fluid>
+                    <div class="d-flex">
+                        <v-row align="center" justify="center">
+                            <v-col cols="12" sm="6" md="4">
+                                <v-text-field label="Título" required variant="underlined" :rules="[requiredField]"
+                                    v-model="newVideogame.name"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                                <v-select multiple chips variant="underlined" :items="['Acción', 'Carrera', 'Deportes', 'Exploración', 'Guerra', 'Lucha', 'Online', 'Rompecabezas', 'Simulador',
+                                    'Violento', 'Anime', 'Casual', 'Fantasía', 'Indie', 'Multijugador', 'Plataforma', 'Sandbox', 'Supervivencia', 'Zombies',
+                                    'Aventura', 'Cooperativo', 'Estrategia', 'FPS', 'JRPG', 'Mundo Abierto', 'Rol', 'Shooter', 'Terror'
+                                ]" label="Género" required :rules="[requiredField]"
+                                    v-model="newVideogame.genre"></v-select>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                                <v-text-field label="Precio" required variant="underlined" type="number"
+                                    :rules="[requiredField]" v-model="newVideogame.price"></v-text-field>
+                            </v-col>
+                        </v-row>
+                    </div>
+                    <v-row>
+                        <v-col cols="12" sm="12" md="12">
+                            <v-file-input label="Portada" variant="underlined" required
+                                prepend-icon="fa-solid fa-camera-retro" name="image"></v-file-input>
                         </v-col>
                     </v-row>
-                </div>
-                <v-row>
-                    <v-col cols="12" sm="12" md="12">
-                        <v-file-input label="Portada" variant="underlined" required prepend-icon="fa-solid fa-camera-retro"
-                            name="image"></v-file-input>
-                    </v-col>
-                </v-row>
 
-                <v-row>
-                    <v-col cols="12" sm="12" md="12">
-                        <v-textarea label="Descripción" variant="underlined" clearable></v-textarea>
-                    </v-col>
-                </v-row>
-            </v-container>
-        </v-card-text>
-        <v-card-actions class="justify-center mx-auto">
-            <v-spacer></v-spacer>
-            <v-btn variant="outlined" @click="emitValue(false)" class="bg-red-darken-3 text-white font-weight-bold button1">
-                Cerrar
-            </v-btn>
-            <v-btn variant="outlined" @click="emitValue(false)"
-                class="bg-blue-darken-4 text-white font-weight-bold button2">
-                Subir videojuego
-            </v-btn>
+                    <v-row>
+                        <v-col cols="12" sm="12" md="12">
+                            <v-textarea label="Descripción" variant="underlined" clearable :rules="[requiredField]"
+                                v-model="newVideogame.description"></v-textarea>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-card-text>
+            <v-card-actions class="justify-center mx-auto">
+                <v-spacer></v-spacer>
+                <v-btn variant="outlined" @click="emitValue(false)"
+                    class="bg-red-darken-3 text-white font-weight-bold button1">
+                    Cerrar
+                </v-btn>
+                <v-btn variant="outlined" class="bg-blue-darken-4 text-white font-weight-bold button2" type="submit">
+                    Subir videojuego
+                </v-btn>
 
-        </v-card-actions>
+            </v-card-actions>
+        </v-form>
     </v-card>
 </template>
 
 <script setup>
-import { defineEmits } from "vue";
+import { defineEmits, reactive, ref } from "vue";
+
+import { useVideogameStore } from "../stores/videogames"
+
+const videogameStore = useVideogameStore()
+const form = ref(null)
+
+const newVideogame = reactive({
+    name: '',
+    genre: null,
+    description: '',
+    price: null
+})
+
+const requiredField = (value) => !!value || "Este campo es obligatorio";
 
 const emit = defineEmits(['change-dialog-value'])
 
@@ -60,6 +80,21 @@ const emitValue = (value) => {
     emit("change-dialog-value", value);
 }
 
+const uploadVideogame = async () => {
+
+    let isValid = form.value.validate()
+    try {
+        if (isValid) {
+            await videogameStore.newVideogame(newVideogame.name, newVideogame.genre, newVideogame.description, newVideogame.price)
+            form.value.reset()
+        } else {
+            console.log('No es válido');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+}
 </script>
 
 <style lang="css" scoped>
@@ -82,5 +117,4 @@ const emitValue = (value) => {
     background-color: #fff !important;
     color: #0D47A1 !important;
 }
-
 </style>

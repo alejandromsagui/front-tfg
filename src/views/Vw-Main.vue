@@ -16,16 +16,16 @@
     </v-row> -->
 
     <v-row align-content="center">
-      <v-col v-for="videogame in videogames" :key="videogame.id" cols="12" sm="6" md="4">
+      <v-col v-for="videogame in videogames" :key="videogame._id" cols="12" sm="6" md="4">
         <v-lazy :options="{ 'threshold': 0.5 }" transition="fade-transition">
           <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" height=350 @click="dialog = true">
-            <v-img :src="videogame.thumbnail" height=250 cover></v-img>
-            <v-card-title>{{ videogame.title }}</v-card-title>
+            <v-img :src="videogame.image" height=250 cover></v-img>
+            <v-card-title class="text-center">{{ videogame.name }}</v-card-title>
             <v-card-text>
-              <p>Fecha de lanzamiento: {{ videogame.release_date }}</p>
+              <p class="text-red-darken-1">{{ videogame.genre.join(', ') }}</p>
               <div style="display: flex; align-items: center; justify-content: flex-end;">
                 <i class="fas fa-user fa-fw"></i>
-                <p style="margin-left: 5px;">Nombre de usuario</p>
+                <p style="margin-left: 5px;" class="text-red-darken-1">Nombre de usuario</p>
               </div>
             </v-card-text>
           </v-card>
@@ -33,12 +33,12 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12" sm="6" md="4" >
         <v-dialog v-model="dialog" transition="dialog-bottom-transition" width="1400">
-          <v-card>
-            <v-row class="center mx-5 my-5">
+          <v-card >
+            <v-row class="center mx-5 my-5" >
               <v-col cols="12" sm="6" md="4" xs="6">
-                <v-card-title class="text-center text-white text-h4 mb-2">Videojuego 1</v-card-title>
+                <v-card-title class="text-center text-white text-h4 mb-2">{{ videogame.name }}</v-card-title>
                 <img src="../assets/images/god-of-war.jpg" alt="" height="450" width="350" class="d-flex mx-auto rounded">
               </v-col>
               <v-col cols="12" sm="6" md="4" class="top-align">
@@ -78,22 +78,19 @@
 
 <script setup>
 import { reactive, onMounted, ref } from 'vue';
-import { getVideogames } from '../services/videogames';
+import { useVideogameStore } from "../stores/videogames"
 
+const getVideogamesMain = useVideogameStore()
 
-const videogames = reactive([]);
+let videogames = reactive([]);
 const dialog = ref(false)
 
 onMounted(async () => {
-  videogames.push(...await getVideogames());
+  const games = await getVideogamesMain.getVideogames();
+  console.log('Games desde onMounted: '+games);
+  await videogames.push(...await getVideogamesMain.getVideogames());
+  console.log('Games desde onMounted:', videogames);
 });
-
-const videogame = reactive({
-  title: 'Videojuego',
-  thumbnail: 'https://via.placeholder.com/150',
-  release_date: '2022-01-01',
-  description: 'Descripción del videojuego'
-})
 
 </script>
 <style scoped>
