@@ -38,7 +38,7 @@
           <v-card >
             <v-row class="center mx-5 my-5" >
               <v-col cols="12" sm="6" md="4" xs="6">
-                <v-card-title class="text-center text-white text-h4 mb-2">{{ videogame.name }}</v-card-title>
+                <v-card-title class="text-center text-white text-h4 mb-2">Ttitulo</v-card-title>
                 <img src="../assets/images/god-of-war.jpg" alt="" height="450" width="350" class="d-flex mx-auto rounded">
               </v-col>
               <v-col cols="12" sm="6" md="4" class="top-align">
