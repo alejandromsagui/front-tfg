@@ -6,7 +6,7 @@
                 <img src="../assets/images/avatar.jpg" alt="Profile Picture" style="width: 100px">
             </v-avatar>
             <div>
-                <h4 class="ml-4">{{ nickname }}</h4>
+                <h4 class="ml-4">{{ data.nickname }}</h4>
             </div>
         </div>
         <v-row class="mt-4 ml-10">
@@ -31,14 +31,13 @@
             </div>
             <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showNickname">
                 <v-col cols="12" md="8" xl="6" class="pa-0">
-                    <v-sheet :height="450" max-width="900"
-                        class="mb-16 d-flex justify-center align-center d-none" rounded>
+                    <v-sheet :height="450" max-width="900" class="mb-16 d-flex justify-center align-center d-none" rounded>
                         <div style="text-align: center; width: 400px;">
                             <h2 class="text-center text-white font-weight-bold mb-10">Cambiar nombre de usuario</h2>
                             <p class="text-center text-subtitle-2 mb-10 text-grey">Selecciona un nuevo nombre de usuario</p>
                             <div class="text-start mb-4">
                                 <p class="text-subtitle-2 text-grey">Nombre de usuario actual</p>
-                                <p>{{ nickname }}</p>
+                                <p>{{ data.nickname }}</p>
                             </div>
                             <slot name="username"></slot>
                         </div>
@@ -47,14 +46,14 @@
             </v-row>
             <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showEmail">
                 <v-col cols="12" md="8" xl="6" xs="3" sm="3" class="pa-0">
-                    <v-sheet :height="450" max-width="900"
-                        class="mb-16 d-flex justify-center align-center d-none" rounded>
+                    <v-sheet :height="450" max-width="900" class="mb-16 d-flex justify-center align-center d-none" rounded>
                         <div style="text-align: center; width: 400px;">
                             <h2 class="text-center text-white font-weight-bold mb-10">Cambiar correo de la cuenta</h2>
-                            <p class="text-center text-subtitle-2 mb-10 text-grey">Selecciona un nuevo correo para acceder a tu cuenta</p>
+                            <p class="text-center text-subtitle-2 mb-10 text-grey">Selecciona un nuevo correo para acceder a
+                                tu cuenta</p>
                             <div class="text-start mb-4">
                                 <p class="text-subtitle-2 text-grey">Correo actual</p>
-                                <p>{{ email }}</p>
+                                <p>{{ data.email }}</p>
                             </div>
                             <slot name="email"></slot>
                         </div>
@@ -63,11 +62,11 @@
             </v-row>
             <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showPassword">
                 <v-col cols="12" md="8" xl="6" class="pa-0">
-                    <v-sheet :height="480" max-width="900"
-                        class="mb-16 d-flex justify-center align-center d-none" rounded>
+                    <v-sheet :height="480" max-width="900" class="mb-16 d-flex justify-center align-center d-none" rounded>
                         <div style="text-align: center; width: 400px;">
                             <h2 class="text-center text-white font-weight-bold mb-10">Cambiar contraseña de la cuenta</h2>
-                            <p class="text-center text-subtitle-2 mb-10 text-grey">Escoge una contraseña robusta para mantener la seguridad de tu cuenta</p>
+                            <p class="text-center text-subtitle-2 mb-10 text-grey">Escoge una contraseña robusta para
+                                mantener la seguridad de tu cuenta</p>
                             <slot name="password"></slot>
                         </div>
                     </v-sheet>
@@ -78,31 +77,49 @@
 </template>
 
 <script setup>
-import { ref, reactive, onBeforeMount } from 'vue';
-const fullName = ref('Juan Pérez');
+import { ref, reactive, onBeforeMount, watchEffect, watch } from 'vue';
 
 const showNickname = ref(false);
 const showEmail = ref(false);
 const showPassword = ref(false);
-
+const token = localStorage.getItem('token')
 import { userData } from "../stores/userData";
 const getData = userData();
-const nickname = ref()
-const email = ref()
+const data = reactive({
+    nickname: '',
+    email: ''
+});
 
 onBeforeMount(async () => {
-    await getData.getData()
-    nickname.value = getData.getNickname
-    email.value = getData.getEmail
-    console.log(nickname.value);
-    console.log(email.value);
+    await getData.getData();
+    data.nickname = getData.getNickname;
+    data.email = getData.getEmail;
+});
+
+watch(() => getData.getNickname, async (newNickname, oldNickname) => {
+    if(newNickname !== oldNickname){
+        console.log('Valor de getNickname: '+getData.getNickname)
+        await getData.updateTokenByNickname(newNickname)
+        console.log('El nombre ha sido cambiado por: '+newNickname);
+        data.nickname = newNickname
+    }
 })
 
-const isValidEmailRule = (val) => {
-    const emailPattern =
-        /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-    return emailPattern.test(val) || "El email no es válido";
-};
+watch(() => getData.getEmail, async (newEmail, oldEmail) => {
+    if(newEmail !== oldEmail){
+        console.log('Valor de getEmail: '+getData.getEmail);
+        await getData.updateTokenByEmail(newEmail)
+        console.log('El correo ha sido cambiado por: '+getData.getEmail);
+        data.email = newEmail;
+    }
+})
+// watchEffect( async () => {
+//     const { getNickname, getEmail } = getData;
+//     data.nickname = getNickname;
+//     data.email = getEmail;
+//     console.log('Token desde whatchEffect: '+getData.newToken);
+
+// });
 
 const items = reactive([
     { text: 'Modificar nombre de usuario', action: 'username' },

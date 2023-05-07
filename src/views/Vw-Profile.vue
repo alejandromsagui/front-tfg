@@ -1,48 +1,45 @@
 <template>
     <CProfile>
         <template #username>
-            <v-form>
+            <v-form ref="form" @submit.prevent="changeNickname">
                 <v-text-field label="Nuevo nombre de usuario" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;"
-                    :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio']"></v-text-field>
+                    style="width: 400px;" :rules="[requiredField]" v-model="userModifier.nickname"></v-text-field>
                 <v-text-field label="Contraseña actual" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" type="password"
-                    :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio']"></v-text-field>
+                    style="width: 400px;" type="password" :rules="[requiredField, passwordLength]"
+                    v-model="userModifier.password"></v-text-field>
                 <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
-                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3">CAMBIAR
+                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit">CAMBIAR
                         NOMBRE DE USUARIO</v-btn>
                 </div>
             </v-form>
         </template>
         <template #email>
-            <v-form>
+            <v-form ref="form" @submit.prevent="changeEmail">
                 <v-text-field label="Nuevo email" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                        isValidEmailRule]"></v-text-field>
+                    style="width: 400px;" :rules="[requiredField, isValidEmailRule]"
+                    v-model="userModifier.email"></v-text-field>
                 <v-text-field label="Contraseña actual" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" type="password"
-                    :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio']"></v-text-field>
+                    style="width: 400px;" type="password" :rules="[requiredField, passwordLength]"
+                    v-model="userModifier.password"></v-text-field>
                 <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
-                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3">CAMBIAR
+                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit">CAMBIAR
                         EMAIL</v-btn>
                 </div>
             </v-form>
         </template>
         <template #password>
-            <v-form>
+            <v-form ref="form" @submit.prevent="changePassword">
                 <v-text-field label="Contraseña actual" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" type="password"
-                    :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio']"></v-text-field>
+                    style="width: 400px;" type="password" :rules="[requiredField, passwordLength]"
+                    v-model="userModifier.oldPassword"></v-text-field>
                 <v-text-field label="Nueva contraseña" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" type="password" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                    (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
-                    ]"></v-text-field>
+                    style="width: 400px;" type="password" :rules="[requiredField, passwordLength, passwordMatch]"
+                    v-model="userModifier.newPassword"></v-text-field>
                 <v-text-field label="Repite la nueva contraseña" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" type="password" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                    (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
-                    ]"></v-text-field>
+                    style="width: 400px;" type="password" :rules="[requiredField, passwordLength, passwordMatch]"
+                    v-model="userModifier.confirmPassword"></v-text-field>
                 <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
-                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3">CAMBIAR
+                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit">CAMBIAR
                         CONTRASEÑA</v-btn>
                 </div>
             </v-form>
@@ -50,10 +47,29 @@
     </CProfile>
 </template>
 <script setup>
-import { ref, reactive, onBeforeMount } from 'vue';
+import { reactive, ref, computed } from 'vue';
 import { CProfile } from "../components"
+import { userData } from '../stores/userData';
+const useModifierStore = userData()
 
+const form = ref(null);
 
+const userModifier = reactive({
+    nickname: '',
+    email: '',
+    password: '',
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+})
+
+const requiredField = (value) => !!value || "Este campo es obligatorio";
+
+const passwordLength = (value) =>
+    value && value.length >= 6 || "La contraseña debe ser superior a 5 caracteres";
+
+const passwordMatch = (value) =>
+    value === userModifier.newPassword || "Las contraseñas no coinciden"
 
 const isValidEmailRule = (val) => {
     const emailPattern =
@@ -61,32 +77,36 @@ const isValidEmailRule = (val) => {
     return emailPattern.test(val) || "El email no es válido";
 };
 
-const items = reactive([
-    { text: 'Modificar nombre de usuario', action: 'username' },
-    { text: 'Modificar email', action: 'email' },
-    { text: 'Modificar contraseña', action: 'password' },
-    { text: 'Saldo' },
-    { text: 'Historial de compras' },
-    { text: 'Exportar datos' },
-]);
-
-const handleItemClick = (item) => {
-    if (item.action === 'username') {
-        showNickname.value = true;
-        showEmail.value = false;
-        showPassword.value = false;
-
-    } else if (item.action === 'email') {
-        showNickname.value = false;
-        showEmail.value = true;
-        showPassword.value = false;
-
-    } else if (item.action === 'password') {
-        showNickname.value = false;
-        showEmail.value = false;
-        showPassword.value = true;
+const changeNickname = async () => {
+    try {
+        await useModifierStore.changeNickname(userModifier.nickname, userModifier.password)
+        form.value.reset();
+    } catch (error) {
+        console.log(error);
     }
-};
+
+}
+
+const changeEmail = async () => {
+    try {
+        await useModifierStore.changeEmail(userModifier.email, userModifier.password)
+        form.value.reset();
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+const changePassword = async () => {
+    try {
+        await useModifierStore.changePassword(userModifier.oldPassword, userModifier.newPassword)
+        form.value.reset();
+    } catch (error) {
+        console.log(error);
+    }
+
+
+}
 
 </script>
 <style>
