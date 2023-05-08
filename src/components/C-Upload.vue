@@ -30,7 +30,8 @@
                     <v-row>
                         <v-col cols="12" sm="12" md="12">
                             <v-file-input label="Portada" variant="underlined" required
-                                prepend-icon="fa-solid fa-camera-retro" name="image"></v-file-input>
+                                prepend-icon="fa-solid fa-camera-retro" name="image"
+                                v-model="newVideogame.image"></v-file-input>
                         </v-col>
                     </v-row>
 
@@ -61,16 +62,18 @@
 import { defineEmits, reactive, ref } from "vue";
 
 import { useVideogameStore } from "../stores/videogames"
-
+import headers from "../middlewares/axios"
 const videogameStore = useVideogameStore()
 const form = ref(null)
 
 const newVideogame = reactive({
     name: '',
-    genre: null,
+    genre: [],
     description: '',
+    image: [],
     price: null
 })
+
 
 const requiredField = (value) => !!value || "Este campo es obligatorio";
 
@@ -85,7 +88,8 @@ const uploadVideogame = async () => {
     let isValid = form.value.validate()
     try {
         if (isValid) {
-            await videogameStore.newVideogame(newVideogame.name, newVideogame.genre, newVideogame.description, newVideogame.price)
+            headers(newVideogame.image)
+            await videogameStore.newVideogame(newVideogame.name, newVideogame.genre, newVideogame.description, newVideogame.image, newVideogame.price)
             form.value.reset()
         } else {
             console.log('No es válido');
@@ -95,6 +99,8 @@ const uploadVideogame = async () => {
     }
 
 }
+
+
 </script>
 
 <style lang="css" scoped>

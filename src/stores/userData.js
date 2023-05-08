@@ -39,8 +39,8 @@ export const userData = defineStore({
 
         async getData() {
 
-            if (localStorage.getItem('token')) {
-                instance_axios.defaults.headers.common['token'] = JSON.parse(localStorage.getItem('token'));
+            if (localStorage.getItem('Authentication')) {
+                instance_axios.defaults.headers.common['Authentication'] = JSON.parse(localStorage.getItem('Authentication'));
             }
             await this.decodeToken()
         },
@@ -48,13 +48,13 @@ export const userData = defineStore({
         async updateTokenByNickname(nickname) {
             const res = await instance_axios.put('/updateToken', { nickname })
             console.log('Token actualizado: ' + res.data.data.token);
-            localStorage.setItem('token', JSON.stringify(res.data.data.token))
+            localStorage.setItem('Authentication', JSON.stringify(res.data.data.token))
         },
 
         async updateTokenByEmail(email) {
             const res = await instance_axios.put('/updateToken', { email })
             console.log('Token actualizado: ' + res.data.data.token);
-            localStorage.setItem('token', JSON.stringify(res.data.data.token))
+            localStorage.setItem('Authentication', JSON.stringify(res.data.data.token))
         },
         async changeNickname(nickname, password) {
 

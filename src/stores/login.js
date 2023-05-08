@@ -8,7 +8,7 @@ export const useLoginStore = defineStore({
   id: 'login',
 
   state: () => ({
-    token: JSON.parse(localStorage.getItem("token")),
+    token: JSON.parse(localStorage.getItem("Authentication")),
     returnUrl: null,
     authenticated: false,
     nickname: ''
@@ -25,7 +25,7 @@ export const useLoginStore = defineStore({
         const user = await instance_axios.post('/login', { nickname, password });
         //Se actualiza el estado del usuario (no es necesario mutations)
         this.user = user;
-        localStorage.setItem('token', JSON.stringify(user.data.data.token));
+        localStorage.setItem('Authentication', JSON.stringify(user.data.data.token));
         this.authenticated = true;
 
         toast.success("¡Bienvenido de nuevo, " + nickname + "!", {
@@ -43,10 +43,10 @@ export const useLoginStore = defineStore({
     },
 
     async getTokenDecoded() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('Authentication');
 
       if (token) {
-        instance_axios.defaults.headers.common['token'] = JSON.parse(token);
+        instance_axios.defaults.headers.common['Authentication'] = JSON.parse(token);
       }
 
       const res = await instance_axios.get('/decode');
@@ -54,12 +54,12 @@ export const useLoginStore = defineStore({
     },
 
     async loginEmail(email, password) {
-      localStorage.removeItem('token')
+      localStorage.removeItem('Authentication')
       let user;
       try {
         user = await instance_axios.post('/login', { email, password });
         this.user = user;
-        localStorage.setItem('token', JSON.stringify(user.data.data.token));
+        localStorage.setItem('Authentication', JSON.stringify(user.data.data.token));
         this.authenticated = true;
 
         const nickname = await this.getTokenDecoded()
@@ -82,8 +82,8 @@ export const useLoginStore = defineStore({
 
     logout() {
       this.user = null;
-      localStorage.removeItem('token')
-      delete instance_axios.defaults.headers.common['token'];
+      localStorage.removeItem('Authentication')
+      delete instance_axios.defaults.headers.common['Authentication'];
       this.authenticated = false
       router.push('/acceso')
     },
