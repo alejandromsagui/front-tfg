@@ -30,8 +30,7 @@
                     <v-row>
                         <v-col cols="12" sm="12" md="12">
                             <v-file-input label="Portada" variant="underlined" required
-                                prepend-icon="fa-solid fa-camera-retro" name="image"
-                                v-model="newVideogame.image"></v-file-input>
+                                prepend-icon="fa-solid fa-camera-retro" name="image" @change="onChange"></v-file-input>
                         </v-col>
                     </v-row>
 
@@ -60,8 +59,10 @@
 
 <script setup>
 import { defineEmits, reactive, ref } from "vue";
-
+import { instance_axios } from "../middlewares/axios";
 import { useVideogameStore } from "../stores/videogames"
+import { userData } from '../stores/userData';
+const useModifierStore = userData()
 import headers from "../middlewares/axios"
 const videogameStore = useVideogameStore()
 const form = ref(null)
@@ -70,35 +71,71 @@ const newVideogame = reactive({
     name: '',
     genre: [],
     description: '',
-    image: [],
-    price: null
+    image: null,
+    price: null,
+    userId: '',
+    nickname: ''
 })
 
 
 const requiredField = (value) => !!value || "Este campo es obligatorio";
 
 const emit = defineEmits(['change-dialog-value'])
-
+const file = ref()
 const emitValue = (value) => {
     emit("change-dialog-value", value);
 }
 
-const uploadVideogame = async () => {
 
-    let isValid = form.value.validate()
+const headerss = (isFile) => {
+    return {
+        "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token",
+        "Content-Type": isFile ? "application/octet-stream" : "application/json",
+    };
+};
+
+const decodeToken = async () => {
+    const token = await useModifierStore.decodeToken();
+        console.log(token.user);
+
+        newVideogame.userId = token.user.id;
+        newVideogame.nickname = token.user.nickname;
+}
+
+const onChange = (e) => {
+    file.value = e.target.files[0];
+    console.log(file.value);
+};
+
+const uploadVideogame = async (e) => {
+    // e.preventDefault();
+
+    // if (!file.value) {
+    //     return;
+    // }
+
+    // const data = new FormData();
+    // data.append("image", file.value);
+
     try {
-        if (isValid) {
-            headers(newVideogame.image)
-            await videogameStore.newVideogame(newVideogame.name, newVideogame.genre, newVideogame.description, newVideogame.image, newVideogame.price)
-            form.value.reset()
-        } else {
-            console.log('No es válido');
-        }
+        // const res = await instance_axios.post("/uploads", data, {
+        //     headers: headerss(true),
+        // });
+        // console.log(res.data);
+
+        // newVideogame.image = res.data.data
+        console.log('Valor de image: ' + newVideogame.image);
+
+        console.log('Id desde la vista: '+videogameStore.getId);
+        console.log('Nickname desde la vista: '+videogameStore.getNickname);
+
+        const videogame = await videogameStore.newVideogame(newVideogame.name, newVideogame.description, newVideogame.image, newVideogame.genre, newVideogame.price, 'werwer', 'werewrewr')
+        console.log(videogame);
     } catch (error) {
         console.log(error);
     }
-
-}
+};
 
 
 </script>

@@ -77,42 +77,43 @@
 </template>
 
 <script setup>
-import { ref, reactive, onBeforeMount, watchEffect, watch } from 'vue';
+import { ref, reactive, onBeforeMount, watchEffect, watch, onMounted } from 'vue';
 
 const showNickname = ref(false);
 const showEmail = ref(false);
 const showPassword = ref(false);
 const token = localStorage.getItem('token')
 import { userData } from "../stores/userData";
-const getData = userData();
+const userDataStore = userData(); 
+
 const data = reactive({
     nickname: '',
     email: ''
 });
 
-onBeforeMount(async () => {
-    await getData.getData();
-    data.nickname = getData.getNickname;
-    data.email = getData.getEmail;
+onMounted( async () => {
+    const res = await userDataStore.decodeToken()
+    data.nickname = res.user.nickname;
+    data.email = res.user.email;
 });
 
-watch(() => getData.getNickname, async (newNickname, oldNickname) => {
-    if(newNickname !== oldNickname){
-        console.log('Valor de getNickname: '+getData.getNickname)
-        await getData.updateTokenByNickname(newNickname)
-        console.log('El nombre ha sido cambiado por: '+newNickname);
-        data.nickname = newNickname
-    }
-})
+// watch(() => data.nickname, async (newNickname, oldNickname) => {
+//     if(newNickname !== oldNickname){
+//         console.log('Valor de nickname: '+data.nickname);
+//         await userDataStore.updateTokenByNickname(newNickname)
+//         console.log('El nombre ha sido cambiado por: '+newNickname);
+//         data.nickname = newNickname
+//     }
+// })
 
-watch(() => getData.getEmail, async (newEmail, oldEmail) => {
-    if(newEmail !== oldEmail){
-        console.log('Valor de getEmail: '+getData.getEmail);
-        await getData.updateTokenByEmail(newEmail)
-        console.log('El correo ha sido cambiado por: '+getData.getEmail);
-        data.email = newEmail;
-    }
-})
+// watch(() => getData.getEmail, async (newEmail, oldEmail) => {
+//     if(newEmail !== oldEmail){
+//         console.log('Valor de getEmail: '+getData.getEmail);
+//         await getData.updateTokenByEmail(newEmail)
+//         console.log('El correo ha sido cambiado por: '+getData.getEmail);
+//         data.email = newEmail;
+//     }
+// })
 // watchEffect( async () => {
 //     const { getNickname, getEmail } = getData;
 //     data.nickname = getNickname;

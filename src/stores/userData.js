@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { instance_axios } from "../middlewares/axios";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import { useLoginStore } from "./login"
 
 export const userData = defineStore({
     id: 'data',
@@ -13,79 +14,54 @@ export const userData = defineStore({
         newToken: ''
     }),
 
-    getters: {
-        getNickname() {
-            return this.nickname;
-        },
-        getEmail() {
-            return this.email;
-        },
-        getToken() {
-            return this.token;
-        },
-        getNewToken() {
-            return this.newToken
-        }
-    },
     actions: {
-
         async decodeToken() {
-            const res = await instance_axios.get('/decode');
-            console.log('Email desde Pinia: ' + res.data.email);
-            console.log('Nickname desde Pinia: ' + res.data.nickname);
-            this.email = res.data.email;
-            this.nickname = res.data.nickname;
-        },
-
-        async getData() {
-
-            if (localStorage.getItem('Authentication')) {
-                instance_axios.defaults.headers.common['Authentication'] = JSON.parse(localStorage.getItem('Authentication'));
+            try {
+                const res = await instance_axios.get('/decode')
+                console.log(res.data);
+                return res.data;
+            } catch (error) {
+                console.log(error);
             }
-            await this.decodeToken()
         },
-
         async updateTokenByNickname(nickname) {
             const res = await instance_axios.put('/updateToken', { nickname })
             console.log('Token actualizado: ' + res.data.data.token);
-            localStorage.setItem('Authentication', JSON.stringify(res.data.data.token))
+            localStorage.setItem('token', JSON.stringify(res.data.data.token))
         },
 
         async updateTokenByEmail(email) {
             const res = await instance_axios.put('/updateToken', { email })
             console.log('Token actualizado: ' + res.data.data.token);
-            localStorage.setItem('Authentication', JSON.stringify(res.data.data.token))
+            localStorage.setItem('Authorization', JSON.stringify(res.data.data.token))
         },
         async changeNickname(nickname, password) {
-
-            let res; 
             try {
-                res = await instance_axios.put('/updateNickname/' + this.nickname, { nickname, password })
 
-                console.log('Token: ' + res.data.token);
-                console.log('Respuesta bien: ' + res.data.message);
-
-                if (res.data.message === "El nombre de usuario debe ser diferente al actual" || res.data.message === "La contraseña no es válida"
-                    || res.data.message === "Debe proporcionar un nombre de usuario válido" || res.data.message === "El nombre de usuario ya está en uso") {
-                    toast.error(res.data.message, {
+                const response = await instance_axios.put(`/updateNickname/${nickname}`, { password });
+                
+                console.log('Response: '+response.data);
+                if (
+                    response.data.message === "El nombre de usuario debe ser diferente al actual" ||
+                    response.data.message === "La contraseña no es válida" ||
+                    response.data.message === "Debe proporcionar un nombre de usuario válido" ||
+                    response.data.message === "El nombre de usuario ya está en uso"
+                ) {
+                    toast.error(response.data.message, {
                         autoClose: 2000,
                         theme: 'colored'
                     });
                 } else {
-                    toast.success("Nombre actualizado a, " + nickname, {
+                    toast.success(`Nombre actualizado a, ${nickname}`, {
                         autoClose: 2000,
                         theme: 'colored'
                     });
-
-                    await this.getData()
-                    this.nickname = nickname
-
-                    console.log('Valor de nickname desde changeNickname: ' + this.nickname);
+        
+                    console.log(`Valor de nickname desde changeNickname: ${nickname}`);
                 }
-
             } catch (error) {
-                console.log('Error: ' + res.data.message);
-                toast.error(res.data.message, {
+                console.log(`Error: ${error.message}`);
+                toast.error(error.message, {
                     autoClose: 2000,
                     theme: 'colored'
                 });

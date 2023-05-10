@@ -130,6 +130,7 @@ const router = useRouter()
 const userStore = useLoginStore()
 const { authenticated } = storeToRefs(userStore)
 const token = localStorage.getItem('token')
+console.log(token);
 
 const hasNotifications = ref(false)
 

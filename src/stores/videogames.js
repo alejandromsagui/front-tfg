@@ -11,9 +11,12 @@ export const useVideogameStore = defineStore({
         res: ''
     }),
     actions: {
-        async newVideogame(name, genre, description, image, price) {
+
+        async newVideogame(name, description, genre, price, userId, nickname) {
             try {
-                this.res = await instance_axios.post('/newVideogame', { name, genre, description, image, price })
+
+                console.log('estoy aqui');
+                this.res = await instance_axios.post('/newVideogame', {name, description, genre, price, userId, nickname});
                 console.log(this.res);
             } catch (error) {
                 console.log(error);

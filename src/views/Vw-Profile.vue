@@ -79,6 +79,8 @@ const isValidEmailRule = (val) => {
 
 const changeNickname = async () => {
     try {
+        console.log(userModifier.nickname);
+        console.log(userModifier.password);
         await useModifierStore.changeNickname(userModifier.nickname, userModifier.password)
         form.value.reset();
     } catch (error) {

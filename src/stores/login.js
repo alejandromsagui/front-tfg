@@ -3,6 +3,7 @@ import { router } from '../routes';
 import { instance_axios } from '../middlewares/axios';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import { ref } from 'vue';
 
 export const useLoginStore = defineStore({
   id: 'login',
@@ -24,11 +25,12 @@ export const useLoginStore = defineStore({
       try {
         const user = await instance_axios.post('/login', { nickname, password });
         //Se actualiza el estado del usuario (no es necesario mutations)
-        this.user = user;
-        localStorage.setItem('Authentication', JSON.stringify(user.data.data.token));
+        console.log('Respuesta user: '+user);
+        localStorage.setItem('token', JSON.stringify(user.data.data.token));
         this.authenticated = true;
 
-        toast.success("¡Bienvenido de nuevo, " + nickname + "!", {
+        this.nickname = nickname;
+        toast.success("¡Bienvenido de nuevo, " + this.nickname + "!", {
           autoClose: 2000,
           theme: 'colored'
         });
@@ -42,52 +44,41 @@ export const useLoginStore = defineStore({
       }
     },
 
-    async getTokenDecoded() {
-      const token = localStorage.getItem('Authentication');
-
-      if (token) {
-        instance_axios.defaults.headers.common['Authentication'] = JSON.parse(token);
-      }
-
-      const res = await instance_axios.get('/decode');
-      return res.data.nickname
-    },
-
     async loginEmail(email, password) {
-      localStorage.removeItem('Authentication')
-      let user;
+      localStorage.removeItem('token')
       try {
-        user = await instance_axios.post('/login', { email, password });
-        this.user = user;
-        localStorage.setItem('Authentication', JSON.stringify(user.data.data.token));
-        this.authenticated = true;
+        const response = await instance_axios.post('/login', { email, password })
+        const token = response.data.data.token
+        localStorage.setItem('token', JSON.stringify(token))
+        this.authenticated = true
+    
+        const userResponse = await instance_axios.get('/getEmail/'+email)
 
-        const nickname = await this.getTokenDecoded()
-
-        toast.success("¡Bienvenido de nuevo, " + nickname + "!", {
+        console.log(userResponse.data.user.nickname);
+        
+        this.nickname = userResponse.data.user.nickname
+    
+        toast.success('¡Bienvenido de nuevo,' + this.nickname+'!', {
           autoClose: 2000,
           theme: 'colored'
-        });
-        router.push('/');
+        })
+    
+        router.push('/')
       } catch (error) {
-        if (user.data.error === "Nombre de usuario o contraseña incorrectos") {
-          this.authenticated = false;
-          toast.error(user.data.error, {
-            autoClose: 2000,
-            theme: 'colored'
-          });
-        }
+        console.log(error)
+        // handle error
       }
     },
 
     logout() {
       this.user = null;
-      localStorage.removeItem('Authentication')
-      delete instance_axios.defaults.headers.common['Authentication'];
+      localStorage.removeItem('token')
+      delete instance_axios.defaults.headers.common['Authorization'];
       this.authenticated = false
       router.push('/acceso')
     },
 
   }
+
 
 })
