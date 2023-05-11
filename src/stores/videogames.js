@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
-import { instance_axios } from '../middlewares/axios';
+import headers, { instance_axios } from '../middlewares/axios';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { router } from '../routes';
+
 
 export const useVideogameStore = defineStore({
     id: 'videogame',
@@ -11,13 +12,16 @@ export const useVideogameStore = defineStore({
         res: ''
     }),
     actions: {
-
-        async newVideogame(name, description, genre, price, userId, nickname) {
+        async newVideogame(nvg) {
             try {
-
                 console.log('estoy aqui');
-                this.res = await instance_axios.post('/newVideogame', {name, description, genre, price, userId, nickname});
-                console.log(this.res);
+
+                const options = {
+                    headers: headers(true),
+                  };
+
+                const res = await instance_axios.post('/newVideogame', nvg, options)
+                console.log(res.data);
             } catch (error) {
                 console.log(error);
             }

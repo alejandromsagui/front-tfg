@@ -66,15 +66,15 @@ const useModifierStore = userData()
 import headers from "../middlewares/axios"
 const videogameStore = useVideogameStore()
 const form = ref(null)
+import fs from "fs";
 
+const token = localStorage.getItem('token')
 const newVideogame = reactive({
     name: '',
     genre: [],
     description: '',
-    image: null,
     price: null,
-    userId: '',
-    nickname: ''
+    image: ''
 })
 
 
@@ -86,57 +86,33 @@ const emitValue = (value) => {
     emit("change-dialog-value", value);
 }
 
-
-const headerss = (isFile) => {
-    return {
-        "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token",
-        "Content-Type": isFile ? "application/octet-stream" : "application/json",
-    };
-};
-
-const decodeToken = async () => {
-    const token = await useModifierStore.decodeToken();
-        console.log(token.user);
-
-        newVideogame.userId = token.user.id;
-        newVideogame.nickname = token.user.nickname;
-}
-
 const onChange = (e) => {
     file.value = e.target.files[0];
     console.log(file.value);
+
+    newVideogame.image = file.value
 };
 
 const uploadVideogame = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
+    if (!file.value) {
+        return;
+    }
 
-    // if (!file.value) {
-    //     return;
-    // }
-
-    // const data = new FormData();
-    // data.append("image", file.value);
+    const data = new FormData();
+    data.append("name", newVideogame.name)
+    data.append("description", newVideogame.description)
+    data.append("price", newVideogame.price)
+    data.append("genre", newVideogame.genre)
+    data.append("image", file.value);
 
     try {
-        // const res = await instance_axios.post("/uploads", data, {
-        //     headers: headerss(true),
-        // });
-        // console.log(res.data);
-
-        // newVideogame.image = res.data.data
-        console.log('Valor de image: ' + newVideogame.image);
-
-        console.log('Id desde la vista: '+videogameStore.getId);
-        console.log('Nickname desde la vista: '+videogameStore.getNickname);
-
-        const videogame = await videogameStore.newVideogame(newVideogame.name, newVideogame.description, newVideogame.image, newVideogame.genre, newVideogame.price, 'werwer', 'werewrewr')
+        const videogame = await videogameStore.newVideogame(data)
         console.log(videogame);
     } catch (error) {
         console.log(error);
     }
 };
-
 
 </script>
 
