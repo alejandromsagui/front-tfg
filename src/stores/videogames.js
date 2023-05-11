@@ -14,16 +14,22 @@ export const useVideogameStore = defineStore({
     actions: {
         async newVideogame(nvg) {
             try {
-                console.log('estoy aqui');
-
                 const options = {
                     headers: headers(true),
                   };
-
                 const res = await instance_axios.post('/newVideogame', nvg, options)
                 console.log(res.data);
+
+                toast.success('¡Videojuego subido correctamente!', {
+                    autoClose: 2000,
+                    theme: 'colored'
+                  })
             } catch (error) {
                 console.log(error);
+                toast.error('Ha ocurrido un error al subir el videojuego', {
+                    autoClose: 2000,
+                    theme: 'colored'
+                  })
             }
         },
 

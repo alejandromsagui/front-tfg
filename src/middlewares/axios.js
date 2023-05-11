@@ -14,6 +14,7 @@ export const instance_axios = axios.create({
 
 export default function headers(esArchivo) {
     return {
-        'Content-Type': esArchivo ? 'application/octet-stream' : 'application/json'
+        'Content-Type': esArchivo ? 'application/octet-stream' : 'application/json',
+        'Authorization': token ? `Bearer ${token.replace(/"/g, '')}` : null 
     }
 }

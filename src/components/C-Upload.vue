@@ -15,9 +15,9 @@
                                     v-model="newVideogame.name"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                                <v-select multiple chips variant="underlined" :items="['Acción', 'Carrera', 'Deportes', 'Exploración', 'Guerra', 'Lucha', 'Online', 'Rompecabezas', 'Simulador',
-                                    'Violento', 'Anime', 'Casual', 'Fantasía', 'Indie', 'Multijugador', 'Plataforma', 'Sandbox', 'Supervivencia', 'Zombies',
-                                    'Aventura', 'Cooperativo', 'Estrategia', 'FPS', 'JRPG', 'Mundo Abierto', 'Rol', 'Shooter', 'Terror'
+                                <v-select multiple chips variant="underlined" :items="['Acción ', 'Carrera ', 'Deportes ', 'Exploración ', 'Guerra ', 'Lucha ', 'Online ', 'Rompecabezas ', 'Simulador ',
+                                    'Violento ', 'Anime ', 'Casual ', 'Fantasía ', 'Indie ', 'Multijugador ', 'Plataforma ', 'Sandbox ', 'Supervivencia ', 'Zombies ',
+                                    'Aventura ', 'Cooperativo ', 'Estrategia ', 'FPS ', 'JRPG ', 'Mundo Abierto ', 'Rol ', 'Shooter ', 'Terror '
                                 ]" label="Género" required :rules="[requiredField]"
                                     v-model="newVideogame.genre"></v-select>
                             </v-col>
@@ -42,7 +42,8 @@
                     </v-row>
                 </v-container>
             </v-card-text>
-            <v-card-actions class="justify-center mx-auto">
+            <div class="d-flex mx-auto justify-center">
+            <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn variant="outlined" @click="emitValue(false)"
                     class="bg-red-darken-3 text-white font-weight-bold button1">
@@ -53,6 +54,7 @@
                 </v-btn>
 
             </v-card-actions>
+        </div>
         </v-form>
     </v-card>
 </template>
@@ -106,9 +108,12 @@ const uploadVideogame = async (e) => {
     data.append("genre", newVideogame.genre)
     data.append("image", file.value);
 
+ 
     try {
         const videogame = await videogameStore.newVideogame(data)
         console.log(videogame);
+        form.value.reset();
+        emitValue(false)
     } catch (error) {
         console.log(error);
     }

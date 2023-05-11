@@ -14,13 +14,15 @@
         </div>
       </v-col>
     </v-row> -->
-
     <v-row align-content="center">
-      <v-col v-for="videogame in videogames" :key="videogame._id" cols="12" sm="6" md="4">
+      <v-col v-for="videogame in videogames.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))"
+        :key="videogame._id" cols="12" sm="6" md="4">
         <v-lazy :options="{ 'threshold': 0.5 }" transition="fade-transition">
-          <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" height="100%" @click="dialog = true">
+          <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" height="100%"
+            @click="verJuego(videogame)">
             <div style="position: relative; padding-top: 75%;">
-              <img :src="videogame.image" alt="videogame" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+              <img :src="videogame.image" alt="videogame"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
             </div>
             <v-card-title class="text-center">{{ videogame.name }}</v-card-title>
             <v-card-text>
@@ -31,30 +33,24 @@
               </div>
             </v-card-text>
           </v-card>
-          
         </v-lazy>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="nuevoJuego">
       <v-col cols="12" sm="6" md="4">
         <v-dialog v-model="dialog" transition="dialog-bottom-transition" width="1400">
           <v-card>
             <v-row class="center mx-5 my-5">
               <v-col cols="12" sm="6" md="4" xs="6">
-                <v-card-title class="text-center text-white text-h4 mb-2">Ttitulo</v-card-title>
-                <img src="../assets/images/god-of-war.jpg" alt="" height="450" width="350" class="d-flex mx-auto rounded">
+                <v-card-title class="text-center text-white text-h4 mb-2">{{ nuevoJuego.name }}</v-card-title>
+                <img :src=nuevoJuego.image alt="" height="auto" width="500" class="d-flex mx-auto rounded">
               </v-col>
               <v-col cols="12" sm="6" md="4" class="top-align">
                 <v-card-title class="text-center text-white text-h4 mb-2 my-6">Descripción</v-card-title>
-                <v-card-text class="text-subtitle-1 text-justify my-6">Lorem ipsum dolor sit amet consectetur adipiscing,
-                  elit eget magnis sociis et interdum, sapien fusce lobortis cras vitae. Hac proin leo vestibulum pulvinar
-                  dapibus ridiculus dictum elementum, eros etiam sollicitudin habitant tellus himenaeos magnis feugiat, in
-                  velit sociosqu dignissim viverra non semper. Sed nisl nunc ut in rhoncus ridiculus tempus eleifend
-                  tortor, suscipit consequat malesuada praesent conubia convallis tempor per nec lectus, est ligula dictum
-                  dictumst potenti sollicitudin rutrum luctus.</v-card-text>
+                <v-card-text class="text-subtitle-1 text-justify my-6">{{ nuevoJuego.description }}.</v-card-text>
                 <v-card-title class="text-center text-white text-h4 mb-2 my-6">Género</v-card-title>
                 <v-card-text class="text-subtitle- text-center my-6 text-body-1">
-                  Aventura</v-card-text>
+                  {{ nuevoJuego.genre }}</v-card-text>
               </v-col>
               <v-col cols="12" sm="6" md="4" class="top-align">
                 <v-card-title class="text-center text-white text-h4 mb-2 my-6">Opiniones de venta</v-card-title>
@@ -67,7 +63,7 @@
                     elit eget magnis sociis et interdum,</v-card-text>
                 </v-card>
                 <v-card-title class="text-center text-white text-h4 mb-2 my-6">Precio</v-card-title>
-                <v-card-text class="text-subtitle- text-center my-6 text-body-1">20€</v-card-text>
+                <v-card-text class="text-subtitle- text-center my-6 text-body-1">{{ nuevoJuego.price }}</v-card-text>
                 <v-btn block class="bg-red-lighten-1 text-white font-weight-bold">Comprar</v-btn>
               </v-col>
             </v-row>
@@ -80,11 +76,11 @@
 </template>
 
 <script setup>
-import { reactive, onMounted, ref } from 'vue';
+import { reactive, onMounted, ref, watch } from 'vue';
 import { useVideogameStore } from "../stores/videogames"
 
 const getVideogamesMain = useVideogameStore()
-
+const nuevoJuego = ref()
 let videogames = reactive([]);
 const dialog = ref(false)
 
@@ -95,6 +91,15 @@ onMounted(async () => {
   console.log('Games desde onMounted:', videogames);
 });
 
+// watch(() => videogames, () => {
+//     console.log('new value',);
+// }, { deep: true });
+
+
+const verJuego = (videogame) => {
+  nuevoJuego.value = videogame
+  dialog.value = true
+}
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
@@ -122,5 +127,4 @@ onMounted(async () => {
   max-width: 500px;
   max-height: 250px;
   object-fit: cover;
-}
-</style>
+}</style>
