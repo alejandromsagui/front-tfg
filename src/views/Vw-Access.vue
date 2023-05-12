@@ -76,11 +76,11 @@
 
                                         <v-text-field label="Email" prepend-icon="fa-solid fa-envelope" type="text"
                                             class="text-white" v-model="userLogin.email" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                                                    isValidEmailRule]" />
+                                                isValidEmailRule]" />
                                         <v-text-field label="Contraseña" prepend-icon="fa-solid fa-key" type="password"
                                             class="text-white" v-model="userLogin.password" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                                                (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
-                                                ]" />
+                                            (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
+                                            ]" />
                                         <div class="text-center mt-3">
                                             <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
                                                 type="submit">Registro</v-btn>
@@ -105,11 +105,11 @@
 
                                         <v-text-field label="Email" prepend-icon="fa-solid fa-envelope" type="text"
                                             class="text-white" v-model="userLogin.email" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                                                    isValidEmailRule]" />
+                                                isValidEmailRule]" />
                                         <v-text-field label="Contraseña" prepend-icon="fa-solid fa-key" type="password"
                                             class="text-white" v-model="userLogin.password" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                                                (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
-                                                ]" />
+                                            (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
+                                            ]" />
 
                                         <div class="text-center mt-3">
                                             <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
@@ -132,17 +132,18 @@
                                         style="color:red;font-weight: bold;">usuario</span>
                                     y te enviaremos un correo electrónico de recuperación
                                 </h2>
-                                <v-form>
+                                <v-form ref="form">
                                     <v-text-field label="Email o nombre de usuario" name="user-data"
                                         prepend-icon="fa-solid fa-user" type="text"
                                         class="data-user text-center text-white mr-3"
-                                        :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio']" />
+                                        :rules="[v => !!v || 'Este campo es obligatorio']" />
+
+                                    <div class="text-center mt-3">
+                                        <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
+                                            @click="sendEmailUser()">Enviar
+                                        </v-btn>
+                                    </div>
                                 </v-form>
-                                <div class="text-center mt-3">
-                                    <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
-                                        @click="sendEmailUser()">Enviar
-                                    </v-btn>
-                                </div>
 
                                 <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 1"
                                         class="password-recovery">Inicia sesión aquí</v-btn></h3>
@@ -226,16 +227,21 @@ const sendEmailUser = async () => {
 
     console.log(isValidEmail(usuarioValue))
 
-    if (isValidEmail(usuarioValue)) {
-        console.log('Es email');
-        isEmail.value = true
-        await emailStore.sendMailByEmail(usuarioValue)
-    } else {
-        console.log('No es email');
-        isEmail.value = false
-        await emailStore.sendMailByUser(usuarioValue)
 
+    let formIsValid = await form.value.validate();
+
+    if (formIsValid) {
+        if (isValidEmail(usuarioValue)) {
+            console.log('Es email');
+            isEmail.value = true
+            await emailStore.sendMailByEmail(usuarioValue)
+        } else {
+            console.log('No es email');
+            isEmail.value = false
+            await emailStore.sendMailByUser(usuarioValue)
+        }
     }
+
 }
 
 

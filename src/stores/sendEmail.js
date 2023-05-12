@@ -23,7 +23,10 @@ export const useEmailStore = defineStore({
     },
     actions: {
         async sendMailByEmail(email) {
-            try {
+
+            if (!email) {
+                console.log('Mal email');
+            } else {
                 const response = await instance_axios.post('/recovery', { email })
                 router.push({ path: '/codigo' })
                 this.code = response.data.code
@@ -34,30 +37,19 @@ export const useEmailStore = defineStore({
                     theme: 'colored'
                 })
                 this.sent = true
-            } catch (error) {
-                router.push({ path: '/codigo' })
-                toast.success("En el caso de que exista, recibirás un correo electrónico con el código para recuperar tu contraseña", {
-                    autoClose: 2000,
-                    theme: 'colored'
-                })
-                this.sent = true;
             }
         },
 
         async sendMailByUser(nickname) {
-            try {
+
+            if (!nickname) {
+                console.log('Mal nickname');
+            } else {
                 const response = await instance_axios.post('/recovery', { nickname })
                 router.push({ path: '/codigo' })
                 this.code = response.data.code
                 this.nickname = response.data.nickname
 
-                toast.success("En el caso de que exista, recibirás un correo electrónico con el código para recuperar tu contraseña", {
-                    autoClose: 2000,
-                    theme: 'colored'
-                })
-                this.sent = true;
-            } catch (error) {
-                router.push({ path: '/codigo' })
                 toast.success("En el caso de que exista, recibirás un correo electrónico con el código para recuperar tu contraseña", {
                     autoClose: 2000,
                     theme: 'colored'
