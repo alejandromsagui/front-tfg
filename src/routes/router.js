@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { vwMain, vwLogin, vwCode, vwProfile } from '../views'
+import { vwMain, vwLogin, vwCode, vwProfile, vw404 } from '../views'
 import { useLoginStore } from "../stores/login";
 import { useEmailStore } from '../stores/sendEmail';
 
@@ -7,7 +7,8 @@ const routes = [
     { path: '/', name: 'Home', component: vwMain },
     { path: '/acceso', name: 'acceso', component: vwLogin },
     { path: '/codigo', name: 'codigo', component: vwCode },
-    { path: '/perfil', name: 'perfil', component: vwProfile }
+    { path: '/perfil', name: 'perfil', component: vwProfile },
+    { path: '/:pathMatch(.*)*', name: '404', component: vw404 },
 ]
 
 const router = createRouter({

@@ -9,7 +9,8 @@
 
 
 <script setup>
-import {CHeader} from "./components";
+import { CHeader } from "./components";
+
 </script>
 
 <style scoped>
