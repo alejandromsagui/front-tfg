@@ -10,7 +10,6 @@
 
 <script setup>
 import { CHeader } from "./components";
-
 </script>
 
 <style scoped>
