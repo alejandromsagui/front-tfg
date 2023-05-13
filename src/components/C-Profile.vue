@@ -78,33 +78,33 @@
 
 <script setup>
 import { ref, reactive, onBeforeMount, watchEffect, watch, onMounted } from 'vue';
+import { useLoginStore } from "../stores/login"
+import { userData } from "../stores/userData";
 
 const showNickname = ref(false);
 const showEmail = ref(false);
 const showPassword = ref(false);
-const token = localStorage.getItem('token')
-import { userData } from "../stores/userData";
-const userDataStore = userData(); 
+const userDataStore = userData();
+const useAuthStore = useLoginStore();
 
 const data = reactive({
     nickname: '',
     email: ''
 });
 
-onMounted( async () => {
-    const res = await userDataStore.decodeToken()
-    data.nickname = res.user.nickname;
-    data.email = res.user.email;
-});
+onBeforeMount(() => {
+    data.nickname = useAuthStore.getToken.nickname;
+    data.email = useAuthStore.getToken.email;
+})
 
-// watch(() => data.nickname, async (newNickname, oldNickname) => {
-//     if(newNickname !== oldNickname){
-//         console.log('Valor de nickname: '+data.nickname);
-//         await userDataStore.updateTokenByNickname(newNickname)
-//         console.log('El nombre ha sido cambiado por: '+newNickname);
-//         data.nickname = newNickname
-//     }
-// })
+//watch(() => data.nickname, async (newNickname, oldNickname) => {
+//    if (newNickname !== oldNickname) {
+//        console.log('Valor de nickname: ' + data.nickname);
+//        await userDataStore.updateTokenByNickname(newNickname);
+//        console.log('El nombre ha sido cambiado por: ' + newNickname);
+//        data.nickname = newNickname;
+//    }
+//});
 
 // watch(() => getData.getEmail, async (newEmail, oldEmail) => {
 //     if(newEmail !== oldEmail){

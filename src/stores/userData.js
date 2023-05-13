@@ -15,32 +15,23 @@ export const userData = defineStore({
     }),
 
     actions: {
-        async decodeToken() {
-            try {
-                const res = await instance_axios.get('/decode')
-                console.log(res.data);
-                return res.data;
-            } catch (error) {
-                console.log(error);
-            }
-        },
         async updateTokenByNickname(nickname) {
             const res = await instance_axios.put('/updateToken', { nickname })
             console.log('Token actualizado: ' + res.data.data.token);
-            localStorage.setItem('token', JSON.stringify(res.data.data.token))
+            localStorage.setItem('token', res.data.data.token);
         },
 
         async updateTokenByEmail(email) {
             const res = await instance_axios.put('/updateToken', { email })
             console.log('Token actualizado: ' + res.data.data.token);
-            localStorage.setItem('Authorization', JSON.stringify(res.data.data.token))
+            localStorage.setItem('Authorization', res.data.data.token)
         },
         async changeNickname(nickname, password) {
             try {
 
-                const response = await instance_axios.put(`/updateNickname/${nickname}`, { password });
+                const response = await instance_axios.put(`/updateNickname/${nickname}`, { nickname, password });
                 
-                console.log('Response: '+response.data);
+                console.log('Response: ', response.data);
                 if (
                     response.data.message === "El nombre de usuario debe ser diferente al actual" ||
                     response.data.message === "La contraseña no es válida" ||
@@ -118,5 +109,6 @@ export const userData = defineStore({
                 }
             }
         }
-    }
+    },
+
 })

@@ -29,7 +29,9 @@
               <p class="text-red-darken-1">{{ videogame.genre.join(', ') }}</p>
               <div style="display: flex; align-items: center; justify-content: flex-end;">
                 <i class="fas fa-user fa-fw"></i>
-                <p style="margin-left: 5px;" class="text-red-darken-1">{{ videogame.nickname }}</p>
+                <router-link :to="'/perfil/' + videogame.nickname" class="text-decoration-none">
+                  <p style="margin-left: 5px;" class="text-red-darken-1">{{ videogame.nickname }}</p>
+                </router-link>
               </div>
             </v-card-text>
           </v-card>
@@ -127,4 +129,5 @@ const verJuego = (videogame) => {
   max-width: 500px;
   max-height: 250px;
   object-fit: cover;
-}</style>
+}
+</style>

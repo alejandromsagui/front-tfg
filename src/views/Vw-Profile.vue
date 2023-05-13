@@ -3,7 +3,7 @@
         <template #username>
             <v-form ref="form" @submit.prevent="changeNickname">
                 <v-text-field label="Nuevo nombre de usuario" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" :rules="[requiredField]" v-model="userModifier.nickname"></v-text-field>
+                    style="width: 400px;" :rules="[requiredField]" v-model="userModifier.nickname" @blur="onChange"></v-text-field>
                 <v-text-field label="Contraseña actual" variant="outlined" class="align-items-center mx-auto"
                     style="width: 400px;" type="password" :rules="[requiredField, passwordLength]"
                     v-model="userModifier.password"></v-text-field>
@@ -63,6 +63,9 @@ const userModifier = reactive({
     confirmPassword: ''
 })
 
+const onChange = (e) => {
+    console.log(e.target.value)
+}
 const requiredField = (value) => !!value || "Este campo es obligatorio";
 
 const passwordLength = (value) =>

@@ -14,6 +14,17 @@ export const instance_axios = axios.create({
     
 })
 
+instance_axios.interceptors.response.use(response => {
+    return response
+}, error => {
+    if (error.response.status === 401) {
+        useLoginStore.authenticated = false;
+        useLoginStore().logout
+    }
+    return Promise.reject(error)
+})
+
+
 export default function headers(esArchivo) {
     return {
         'Content-Type': esArchivo ? 'application/octet-stream' : 'application/json',
