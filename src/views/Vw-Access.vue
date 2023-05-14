@@ -165,14 +165,12 @@ import { useLoginStore } from '../stores/login'
 import { useRegister } from "../stores/register";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import { storeToRefs } from "pinia";
 import { useEmailStore } from "../stores/sendEmail";
 
 const authStore = useLoginStore();
 const registerStore = useRegister();
 const emailStore = useEmailStore();
-const { code } = storeToRefs(useEmailStore);
-const { nicknameExists } = storeToRefs(registerStore)
+
 
 
 const transition = ref(1)
