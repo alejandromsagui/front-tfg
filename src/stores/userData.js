@@ -11,9 +11,25 @@ export const userData = defineStore({
         token: '',
         email: '',
         nickname: '',
-        newToken: ''
+        newToken: '',
+        admin: false
     }),
+    getters: {
+        async getPermission(){
+            try {   
+                const response = await instance_axios.get('/getPermission'+this.nickname)
+                console.log(response);
 
+                if(response.data.isAdmin === true){
+                    this.admin = true;
+                }
+
+                return this.admin;
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    },
     actions: {
         async updateTokenByNickname(nickname) {
             const res = await instance_axios.put('/updateToken', { nickname })
@@ -107,6 +123,15 @@ export const userData = defineStore({
                         theme: 'colored'
                     });
                 }
+            }
+        },
+        async getUsers(){
+            try {
+                const response = await instance_axios.get('/users');
+                console.log(response.data.users);
+                return response.data.users;
+            } catch (error) {
+                console.log(error);
             }
         }
     },

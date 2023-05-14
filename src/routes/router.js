@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { vwMain, vwLogin, vwCode, vwProfile, vwPublicProfile, vw404, vwAdmin } from '../views'
+import { instance_axios } from '../middlewares/axios';
 import { useLoginStore } from "../stores/login";
 import { useEmailStore } from '../stores/sendEmail';
+import { userData } from '../stores/userData'
 
 
 const routes = [
@@ -11,7 +13,7 @@ const routes = [
     { path: '/perfil', name: 'perfil', component: vwProfile },
     { path: '/perfil/:nickname', name: 'perfilPublico', component: vwPublicProfile },
     { path: '/:pathMatch(.*)*', name: '404', component: vw404 },
-    { path: '/admin', name: 'admin', component: vwAdmin },
+    { path: '/admin', name: 'admin', component: vwAdmin, meta: { requiresAdmin: true } },
 ]
 
 const router = createRouter({
@@ -20,26 +22,34 @@ const router = createRouter({
     history: createWebHistory(),
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     const userStore = useLoginStore();
     const emailStore = useEmailStore();
+    const userDataStore = userData();
 
-    if (to.name === 'acceso' && userStore.isAuthenticated) {
+    if (to.meta.requiresAdmin) {
+        try {
+            const response = await instance_axios.get('/getPermission/'+userStore.getToken.nickname);
+            if (!response.data.isAdmin) {
+                next({ name: 'Home' });
+            } else {
+                next();
+            }
+        } catch (error) {
+            console.log(userDataStore.nickname);
+            console.log(error);
+            next({ name: 'Home' });
+        }
+    } else if (to.name === 'acceso' && userStore.isAuthenticated) {
         next({ name: 'Home' });
-    }
-    else if (to.name === 'perfil' && !userStore.isAuthenticated) {
+    } else if (to.name === 'perfil' && !userStore.isAuthenticated) {
         next({ name: 'acceso' });
-    }
-
-    else if (to.name === 'codigo' && !emailStore.sent) {
+    } else if (to.name === 'codigo' && !emailStore.sent) {
         next({ name: 'acceso' });
-    }
-
-    else {
+    } else {
         next();
     }
 });
-
 export default router;
 
 //meta: {auth: false} 
