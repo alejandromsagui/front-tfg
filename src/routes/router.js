@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { vwMain, vwLogin, vwCode, vwProfile, vwPublicProfile, vw404, vwAdmin } from '../views'
+import { vwMain, vwLogin, vwCode, vwProfile, vwPublicProfile, vw404, vwAdmin, vwRecharge } from '../views'
 import { instance_axios } from '../middlewares/axios';
 import { useLoginStore } from "../stores/login";
 import { useEmailStore } from '../stores/sendEmail';
@@ -14,6 +14,7 @@ const routes = [
     { path: '/perfil/:nickname', name: 'perfilPublico', component: vwPublicProfile },
     { path: '/:pathMatch(.*)*', name: '404', component: vw404 },
     { path: '/admin', name: 'admin', component: vwAdmin, meta: { requiresAdmin: true } },
+    { path: '/recarga', name: 'recarga', component: vwRecharge },
 ]
 
 const router = createRouter({

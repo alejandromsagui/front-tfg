@@ -46,7 +46,9 @@
               <v-col cols="12" sm="6" md="4" xs="6" class="col-dialog">
                 <v-card-title class="text-center text-white text-h4 mb-2">{{ nuevoJuego.name }}</v-card-title>
                 <img :src=nuevoJuego.image alt="Portada" class="d-flex mx-auto rounded">
-                <p class="text-subtitle-1 text-white text-center mt-5">Subido por <a :href="'/perfil/' + nuevoJuego.nickname" target="_blank" class="text-red-darken-1">{{ nuevoJuego.nickname }}</a></p>
+                <p class="text-subtitle-1 text-white text-center mt-5">Subido por <a
+                    :href="'/perfil/' + nuevoJuego.nickname" target="_blank" class="text-red-darken-1">{{
+                      nuevoJuego.nickname }}</a></p>
               </v-col>
               <v-col cols="12" sm="6" md="6" lg="8" class="col-dialog-info">
                 <v-card-title class="text-center text-white text-h4 mb-3">Descripción</v-card-title>
@@ -64,9 +66,19 @@
                   <v-card-text class="text-white">Manolo: Lorem ipsum dolor sit amet consectetur adipiscing,
                     elit eget magnis sociis et interdum,</v-card-text>
                 </v-card>
-                <v-card-title class="text-center text-white text-h4 mb-2 my-6">Precio</v-card-title>
-                <v-card-text class="text-subtitle- text-center my-6 text-body-1">{{ nuevoJuego.price }}</v-card-text>
-                  <v-btn class="bg-red-darken-3 text-white font-weight-bold d-flex mx-auto" variant="outlined">Comprar</v-btn>
+                <v-row>
+                  <v-col cols="6">
+                    <v-card-title class="text-center text-white text-h4 mb-2 my-6">Precio</v-card-title>
+                    <v-card-text class="text-center my-6 text-body-1">{{ nuevoJuego.price }}</v-card-text>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-card-title class="text-center text-white text-h4 mb-2 my-6">Plataforma</v-card-title>
+                    <v-card-text class=" text-center my-6 text-body-1">{{ nuevoJuego.platform
+                    }}</v-card-text>
+                  </v-col>
+                </v-row>
+                <v-btn class="bg-red-darken-3 text-white font-weight-bold d-flex mx-auto" variant="outlined"
+                  @click="createOrder()">Comprar</v-btn>
               </v-col>
             </v-row>
           </v-card>
@@ -80,8 +92,10 @@
 <script setup>
 import { reactive, onMounted, ref, watch } from 'vue';
 import { useVideogameStore } from "../stores/videogames"
+import { paymentStore } from "../stores/paymentStore"
 
 const getVideogamesMain = useVideogameStore()
+const usePaymentStore = paymentStore()
 const nuevoJuego = ref()
 let videogames = reactive([]);
 const dialog = ref(false)
@@ -97,10 +111,13 @@ onMounted(async () => {
 //     console.log('new value',);
 // }, { deep: true });
 
-
 const verJuego = (videogame) => {
   nuevoJuego.value = videogame
   dialog.value = true
+}
+
+const createOrder = async () => {
+  await usePaymentStore.createOrder()
 }
 </script>
 <style scoped>
@@ -144,5 +161,4 @@ const verJuego = (videogame) => {
 .col-dialog-info {
   width: 100%;
   height: auto;
-}
-</style>
+}</style>

@@ -39,15 +39,18 @@
 
           <v-btn class="link" stacked v-if="hasNotifications">
             <v-badge color="error" floating content="0">
-              <i class="fa-solid fa-message mr-1"></i> Chat
+              <i class="fa-solid fa-coins mr-1"></i> Saldo
             </v-badge>
-          </v-btn>
-          <v-btn class="link" text v-if="!hasNotifications">
-            <i class="fa-solid fa-message mr-1"></i> Chat
           </v-btn>
           <v-btn class="link" text>
             <i class="fa-solid fa-cart-shopping mr-1"></i> Carrito
           </v-btn>
+          
+          <v-btn class="link" text v-if="!hasNotifications">
+            <i class="fa-solid fa-coins mr-1"></i> Saldo
+          </v-btn>
+
+
           <v-btn class="link mr-10" text @click="logout()">
             <i class="fa-solid fa-right-from-bracket mr-1"></i> Salir
           </v-btn>
@@ -115,8 +118,7 @@ import { useRouter } from 'vue-router';
 import { useLoginStore } from '../stores/login';
 import { storeToRefs } from 'pinia';
 
-import { CDialog } from "../components";
-
+import { CDialog, CMenu } from "../components";
 
 const emits = defineEmits(['open-modal']);
 
@@ -176,9 +178,9 @@ const itemsLogged = [{
   action: '#'
 },
 {
-  title: 'Chat',
-  value: 'chat',
-  icon: 'fa-solid fa-message',
+  title: 'Saldo',
+  value: 'saldo',
+  icon: 'fa-solid fa-coins',
   action: '#'
 },
 {

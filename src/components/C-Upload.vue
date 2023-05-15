@@ -28,9 +28,14 @@
                         </v-row>
                     </div>
                     <v-row>
-                        <v-col cols="12" sm="12" md="12">
+                        <v-col cols="6" sm="6" md="6">
                             <v-file-input label="Portada" variant="underlined" required
                                 prepend-icon="fa-solid fa-camera-retro" name="image" @change="onChange"></v-file-input>
+                        </v-col>
+                        <v-col cols="6" sm="6" md="6">
+                            <v-select chips variant="underlined" :items="['PC', 'PS5', 'PS4', 'PS3', 'PS2', 'PS1', 'XBOX', 'Nintendo Switch' 
+                                ]" label="Plataforma" required :rules="[requiredField]"
+                                    v-model="newVideogame.platform"></v-select>
                         </v-col>
                     </v-row>
 
@@ -61,32 +66,28 @@
 
 <script setup>
 import { defineEmits, reactive, ref } from "vue";
-import { instance_axios } from "../middlewares/axios";
 import { useVideogameStore } from "../stores/videogames"
-import { userData } from '../stores/userData';
-const useModifierStore = userData()
-import headers from "../middlewares/axios"
+
 const videogameStore = useVideogameStore()
 const form = ref(null)
-import fs from "fs";
+const file = ref()
 
-const token = localStorage.getItem('token')
+const emit = defineEmits(['change-dialog-value'])
+const emitValue = (value) => {
+    emit("change-dialog-value", value);
+}
+
+
 const newVideogame = reactive({
     name: '',
     genre: [],
+    platform: null,
     description: '',
     price: null,
     image: ''
 })
 
-
 const requiredField = (value) => !!value || "Este campo es obligatorio";
-
-const emit = defineEmits(['change-dialog-value'])
-const file = ref()
-const emitValue = (value) => {
-    emit("change-dialog-value", value);
-}
 
 const onChange = (e) => {
     file.value = e.target.files[0];
@@ -106,6 +107,7 @@ const uploadVideogame = async (e) => {
     data.append("description", newVideogame.description)
     data.append("price", newVideogame.price)
     data.append("genre", newVideogame.genre)
+    data.append("platform", newVideogame.platform)
     data.append("image", file.value);
 
  
