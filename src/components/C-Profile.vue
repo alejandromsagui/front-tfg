@@ -24,7 +24,7 @@
                             <v-list-item-title v-text="item.text"></v-list-item-title>
                         </v-list-item>
                         <v-list-item>
-                            <v-btn block class="font-weight-bold bg-red-darken-3">ELIMINAR CUENTA</v-btn>
+                            <v-btn class="font-weight-bold bg-red-darken-3 mt-10" variant="outlined">ELIMINAR CUENTA</v-btn>
                         </v-list-item>
                     </v-list>
                 </v-col>

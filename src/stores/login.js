@@ -4,7 +4,6 @@ import { instance_axios } from '../middlewares/axios';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { ref } from 'vue';
-import jwt_decode from "jwt-decode";
 
 export const useLoginStore = defineStore({
   id: 'login',

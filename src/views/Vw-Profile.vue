@@ -8,7 +8,7 @@
                     style="width: 400px;" type="password" :rules="[requiredField, passwordLength]"
                     v-model="userModifier.password"></v-text-field>
                 <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
-                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit">CAMBIAR
+                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit" variant="outlined">CAMBIAR
                         NOMBRE DE USUARIO</v-btn>
                 </div>
             </v-form>
@@ -22,7 +22,7 @@
                     style="width: 400px;" type="password" :rules="[requiredField, passwordLength]"
                     v-model="userModifier.password"></v-text-field>
                 <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
-                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit">CAMBIAR
+                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit" variant="outlined">CAMBIAR
                         EMAIL</v-btn>
                 </div>
             </v-form>
@@ -39,7 +39,7 @@
                     style="width: 400px;" type="password" :rules="[requiredField, passwordLength, passwordMatch]"
                     v-model="userModifier.confirmPassword"></v-text-field>
                 <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
-                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit">CAMBIAR
+                    <v-btn variant="outlined" class="text-white text-center font-weight-bold bg-red-darken-3" type="submit" block>CAMBIAR
                         CONTRASEÑA</v-btn>
                 </div>
             </v-form>

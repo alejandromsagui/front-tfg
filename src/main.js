@@ -11,10 +11,8 @@ import vuetify from './plugins/vuetify'
 
 //Pinia
 import pinia from './plugins/pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
 
 import './style.css'
-
-pinia.use(piniaPluginPersistedstate);
 
 createApp(App).use(router).use(vuetify).use(pinia).mount('#app')
