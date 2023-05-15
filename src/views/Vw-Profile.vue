@@ -50,10 +50,9 @@
 import { reactive, ref, computed } from 'vue';
 import { CProfile } from "../components"
 import { userData } from '../stores/userData';
+
 const useModifierStore = userData()
-
 const form = ref(null);
-
 const userModifier = reactive({
     nickname: '',
     email: '',

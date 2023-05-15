@@ -93,8 +93,8 @@ const data = reactive({
 });
 
 onBeforeMount(() => {
-    data.nickname = useAuthStore.getToken.nickname;
-    data.email = useAuthStore.getToken.email;
+    data.nickname = useAuthStore.$state.nickname;
+    data.email = useAuthStore.$state.email;
 })
 
 //watch(() => data.nickname, async (newNickname, oldNickname) => {

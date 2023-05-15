@@ -30,7 +30,7 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.meta.requiresAdmin) {
         try {
-            const response = await instance_axios.get('/getPermission/'+userStore.getToken.nickname);
+            const response = await instance_axios.get('/getPermission/'+userStore.$state.nickname);
             if (!response.data.isAdmin) {
                 next({ name: 'Home' });
             } else {

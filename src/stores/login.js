@@ -83,7 +83,7 @@ export const useLoginStore = defineStore({
       /* this.nickname = null;
       this.email = null; */
       localStorage.removeItem('token')
-   //   delete instance_axios.defaults.headers.common['Authorization'];
+    //  delete instance_axios.defaults.headers.common['Authorization'];
      // this.authenticated = false
       router.push('/acceso')
     },

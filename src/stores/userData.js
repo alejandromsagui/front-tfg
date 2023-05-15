@@ -1,8 +1,10 @@
 import { defineStore } from "pinia";
 import { instance_axios } from "../middlewares/axios";
 import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
 import { useLoginStore } from "./login"
+import 'vue3-toastify/dist/index.css';
+
+
 
 export const userData = defineStore({
     id: 'data',
@@ -14,22 +16,7 @@ export const userData = defineStore({
         newToken: '',
         admin: false
     }),
-    getters: {
-        async getPermission(){
-            try {   
-                const response = await instance_axios.get('/getPermission'+this.nickname)
-                console.log(response);
 
-                if(response.data.isAdmin === true){
-                    this.admin = true;
-                }
-
-                return this.admin;
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    },
     actions: {
         async updateTokenByNickname(nickname) {
             const res = await instance_axios.put('/updateToken', { nickname })
@@ -46,7 +33,7 @@ export const userData = defineStore({
             try {
 
                 const response = await instance_axios.put(`/updateNickname/${nickname}`, { nickname, password });
-                
+
                 console.log('Response: ', response.data);
                 if (
                     response.data.message === "El nombre de usuario debe ser diferente al actual" ||
@@ -63,7 +50,7 @@ export const userData = defineStore({
                         autoClose: 2000,
                         theme: 'colored'
                     });
-        
+
                     console.log(`Valor de nickname desde changeNickname: ${nickname}`);
                 }
             } catch (error) {
@@ -125,11 +112,37 @@ export const userData = defineStore({
                 }
             }
         },
-        async getUsers(){
+        async getUsers() {
             try {
                 const response = await instance_axios.get('/users');
                 console.log(response.data.users);
                 return response.data.users;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async getUserByNickname(nickname) {
+
+            try {
+                const response = await instance_axios.get(`/getUser/${nickname}`)
+                console.log(response.data);
+                console.log(response.data.user.number_namekoins);
+                return response.data.user.number_namekoins;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async getPermission() {
+            try {
+                const response = await instance_axios.get('/getPermission' + this.nickname)
+                console.log(response);
+
+                if (response.data.isAdmin === true) {
+                    this.admin = true;
+                }
+
+                return this.admin;
             } catch (error) {
                 console.log(error);
             }

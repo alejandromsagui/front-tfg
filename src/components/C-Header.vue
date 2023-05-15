@@ -31,8 +31,8 @@
         <v-spacer></v-spacer>
         <v-toolbar-items class="d-none d-md-block">
 
-          <CDialog/>
-            
+          <CDialog />
+
           <v-btn class="link" text @click="goPerfil()">
             <i class="fa-solid fa-user mr-1"></i> Perfil
           </v-btn>
@@ -45,12 +45,19 @@
           <v-btn class="link" text>
             <i class="fa-solid fa-cart-shopping mr-1"></i> Carrito
           </v-btn>
-          
-          <v-btn class="link" text v-if="!hasNotifications">
-            <i class="fa-solid fa-coins mr-1"></i> Saldo
-          </v-btn>
 
-
+          <v-menu transition="slide-x-transition">
+            <template v-slot:activator="{ props }">
+              <v-btn class="link" text v-if="!hasNotifications" v-bind="props" @click="getNamekoins()">
+                <i class="fa-solid fa-coins mr-1"></i> Saldo
+              </v-btn>
+            </template>
+            <v-card min-width="200">
+              <v-card-title class="text-center mb-5">NAME<span class="text-red-darken-3">KOINS</span></v-card-title>
+              <v-card-text class="text-center text-h4">{{ namekoins }}</v-card-text>
+                <v-card-text class="font-subtitle-1" style="font-family: 'Roboto', 'sans-serif';">Puedes recargar más Namekoins <a href="/recarga" class="text-red-darken-3 font-weight-bold text-body-2">aquí</a></v-card-text>
+            </v-card>
+          </v-menu>
           <v-btn class="link mr-10" text @click="logout()">
             <i class="fa-solid fa-right-from-bracket mr-1"></i> Salir
           </v-btn>
@@ -116,10 +123,12 @@
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router';
 import { useLoginStore } from '../stores/login';
+import { userData } from '../stores/userData'
 import { storeToRefs } from 'pinia';
-
+import { Buffer } from "buffer";
 import { CDialog, CMenu } from "../components";
 
+const userDataStore = userData();
 const emits = defineEmits(['open-modal']);
 
 let isActive = false;
@@ -134,9 +143,11 @@ const { authenticated } = storeToRefs(userStore)
 const token = localStorage.getItem('token')
 console.log(token);
 
+const namekoins = ref()
+
 const hasNotifications = ref(false)
 
-onMounted(() => {
+onMounted(async() => {
   if (token) {
     authenticated.value = true
   } else {
@@ -144,6 +155,17 @@ onMounted(() => {
   }
 })
 
+const getNamekoins = async() => {
+  const [header, payload, signature] = token.split(".");
+  const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+  try {
+    const res = await userDataStore.getUserByNickname(decodedPayload.nickname)
+    namekoins.value = res;
+  } catch (error) {
+    console.log(error);
+  }
+
+}
 onBeforeUnmount(() => {
   if (!token) {
     router.push({ path: '/acceso' })
