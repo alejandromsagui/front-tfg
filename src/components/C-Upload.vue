@@ -15,9 +15,9 @@
                                     v-model="newVideogame.name"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                                <v-select multiple chips variant="underlined" :items="['Acción ', 'Carrera ', 'Deportes ', 'Exploración ', 'Guerra ', 'Lucha ', 'Online ', 'Rompecabezas ', 'Simulador ',
-                                    'Violento ', 'Anime ', 'Casual ', 'Fantasía ', 'Indie ', 'Multijugador ', 'Plataforma ', 'Sandbox ', 'Supervivencia ', 'Zombies ',
-                                    'Aventura ', 'Cooperativo ', 'Estrategia ', 'FPS ', 'JRPG ', 'Mundo Abierto ', 'Rol ', 'Shooter ', 'Terror '
+                                <v-select multiple chips variant="underlined" :items="['Acción', 'Carrera', 'Deportes', 'Exploración', 'Guerra', 'Lucha', 'Online', 'Rompecabezas', 'Simulador',
+                                    'Violento', 'Anime', 'Casual', 'Fantasía', 'Indie', 'Multijugador', 'Plataforma', 'Sandbox', 'Supervivencia', 'Zombies',
+                                    'Aventura', 'Cooperativo', 'Estrategia', 'FPS', 'JRPG', 'Mundo Abierto', 'Rol', 'Shooter', 'Terror'
                                 ]" label="Género" required :rules="[requiredField]"
                                     v-model="newVideogame.genre"></v-select>
                             </v-col>

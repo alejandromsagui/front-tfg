@@ -26,7 +26,7 @@
             </div>
             <v-card-title class="text-center">{{ videogame.name }}</v-card-title>
             <v-card-text>
-              <p class="text-red-darken-1">{{ videogame.genre.join(', ') }}</p>
+              <p class="text-red-darken-1">{{ videogame.genre.join(",").replaceAll(',', ', ') }}</p>
               <div style="display: flex; align-items: center; justify-content: flex-end;">
                 <i class="fas fa-user fa-fw"></i>
                 <router-link :to="'/perfil/' + videogame.nickname" class="text-decoration-none">
@@ -43,30 +43,30 @@
         <v-dialog v-model="dialog" transition="dialog-bottom-transition" width="1400">
           <v-card>
             <v-row class="center mx-5 my-5">
-              <v-col cols="12" sm="6" md="4" xs="6">
+              <v-col cols="12" sm="6" md="4" xs="6" class="col-dialog">
                 <v-card-title class="text-center text-white text-h4 mb-2">{{ nuevoJuego.name }}</v-card-title>
-                <img :src=nuevoJuego.image alt="" height="auto" width="500" class="d-flex mx-auto rounded">
+                <img :src=nuevoJuego.image alt="Portada" class="d-flex mx-auto rounded">
+                <p class="text-subtitle-1 text-white text-center mt-5">Subido por <a :href="'/perfil/' + nuevoJuego.nickname" target="_blank" class="text-red-darken-1">{{ nuevoJuego.nickname }}</a></p>
               </v-col>
-              <v-col cols="12" sm="6" md="4" class="top-align">
-                <v-card-title class="text-center text-white text-h4 mb-2 my-6">Descripción</v-card-title>
-                <v-card-text class="text-subtitle-1 text-justify my-6">{{ nuevoJuego.description }}.</v-card-text>
-                <v-card-title class="text-center text-white text-h4 mb-2 my-6">Género</v-card-title>
-                <v-card-text class="text-subtitle- text-center my-6 text-body-1">
-                  {{ nuevoJuego.genre }}</v-card-text>
-              </v-col>
-              <v-col cols="12" sm="6" md="4" class="top-align">
+              <v-col cols="12" sm="6" md="6" lg="8" class="col-dialog-info">
+                <v-card-title class="text-center text-white text-h4 mb-3">Descripción</v-card-title>
+                <v-card-text class="text-subtitle-1 text-justify">{{ nuevoJuego.description }}.</v-card-text>
+                <v-card-title class="text-center text-white text-h4 mb-3">Género</v-card-title>
+                <v-card-text class="text-subtitle-1 text-center text-body-1">
+                  {{ nuevoJuego.genre.join(',').replace(/,\s*/g, ', ') }}
+                </v-card-text>
                 <v-card-title class="text-center text-white text-h4 mb-2 my-6">Opiniones de venta</v-card-title>
-                <v-card elevation="10" class="bg-red-lighten-1">
-                  <v-card-text>Pepe: Lorem ipsum dolor sit amet consectetur adipiscing,
+                <v-card elevation="10" class="bg-red-darken-3">
+                  <v-card-text class="text-white">Pepe: Lorem ipsum dolor sit amet consectetur adipiscing,
                     elit eget magnis sociis et interdum,</v-card-text>
-                  <v-card-text> Pepe:Lorem ipsum dolor sit amet consectetur adipiscing,
+                  <v-card-text class="text-white"> Pepe:Lorem ipsum dolor sit amet consectetur adipiscing,
                     elit eget magnis sociis et interdum,</v-card-text>
-                  <v-card-text>Manolo: Lorem ipsum dolor sit amet consectetur adipiscing,
+                  <v-card-text class="text-white">Manolo: Lorem ipsum dolor sit amet consectetur adipiscing,
                     elit eget magnis sociis et interdum,</v-card-text>
                 </v-card>
                 <v-card-title class="text-center text-white text-h4 mb-2 my-6">Precio</v-card-title>
                 <v-card-text class="text-subtitle- text-center my-6 text-body-1">{{ nuevoJuego.price }}</v-card-text>
-                <v-btn block class="bg-red-lighten-1 text-white font-weight-bold">Comprar</v-btn>
+                  <v-btn class="bg-red-darken-3 text-white font-weight-bold d-flex mx-auto" variant="outlined">Comprar</v-btn>
               </v-col>
             </v-row>
           </v-card>
@@ -129,5 +129,20 @@ const verJuego = (videogame) => {
   max-width: 500px;
   max-height: 250px;
   object-fit: cover;
+}
+
+.col-dialog {
+  width: 100%;
+  height: auto;
+}
+
+.col-dialog img {
+  max-width: 100%;
+  height: auto;
+}
+
+.col-dialog-info {
+  width: 100%;
+  height: auto;
 }
 </style>
