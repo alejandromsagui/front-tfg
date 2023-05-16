@@ -48,52 +48,62 @@
               </v-btn>
             </template>
             <v-card min-width="300">
-              <v-card-title class="text-center mb-5">NAME<span class="text-red-darken-3 font-weight-bold">KOINS</span></v-card-title>
+              <v-card-title class="text-center mb-5">NAME<span
+                  class="text-red-darken-3 font-weight-bold">KOINS</span></v-card-title>
               <v-card-text class="text-center text-h4">{{ namekoins }}</v-card-text>
 
               <v-dialog v-model="dialog" width="auto">
                 <template v-slot:activator="{ props }">
                   <v-card-text class="font-subtitle-1" style="font-family: 'Roboto', 'sans-serif';">Puedes recargar más
-                    Namekoins <a class="text-red-darken-3 font-weight-bold text-body-2"
-                      v-bind="props" style="cursor: pointer">aquí</a></v-card-text>
+                    Namekoins <a class="text-red-darken-3 font-weight-bold text-body-2" v-bind="props"
+                      style="cursor: pointer">aquí</a></v-card-text>
                 </template>
                 <v-card class="mx-auto" max-width="800">
-            <v-card-title class="text-center" style="font-family: 'Roboto', sans-serif;">Recargar Saldo</v-card-title>
-            <v-card-text class="text-center">
-                <p class="mb-5" style="font-family: 'Roboto', sans-serif;">Selecciona la cantidad de Name<span class="text-red-darken-3 font-weight-bold" style="font-family: 'Roboto', sans-serif;">koins</span> a recargar:</p>
-                <v-row class="d-flex justify-center">
-                    <v-col cols="12" sm="4" class="mb-4">
+                  <div class="d-flex justify-end mt-2 mr-3">
+                    <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3" @click="dialog = false"></v-icon>
+                  </div>
+                  <v-card-title class="text-center" style="font-family: 'Roboto', sans-serif;">Recargar
+                    Saldo</v-card-title>
+                  <v-card-text class="text-center">
+                    <p class="mb-5" style="font-family: 'Roboto', sans-serif;">Selecciona la cantidad de Name<span
+                        class="text-red-darken-3 font-weight-bold" style="font-family: 'Roboto', sans-serif;">koins</span>
+                      a recargar:</p>
+                    <v-row class="d-flex justify-center">
+                      <v-col cols="12" sm="4" class="mb-4">
                         <v-card class="d-flex flex-column align-center" @click="selectedAmount = 10"
-                            :class="{ 'selected': selectedAmount === 10 }">
-                            <img src="https://via.placeholder.com/150" alt="10€" class="mb-2">
-                            <span class="font-weight-bold" style="font-family: 'Roboto', sans-serif;">10€</span>
+                          :class="{ 'selected': selectedAmount === 10 }">
+                          <img src="https://via.placeholder.com/150" alt="10€" class="mb-2">
+                          <span class="font-weight-bold" style="font-family: 'Roboto', sans-serif;">10€</span>
                         </v-card>
-                    </v-col>
-                    <v-col cols="12" sm="4" class="mb-4">
+                      </v-col>
+                      <v-col cols="12" sm="4" class="mb-4">
                         <v-card class="d-flex flex-column align-center" @click="selectedAmount = 25"
-                            :class="{ 'selected': selectedAmount === 25 }">
-                            <img src="https://via.placeholder.com/150" alt="25€" class="mb-2">
-                            <span class="font-weight-bold" style="font-family: 'Roboto', sans-serif;">25€</span>
+                          :class="{ 'selected': selectedAmount === 25 }">
+                          <img src="https://via.placeholder.com/150" alt="25€" class="mb-2">
+                          <span class="font-weight-bold" style="font-family: 'Roboto', sans-serif;">25€</span>
                         </v-card>
-                    </v-col>
-                    <v-col cols="12" sm="4" class="mb-4">
+                      </v-col>
+                      <v-col cols="12" sm="4" class="mb-4">
                         <v-card class="d-flex flex-column align-center" @click="selectedAmount = 40"
-                            :class="{ 'selected': selectedAmount === 40 }">
-                            <img src="https://via.placeholder.com/150" alt="40€" class="mb-2">
-                            <span class="font-weight-bold" style="font-family: 'Roboto', sans-serif;">40€</span>
+                          :class="{ 'selected': selectedAmount === 40 }">
+                          <img src="https://via.placeholder.com/150" alt="40€" class="mb-2">
+                          <span class="font-weight-bold" style="font-family: 'Roboto', sans-serif;">40€</span>
                         </v-card>
-                    </v-col>
-                </v-row>
-                <v-divider class="my-4"></v-divider>
-                <p class="mb-2" style="font-family: 'Roboto', sans-serif;">Cantidad a recargar:</p>
-                <h2 class="text-center mb-3">{{ selectedAmount }}€</h2>
-                <p class="text-center mb-3 text-white" style="font-family: 'Roboto', sans-serif;">Total de Name<span class="text-red-darken-3 font-weight-bold" style="font-family: 'Roboto', sans-serif;">koins</span>:</p>
-                <h2 class="text-center"> {{ namekoinsRecarge }} </h2>
-            </v-card-text>
-            <v-card-actions class="d-flex justify-center">
-                <v-btn color="text-white bg-red-darken-3 font-weight-bold" variant="outlined" :disabled="!selectedAmount" @click="recharge()">Recargar</v-btn>
-            </v-card-actions>
-        </v-card>
+                      </v-col>
+                    </v-row>
+                    <v-divider class="my-4"></v-divider>
+                    <p class="mb-2" style="font-family: 'Roboto', sans-serif;">Cantidad a recargar:</p>
+                    <h2 class="text-center mb-3">{{ selectedAmount }}€</h2>
+                    <p class="text-center mb-3 text-white" style="font-family: 'Roboto', sans-serif;">Total de Name<span
+                        class="text-red-darken-3 font-weight-bold"
+                        style="font-family: 'Roboto', sans-serif;">koins</span>:</p>
+                    <h2 class="text-center"> {{ namekoinsRecarge }} </h2>
+                  </v-card-text>
+                  <v-card-actions class="d-flex justify-center">
+                    <v-btn color="text-white bg-red-darken-3 font-weight-bold" variant="outlined"
+                      :disabled="!selectedAmount" @click="recharge()">Recargar</v-btn>
+                  </v-card-actions>
+                </v-card>
               </v-dialog>
             </v-card>
           </v-menu>
@@ -208,9 +218,9 @@ onBeforeUnmount(() => {
   }
 })
 
-const recharge = async() => {
-  const usepaymentStore = paymentStore() 
-  console.log('Valor de namekoins seleccionados: '+selectedAmount.value);
+const recharge = async () => {
+  const usepaymentStore = paymentStore()
+  console.log('Valor de namekoins seleccionados: ' + selectedAmount.value);
   await usepaymentStore.createOrder(selectedAmount.value)
 }
 const drawer = ref(false)
@@ -370,7 +380,7 @@ const goPerfil = () => {
 .options {
   font-size: 1em;
 }
+
 .selected {
-    box-shadow: 0px 0px 10px #C62828;
-}
-</style>
+  box-shadow: 0px 0px 10px #C62828;
+}</style>
