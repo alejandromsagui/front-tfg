@@ -55,7 +55,8 @@
             <v-card min-width="200">
               <v-card-title class="text-center mb-5">NAME<span class="text-red-darken-3">KOINS</span></v-card-title>
               <v-card-text class="text-center text-h4">{{ namekoins }}</v-card-text>
-                <v-card-text class="font-subtitle-1" style="font-family: 'Roboto', 'sans-serif';">Puedes recargar más Namekoins <a href="/recarga" class="text-red-darken-3 font-weight-bold text-body-2">aquí</a></v-card-text>
+              <v-card-text class="font-subtitle-1" style="font-family: 'Roboto', 'sans-serif';">Puedes recargar más
+                Namekoins <a href="/recarga" class="text-red-darken-3 font-weight-bold text-body-2">aquí</a></v-card-text>
             </v-card>
           </v-menu>
           <v-btn class="link mr-10" text @click="logout()">
@@ -141,13 +142,12 @@ const router = useRouter()
 const userStore = useLoginStore()
 const { authenticated } = storeToRefs(userStore)
 const token = localStorage.getItem('token')
-console.log(token);
 
 const namekoins = ref()
 
 const hasNotifications = ref(false)
 
-onMounted(async() => {
+onMounted(async () => {
   if (token) {
     authenticated.value = true
   } else {
@@ -155,16 +155,13 @@ onMounted(async() => {
   }
 })
 
-const getNamekoins = async() => {
-  const [header, payload, signature] = token.split(".");
-  const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+const getNamekoins = async () => {
   try {
-    const res = await userDataStore.getUserByNickname(decodedPayload.nickname)
+    const res = await userDataStore.getUserByNickname()
     namekoins.value = res;
   } catch (error) {
     console.log(error);
   }
-
 }
 onBeforeUnmount(() => {
   if (!token) {

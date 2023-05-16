@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { instance_axios } from "../middlewares/axios";
 import { toast } from 'vue3-toastify';
 import { useLoginStore } from "./login"
+import { Buffer } from "buffer"
 import 'vue3-toastify/dist/index.css';
 
 
@@ -122,10 +123,14 @@ export const userData = defineStore({
             }
         },
 
-        async getUserByNickname(nickname) {
+        async getUserByNickname() {
+
+            const token = localStorage.getItem('token');
+            const [header, payload, signature] = token.split(".");
+            const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
 
             try {
-                const response = await instance_axios.get(`/getUser/${nickname}`)
+                const response = await instance_axios.get(`/getUser/${decodedPayload.nickname}`)
                 console.log(response.data);
                 console.log(response.data.user.number_namekoins);
                 return response.data.user.number_namekoins;
