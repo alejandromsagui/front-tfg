@@ -20,6 +20,12 @@ export const useLoginStore = defineStore({
     isAuthenticated() {
       return this.authenticated;
     },
+    getNickname(){
+      const token = localStorage.getItem('token')
+      const [header, payload, signature] = token.split(".");
+      const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+      return decodedPayload.nickname;
+    }
   },
   actions: {
 
@@ -30,7 +36,7 @@ export const useLoginStore = defineStore({
         const tokenResponse = response.data.data.token
         const [header, payload, signature] = tokenResponse.split(".");
         const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
-        ;
+        
         
         localStorage.setItem('token', tokenResponse)
         this.nickname = decodedPayload.nickname

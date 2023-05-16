@@ -78,7 +78,8 @@ const users = reactive([])
 console.log(users);
 
 onBeforeMount(() => {
-    nickname.value = authStore.getToken.nickname;
+    console.log('Nickname de admin: '+authStore.getNickname);
+    nickname.value = authStore.getNickname;
 })
 
 const handleItemClick = async (item) => {

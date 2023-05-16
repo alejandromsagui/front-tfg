@@ -37,18 +37,13 @@
             <i class="fa-solid fa-user mr-1"></i> Perfil
           </v-btn>
 
-          <v-btn class="link" stacked v-if="hasNotifications">
-            <v-badge color="error" floating content="0">
-              <i class="fa-solid fa-coins mr-1"></i> Saldo
-            </v-badge>
-          </v-btn>
           <v-btn class="link" text>
             <i class="fa-solid fa-cart-shopping mr-1"></i> Carrito
           </v-btn>
 
           <v-menu transition="slide-x-transition">
             <template v-slot:activator="{ props }">
-              <v-btn class="link" text v-if="!hasNotifications" v-bind="props" @click="getNamekoins()">
+              <v-btn class="link" text v-bind="props" @click="getNamekoins()">
                 <i class="fa-solid fa-coins mr-1"></i> Saldo
               </v-btn>
             </template>
@@ -145,8 +140,6 @@ const token = localStorage.getItem('token')
 
 const namekoins = ref()
 
-const hasNotifications = ref(false)
-
 onMounted(async () => {
   if (token) {
     authenticated.value = true
@@ -163,6 +156,7 @@ const getNamekoins = async () => {
     console.log(error);
   }
 }
+
 onBeforeUnmount(() => {
   if (!token) {
     router.push({ path: '/acceso' })

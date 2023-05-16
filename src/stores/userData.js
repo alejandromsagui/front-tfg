@@ -139,8 +139,13 @@ export const userData = defineStore({
             }
         },
         async getPermission() {
+
+            const token = localStorage.getItem('token');
+            const [header, payload, signature] = token.split(".");
+            const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+
             try {
-                const response = await instance_axios.get('/getPermission' + this.nickname)
+                const response = await instance_axios.get(`/getPermission/${decodedPayload.nickname}`)
                 console.log(response);
 
                 if (response.data.isAdmin === true) {
