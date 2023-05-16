@@ -7,11 +7,11 @@ export const paymentStore = defineStore({
         user: null,
     }),
     actions: {
-        async createOrder() {
+        async createOrder(quantity) {
             try {
-                const response = await instance_axios.post('/create-order')
+                const response = await instance_axios.post('/create-order', {quantity})
                 console.log(response.data.links[1].href);
-                window.location.href = response.data.links[1].href
+                window.open(response.data.links[1].href)
             } catch (error) {
                 console.log(error);
             }

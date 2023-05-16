@@ -68,7 +68,7 @@
                 </v-card>
                 <v-row>
                   <v-col cols="6">
-                    <v-card-title class="text-center text-white text-h4 mb-2 my-6">Precio</v-card-title>
+                    <v-card-title class="text-center text-white text-h4 mb-2 my-6">Name<span class="text-red-darken-3 font-weight-bold">koins</span></v-card-title>
                     <v-card-text class="text-center my-6 text-body-1">{{ nuevoJuego.price }}</v-card-text>
                   </v-col>
                   <v-col cols="6">

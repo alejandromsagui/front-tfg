@@ -20,12 +20,12 @@ export const useLoginStore = defineStore({
     isAuthenticated() {
       return this.authenticated;
     },
-    getNickname(){
-      const token = localStorage.getItem('token')
-      const [header, payload, signature] = token.split(".");
-      const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
-      return decodedPayload.nickname;
-    }
+    // getNickname(){
+    //   const token = localStorage.getItem('token')
+    //   const [header, payload, signature] = token.split(".");
+    //   const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+    //   return decodedPayload.nickname;
+    // }
   },
   actions: {
 
