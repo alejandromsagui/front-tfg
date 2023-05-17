@@ -133,7 +133,7 @@ export const userData = defineStore({
                 const response = await instance_axios.get(`/getUser/${decodedPayload.nickname}`)
                 console.log(response.data);
                 console.log(response.data.user.number_namekoins);
-                return response.data.user.number_namekoins;
+                return response.data.user;
             } catch (error) {
                 console.log(error);
             }

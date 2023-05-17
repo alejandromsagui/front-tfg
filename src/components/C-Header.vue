@@ -206,7 +206,7 @@ onMounted(async () => {
 const getNamekoins = async () => {
   try {
     const res = await userDataStore.getUserByNickname()
-    namekoins.value = res;
+    namekoins.value = res.number_namekoins;
   } catch (error) {
     console.log(error);
   }

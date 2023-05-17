@@ -83,7 +83,7 @@
                 </v-row>
                 <v-dialog transition="dialog-top-transition" width="500">
                   <template v-slot:activator="{ props }">
-                    <v-btn class="bg-red-darken-3 text-white font-weight-bold d-flex mx-auto" variant="outlined" @click=""
+                    <v-btn class="bg-red-darken-3 text-white font-weight-bold d-flex mx-auto" variant="outlined"
                       v-bind="props">Comprar</v-btn>
                   </template>
                   <template v-slot:default="{ isActive }">
@@ -98,7 +98,7 @@
                       </v-card-text>
                       <v-card-actions class="justify-center">
                         <v-btn variant="text"
-                          class="text-center bg-red-darken-3 text-white font-weight-bold d-flex mx-auto">Comprar</v-btn>
+                          class="text-center bg-red-darken-3 text-white font-weight-bold d-flex mx-auto" @click="createOrder()">Comprar</v-btn>
                         <!-- <v-btn variant="text" class="text-center bg-red-darken-3 text-white font-weight-bold d-flex mx-auto" @click="isActive.value = false">Cerrar</v-btn> -->
                       </v-card-actions>
                     </v-card>
@@ -118,9 +118,15 @@
 import { reactive, onMounted, ref, watch } from 'vue';
 import { useVideogameStore } from "../stores/videogames"
 import { paymentStore } from "../stores/paymentStore"
+import { useLoginStore } from "../stores/login"
+import { userData } from "../stores/userData"
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const getVideogamesMain = useVideogameStore()
 const usePaymentStore = paymentStore()
+const loginStore = useLoginStore()
+const userStore = userData()
 const nuevoJuego = ref()
 let videogames = reactive([]);
 const dialog = ref(false)
@@ -132,6 +138,15 @@ onMounted(async () => {
   console.log('Games desde onMounted:', videogames);
 });
 
+const newTransaction = reactive({
+  description: '',
+  price: '',
+  idSeller: '',
+  nicknameSeller: '',
+  idVideogame: '',
+  videogame: ''
+})
+
 // watch(() => videogames, () => {
 //     console.log('new value',);
 // }, { deep: true });
@@ -142,7 +157,30 @@ const verJuego = (videogame) => {
 }
 
 const createOrder = async () => {
-  await usePaymentStore.createOrder()
+
+  const user = await userStore.getUserByNickname()
+  console.log('Namekoins del usuario: '+user.number_namekoins);
+
+  newTransaction.description = `Transacción realizada entre el comprador ${user.nickname} y el vendedor ${nuevoJuego.value.nickname}`
+  newTransaction.price = nuevoJuego.value.price,
+  newTransaction.idSeller = nuevoJuego.value.userId
+  newTransaction.nicknameSeller = nuevoJuego.value.nickname;
+  newTransaction.idVideogame = nuevoJuego.value._id
+  newTransaction.videogame = nuevoJuego.value.name
+
+  if(user.number_namekoins < newTransaction.price){
+    toast.error('Namekoins insuficientes', {
+      autoClose: 2000,
+      theme: 'colored'
+    })
+  } else {
+    await usePaymentStore.newTransaction(newTransaction)
+    
+    toast.success('Transacción realizada correctamente', {
+      autoClose: 2000,
+      theme: 'colored'
+    })
+  }
 }
 </script>
 <style scoped>

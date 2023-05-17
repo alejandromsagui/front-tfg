@@ -15,6 +15,22 @@ export const paymentStore = defineStore({
             } catch (error) {
                 console.log(error);
             }
+        },
+        async getUser(user){
+            try {
+                const response = await instance_axios.get('/getUser/', user)
+                console.log('Response desde getUser: '+response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async newTransaction(nt){
+            try {
+                const response = await instance_axios.post('/newTransaction', nt)
+                console.log('Response desde el store de pago: ',response.data);
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 })
