@@ -34,7 +34,7 @@ export const paymentStore = defineStore({
         },
         async getTransactions(nickname){
             try {
-                const response = await instance_axios.get('/findTransaction/'+ nickname)
+                const response = await instance_axios.get(`/findTransaction/${nickname}`)
                 console.log(response.data);
                 return response.data;
             } catch (error) {

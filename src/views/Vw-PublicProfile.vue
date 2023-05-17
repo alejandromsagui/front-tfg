@@ -49,14 +49,13 @@
                             </v-list>
                         </v-card>
                         <div class="d-flex mx-auto justify-center">
-                            <v-card-actions>
-                                <v-btn text class="mt-3 bg-red-darken-3 text-white font-weight-bold" variant="outlined">Ver
-                                    más valoraciones</v-btn>
-                            </v-card-actions>
+                            <v-pagination v-model="pageReviews" :length="4" prev-icon="fa-solid fa-arrow-left"
+                                next-icon="fa-solid fa-arrow-right" active-color="red-darken-3">
+                            </v-pagination>
                         </div>
                     </v-col>
                     <v-col cols="12" md="6" class="align-self-stretch" style="width: 100%;">
- 
+
                         <h4 class="mt-6 mx-3 text-h4 text-center mb-2">Últimas transacciones</h4>
                         <v-card class="mx-3" height="350" width="100%" outlined>
                             <v-card-text>
@@ -75,9 +74,8 @@
                                 </v-row>
                             </v-card-text>
                         </v-card>
-                        <i class="fa-solid fa-square-left"></i>
-                        <i class="fa-sharp fa-solid fa-square-left"></i>
-                        <v-pagination v-model="page" :length="transactionsArray.length" prev-icon="fa-solid fa-arrow-left fa-xs" next-icon="fa-solid fa-arrow-right fa-xs" active-color="red-darken-3">
+                        <v-pagination v-model="page" :length="6" prev-icon="fa-solid fa-arrow-left"
+                            next-icon="fa-solid fa-arrow-right" active-color="red-darken-3" @next="next()" @prev="back()">
                         </v-pagination>
                     </v-col>
                 </v-row>
@@ -87,17 +85,19 @@
 </template>
 <script setup>
 
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { instance_axios } from "../middlewares/axios";
 import { router } from "../routes";
 import { paymentStore } from "../stores/paymentStore"
 
+const pageReviews = ref()
 const nickname = ref("");
 const exists = ref(true);
-const transactionsArray = ref([])
-const page = ref()
+var transactionsArray = ref([])
+var page = ref(1)
 const usePaymentStore = paymentStore()
+
 const transactionsDetails = reactive({
     namekoins: '',
     operation: '',
@@ -135,6 +135,24 @@ onMounted(async () => {
         console.log(error);
     }
 });
+
+let indice = 0;
+let removedItems = [];
+
+const next = () => {
+    removedItems = transactionsArray.value.splice(indice, 6);
+    transactionsArray.value = transactionsArray.value.slice(indice, indice + 6);
+    indice += 6;
+    console.log('Indice: ' + indice);
+}
+
+const back = () => {
+    indice -= 6;
+    transactionsArray.value.splice(indice, ...removedItems);
+    transactionsArray.value = transactionsArray.value.slice(indice, indice + 6);
+
+    console.log('Indice: ' + indice);
+}
 
 const ratings = ref([
     { id: 1, user: 'Sarah Johnson', comment: 'Excelente trabajo, altamente recomendado.', value: 5, date: '2023-05-01' },
