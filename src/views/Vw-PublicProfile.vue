@@ -19,8 +19,7 @@
                         <p class="ml-3 text-white font-weight-bold text-subtitle-1">2</p>
                     </v-col>
                     <v-col class="justify-center d-flex">
-                        <v-btn variant="outlined" class="bg-red-darken-3 text-white font-weight-bold"
-                            @click="startChat">Iniciar Chat</v-btn>
+                        <v-btn variant="outlined" class="bg-red-darken-3 text-white font-weight-bold">Iniciar Chat</v-btn>
                     </v-col>
                 </v-row>
                 <v-row align="start" class="align-start">
@@ -31,7 +30,8 @@
                                 <v-list-item v-for="rating in ratings" :key="rating.id">
                                     <v-row class="py-4">
                                         <v-col cols="6" md="6" class="d-flex justify-start">
-                                            <v-list-item-title class="text-body-1 text-white font-weight-bold">{{ rating.user }}</v-list-item-title>
+                                            <v-list-item-title class="text-body-1 text-white font-weight-bold">{{
+                                                rating.user }}</v-list-item-title>
                                         </v-col>
                                         <v-col cols="6" md="6" class="d-flex justify-end">
                                             <v-list-item-action>
@@ -60,18 +60,17 @@
                         <v-card class="mx-3" height="350" width="100%" outlined>
                             <v-card-text>
                                 <v-row class="py-4">
-                                    <v-col cols="3" class="text-center font-weight-bold">Fecha</v-col>
-                                    <v-col cols="3" class="text-center font-weight-bold">Precio</v-col>
+                                    <v-col cols="3" class="text-center font-weight-bold">Namekoins</v-col>
                                     <v-col cols="3" class="text-center font-weight-bold">Operación</v-col>
                                     <v-col cols="3" class="text-center font-weight-bold">Juego</v-col>
+                                    <v-col cols="3" class="text-center font-weight-bold">Plataforma</v-col>
                                 </v-row>
                                 <v-divider class="my-3"></v-divider>
-                                <v-row v-for="transaction in transactions" :key="transaction.id">
-                                    <v-col cols="3" class="text-center">{{ new
-                                        Date(transaction.date).toLocaleDateString() }}</v-col>
-                                    <v-col cols="3" class="text-center">{{ transaction.amount }}</v-col>
+                                <v-row v-for="transaction in transactionsArray" :key="transaction.id">
+                                    <v-col cols="3" class="text-center">{{ transaction.price }}</v-col>
                                     <v-col cols="3" class="text-center">{{ transaction.description }}</v-col>
-                                    <v-col cols="3" class="text-center">{{ transaction.id }}</v-col>
+                                    <v-col cols="3" class="text-center">{{ transaction.videogame }}</v-col>
+                                    <v-col cols="3" class="text-center">{{ transaction.platform }}</v-col>
                                 </v-row>
                             </v-card-text>
                         </v-card>
@@ -89,13 +88,22 @@
 </template>
 <script setup>
 
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { instance_axios } from "../middlewares/axios";
 import { router } from "../routes";
+import { paymentStore } from "../stores/paymentStore"
 
 const nickname = ref("");
 const exists = ref(true);
+const transactionsArray = ref([])
+const usePaymentStore = paymentStore()
+const transactionsDetails = reactive({
+    namekoins: '',
+    operation: '',
+    game: '',
+    platform: ''
+})
 
 onMounted(async () => {
     const route = useRoute();
@@ -110,6 +118,22 @@ onMounted(async () => {
         exists.value = false;
         router.push({ path: '/404' })
     }
+
+    try {
+        const res = await usePaymentStore.getTransactions(nickname.value)
+        res.forEach((transaction) => {
+            console.log(transaction.nicknameBuyer);
+            if (transaction.nicknameBuyer === nickname.value) {
+                transaction.description = 'Compra'
+            } else {
+                transaction.description = 'Venta'
+            }
+        });
+
+        transactionsArray.value = res;
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 const ratings = ref([
@@ -122,15 +146,12 @@ const headers = ref([
     { text: 'Descripción', value: 'description' },
     { text: 'Monto', value: 'amount' }
 ]);
-const transactions = ref([
-    { id: 'God of War', date: '2023-05-10', description: 'Compra', amount: '$200' },
-    { id: 'Spiderman', date: '2023-04-30', description: 'Venta', amount: '$500' },
-    { id:'Call of Duty', date: '2023-04-15', description: 'Compra', amount: '$100' },
-    { id: 'God of War', date: '2023-05-10', description: 'Compra', amount: '$200' },
-    { id: 'Spiderman', date: '2023-04-30', description: 'Venta', amount: '$500' },
-    { id:'Call of Duty', date: '2023-04-15', description: 'Compra', amount: '$100' }
-    
-]);
+
+
+const getTransactions = async () => {
+    const res = await usePaymentStore.getTransactions(nickname.value)
+    console.log(res);
+}
 
 function startChat() {
     // Lógica para iniciar el chat con el usuario

@@ -66,27 +66,27 @@
                     Saldo</v-card-title>
                   <v-card-text class="text-center">
                     <p class="mb-5" style="font-family: 'Roboto', sans-serif;">Selecciona la cantidad de Name<span
-                        class="text-red-darken-3 font-weight-bold" style="font-family: 'Roboto', sans-serif;">koins</span>
+                        class="text-red-darken-3 font-weight-bold mb-3" style="font-family: 'Roboto', sans-serif;">koins</span>
                       a recargar:</p>
                     <v-row class="d-flex justify-center">
                       <v-col cols="12" sm="4" class="mb-4">
                         <v-card class="d-flex flex-column align-center" @click="selectedAmount = 10"
                           :class="{ 'selected': selectedAmount === 10 }">
-                          <img src="https://via.placeholder.com/150" alt="10€" class="mb-2">
+                          <img src="../assets/images/namekoins.png" alt="10€" class="mb-2" height="130">
                           <span class="font-weight-bold" style="font-family: 'Roboto', sans-serif;">10€</span>
                         </v-card>
                       </v-col>
                       <v-col cols="12" sm="4" class="mb-4">
                         <v-card class="d-flex flex-column align-center" @click="selectedAmount = 25"
                           :class="{ 'selected': selectedAmount === 25 }">
-                          <img src="https://via.placeholder.com/150" alt="25€" class="mb-2">
+                          <img src="../assets/images/namekoins.png" alt="25€" class="mb-2" height="130">
                           <span class="font-weight-bold" style="font-family: 'Roboto', sans-serif;">25€</span>
                         </v-card>
                       </v-col>
                       <v-col cols="12" sm="4" class="mb-4">
                         <v-card class="d-flex flex-column align-center" @click="selectedAmount = 40"
                           :class="{ 'selected': selectedAmount === 40 }">
-                          <img src="https://via.placeholder.com/150" alt="40€" class="mb-2">
+                          <img src="../assets/images/namekoins.png" alt="40€" class="mb-2" height="130">
                           <span class="font-weight-bold" style="font-family: 'Roboto', sans-serif;">40€</span>
                         </v-card>
                       </v-col>
