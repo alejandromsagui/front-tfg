@@ -56,6 +56,7 @@
                         </div>
                     </v-col>
                     <v-col cols="12" md="6" class="align-self-stretch" style="width: 100%;">
+ 
                         <h4 class="mt-6 mx-3 text-h4 text-center mb-2">Últimas transacciones</h4>
                         <v-card class="mx-3" height="350" width="100%" outlined>
                             <v-card-text>
@@ -74,12 +75,10 @@
                                 </v-row>
                             </v-card-text>
                         </v-card>
-                        <div class="d-flex mx-auto justify-center">
-                            <v-card-actions>
-                                <v-btn variant="outlined" class="mt-3 bg-red-darken-3 text-white font-weight-bold">Ver más
-                                    transacciones</v-btn>
-                            </v-card-actions>
-                        </div>
+                        <i class="fa-solid fa-square-left"></i>
+                        <i class="fa-sharp fa-solid fa-square-left"></i>
+                        <v-pagination v-model="page" :length="transactionsArray.length" prev-icon="fa-solid fa-arrow-left fa-xs" next-icon="fa-solid fa-arrow-right fa-xs" active-color="red-darken-3">
+                        </v-pagination>
                     </v-col>
                 </v-row>
             </v-container>
@@ -97,6 +96,7 @@ import { paymentStore } from "../stores/paymentStore"
 const nickname = ref("");
 const exists = ref(true);
 const transactionsArray = ref([])
+const page = ref()
 const usePaymentStore = paymentStore()
 const transactionsDetails = reactive({
     namekoins: '',
