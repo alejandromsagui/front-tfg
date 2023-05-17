@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 import { instance_axios } from "../middlewares/axios";
-import { toast } from 'vue3-toastify';
 import { useLoginStore } from "./login"
 import { Buffer } from "buffer"
+import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 

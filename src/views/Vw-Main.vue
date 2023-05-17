@@ -110,7 +110,6 @@
         </v-dialog>
       </v-col>
     </v-row>
-
   </v-container>
 </template>
 
@@ -144,7 +143,8 @@ const newTransaction = reactive({
   idSeller: '',
   nicknameSeller: '',
   idVideogame: '',
-  videogame: ''
+  videogame: '',
+  platform: ''
 })
 
 // watch(() => videogames, () => {
@@ -159,7 +159,6 @@ const verJuego = (videogame) => {
 const createOrder = async () => {
 
   const user = await userStore.getUserByNickname()
-  console.log('Namekoins del usuario: '+user.number_namekoins);
 
   newTransaction.description = `Transacción realizada entre el comprador ${user.nickname} y el vendedor ${nuevoJuego.value.nickname}`
   newTransaction.price = nuevoJuego.value.price,
@@ -167,6 +166,9 @@ const createOrder = async () => {
   newTransaction.nicknameSeller = nuevoJuego.value.nickname;
   newTransaction.idVideogame = nuevoJuego.value._id
   newTransaction.videogame = nuevoJuego.value.name
+  newTransaction.platform = nuevoJuego.value.platform
+
+  console.log('Plataforma: '+nuevoJuego.value.platform);
 
   if(user.number_namekoins < newTransaction.price){
     toast.error('Namekoins insuficientes', {
@@ -175,11 +177,13 @@ const createOrder = async () => {
     })
   } else {
     await usePaymentStore.newTransaction(newTransaction)
-    
+
     toast.success('Transacción realizada correctamente', {
       autoClose: 2000,
       theme: 'colored'
     })
+
+    dialog.value = false; 
   }
 }
 </script>
