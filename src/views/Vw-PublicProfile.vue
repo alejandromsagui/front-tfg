@@ -27,11 +27,11 @@
                         <h4 class="mt-6 mx-3 text-h4 text-center mb-2">Últimas valoraciones</h4>
                         <v-card class="mx-3" height="350" width="100%" outlined>
                             <v-list dense>
-                                <v-list-item v-for="rating in ratings" :key="rating.id">
+                                <v-list-item v-for="review in reviewArray" :key="review.id">
                                     <v-row class="py-4">
                                         <v-col cols="6" md="6" class="d-flex justify-start">
                                             <v-list-item-title class="text-body-1 text-white font-weight-bold">{{
-                                                rating.user }}</v-list-item-title>
+                                                rating.nickname }}</v-list-item-title>
                                         </v-col>
                                         <v-col cols="6" md="6" class="d-flex justify-end">
                                             <v-list-item-action>
@@ -131,6 +131,7 @@ onMounted(async () => {
     try {
     const responseReview = await useReviewStore.getReviews(nickname.value)
     console.log('Array de valoraciones: '+responseReview); 
+    reviewArray = responseReview
     } catch (error) {
         console.log(error);
     }
