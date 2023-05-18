@@ -1,54 +1,52 @@
 <template>
-    <v-container class="d-flex justify-center align-center">
-        <v-card class="mx-auto" max-width="800">
-            <v-card-title class="text-center">Recargar Saldo</v-card-title>
-            <v-card-text class="text-center">
-                <p class="mb-5">Selecciona la cantidad de Name<span class="text-red-darken-3 font-weight-bold">koins</span> a recargar:</p>
-                <v-row class="d-flex justify-center">
-                    <v-col cols="12" sm="4" class="mb-4">
-                        <v-card class="d-flex flex-column align-center" @click="selectedAmount = 10"
-                            :class="{ 'selected': selectedAmount === 10 }">
-                            <img src="https://via.placeholder.com/150" alt="10€" class="mb-2">
-                            <span class="font-weight-bold">10€</span>
-                        </v-card>
-                    </v-col>
-                    <v-col cols="12" sm="4" class="mb-4">
-                        <v-card class="d-flex flex-column align-center" @click="selectedAmount = 25"
-                            :class="{ 'selected': selectedAmount === 25 }">
-                            <img src="https://via.placeholder.com/150" alt="25€" class="mb-2">
-                            <span class="font-weight-bold">25€</span>
-                        </v-card>
-                    </v-col>
-                    <v-col cols="12" sm="4" class="mb-4">
-                        <v-card class="d-flex flex-column align-center" @click="selectedAmount = 40"
-                            :class="{ 'selected': selectedAmount === 40 }">
-                            <img src="https://via.placeholder.com/150" alt="40€" class="mb-2">
-                            <span class="font-weight-bold">40€</span>
-                        </v-card>
-                    </v-col>
-                </v-row>
-                <v-divider class="my-4"></v-divider>
-                <p class="mb-2">Cantidad a recargar:</p>
-                <h2 class="text-center mb-3">{{ selectedAmount }}€</h2>
-                <p class="text-center mb-3 text-white font-weight-bold">Total de Name<span class="text-red-darken-3 font-weight-bold">koins</span>:</p>
-                <h2 class="text-center"> {{ namekoins }} </h2>
-            </v-card-text>
-            <v-card-actions class="d-flex justify-center">
-                <v-btn color="text-white bg-red-darken-3 font-weight-bold" variant="outlined" :disabled="!selectedAmount">Recargar</v-btn>
-            </v-card-actions>
-        </v-card>
+    <v-container>
+      <v-card>
+        <v-card-text class="text-center text-h6 mt-5">
+          Namekians<span class="text-red-darken-3 font-weight-bold">Games</span> es una aplicación nueva. Por ello, necesitamos tu opinión para mejorar la calidad de nuestra plataforma
+        </v-card-text>
+        <v-form ref="form" @submit.prevent="sendReview">
+        <v-row justify="center">
+          <v-col cols="12" sm="6" md="4">
+            <div class="text-center">
+              <v-rating size="large" color="yellow darken-1" class="mt-3 mb-4"></v-rating>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
+          <v-col cols="12" sm="8" md="6">
+            <v-textarea variant="underlined" placeholder="Escribe tu opinión aquí" no-resize
+            :rules="[v => (v || '' ).length <= 200 || 'Por favor, reduce tu comentario hasta un máximo de 200 caracteres']"
+            ></v-textarea>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
+          <v-col cols="12" sm="6" md="4">
+            <div class="text-center">
+              <v-btn class="text-white bg-red-darken-3 font-weight-bold mb-3" variant="outlined" type="submit">Enviar</v-btn>
+            </div>
+          </v-col>
+        </v-row>
+    </v-form>
+      </v-card>
     </v-container>
-</template>
+  </template>
+  
+  
 
 <script setup>
 import { ref, watch } from "vue";
 
-const selectedAmount = ref(null)
-const namekoins = ref(null)
+const form = ref()
 
-watch(selectedAmount, (newVal) => {
-  namekoins.value = newVal * 10
-})
+const sendReview = () => {
+    const isValid = form.value.validate()
+
+    if(isValid){
+        console.log('Formulario válido');
+    }else {
+        console.log('Inválido');
+    }
+}
 </script>
 
 <style lang="css" scoped>

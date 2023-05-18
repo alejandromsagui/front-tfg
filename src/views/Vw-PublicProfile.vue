@@ -74,9 +74,8 @@
                                 </v-row>
                             </v-card-text>
                         </v-card>
-                        <v-pagination v-model="page" :length="6" prev-icon="fa-solid fa-arrow-left"
-                            next-icon="fa-solid fa-arrow-right" active-color="red-darken-3" @next="next()" @prev="back()">
-                        </v-pagination>
+                       
+                       
                     </v-col>
                 </v-row>
             </v-container>
@@ -90,13 +89,23 @@ import { useRoute } from "vue-router";
 import { instance_axios } from "../middlewares/axios";
 import { router } from "../routes";
 import { paymentStore } from "../stores/paymentStore"
+import { reviewStore } from "../stores/reviewStore"
 
-const pageReviews = ref()
+const currentPage = ref(1)
 const nickname = ref("");
 const exists = ref(true);
+const useReviewStore = reviewStore();
+
 var transactionsArray = ref([])
-var page = ref(1)
+
 const usePaymentStore = paymentStore()
+
+const totalRecords = () => {
+    return transactionsArray.value.length;
+}
+const pageCount = computed(() => {
+    return Math.ceil(totalRecords() / itemsPerPage.value) 
+})
 
 const transactionsDetails = reactive({
     namekoins: '',
@@ -136,23 +145,27 @@ onMounted(async () => {
     }
 });
 
+
+
 let indice = 0;
 let removedItems = [];
 
-const next = () => {
-    removedItems = transactionsArray.value.splice(indice, 6);
-    transactionsArray.value = transactionsArray.value.slice(indice, indice + 6);
-    indice += 6;
-    console.log('Indice: ' + indice);
-}
+// const nextPage = () => {
+//     removedItems = transactionsArray.value.splice(indice, 6);
+//     transactionsArray.value = transactionsArray.value.slice(0, 6);
+//     indice += 6;
+//     console.log('Indice: ' + indice);
+//     console.log('Longitud desde next: ' + transactionsArray.value.length);
+// }
 
-const back = () => {
-    indice -= 6;
-    transactionsArray.value.splice(indice, ...removedItems);
-    transactionsArray.value = transactionsArray.value.slice(indice, indice + 6);
+// const beforePage = () => {
+//     indice -= 6;
+//     transactionsArray.value.splice(indice, ...removedItems);
+//     transactionsArray.value = transactionsArray.value.slice(indice, indice + 13);
 
-    console.log('Indice: ' + indice);
-}
+//     console.log('Indice: ' + indice);
+//     console.log('Longitud desde back: ' + transactionsArray.value.length);
+// }
 
 const ratings = ref([
     { id: 1, user: 'Sarah Johnson', comment: 'Excelente trabajo, altamente recomendado.', value: 5, date: '2023-05-01' },
@@ -197,4 +210,28 @@ function startChat() {
 .d-none.d-md-block.pa-0 {
     margin-left: -50px;
 }
+.pagination-container {
+    display: flex;
+    column-gap: 10px;
+  }
+  .paginate-buttons {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: rgb(242, 242, 242);
+    border: 1px solid rgb(217, 217, 217);
+    color: black;
+  }
+  .paginate-buttons:hover {
+    background-color: #d8d8d8;
+  }
+  .active-page {
+    background-color: #3498db;
+    border: 1px solid #3498db;
+    color: white;
+  }
+  .active-page:hover {
+    background-color: #2988c8;
+  }
 </style>

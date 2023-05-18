@@ -98,8 +98,8 @@
                       </v-card-text>
                       <v-card-actions class="justify-center">
                         <v-btn variant="text"
-                          class="text-center bg-red-darken-3 text-white font-weight-bold d-flex mx-auto" @click="createOrder()">Comprar</v-btn>
-                        <!-- <v-btn variant="text" class="text-center bg-red-darken-3 text-white font-weight-bold d-flex mx-auto" @click="isActive.value = false">Cerrar</v-btn> -->
+                          class="text-center bg-red-darken-3 text-white font-weight-bold d-flex mx-auto"
+                          @click="createOrder(); comprado = true">Comprar</v-btn>
                       </v-card-actions>
                     </v-card>
                   </template>
@@ -110,6 +110,40 @@
         </v-dialog>
       </v-col>
     </v-row>
+    <v-dialog v-model="review" persistent max-width="900">
+      <v-container>
+        <v-card>
+          <v-card-text class="text-center text-h6 mt-5">
+            Namekians<span class="text-red-darken-3 font-weight-bold">Games</span> es una aplicación nueva. Por ello,
+            necesitamos tu opinión para mejorar la calidad de nuestra plataforma
+          </v-card-text>
+          <v-form ref="form" @submit.prevent="sendReview">
+            <v-row justify="center">
+              <v-col cols="12" sm="6" md="4">
+                <div class="text-center">
+                  <v-rating size="large" color="yellow darken-1" class="mt-3 mb-4" v-model="rating.rating"></v-rating>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row justify="center">
+              <v-col cols="12" sm="8" md="6">
+                <v-textarea variant="underlined" placeholder="Escribe tu opinión aquí" no-resize
+                  :rules="[v => (v || '').length <= 200 || 'Por favor, reduce tu comentario hasta un máximo de 200 caracteres']"
+                  v-model="rating.comment"></v-textarea>
+              </v-col>
+            </v-row>
+            <v-row justify="center">
+              <v-col cols="12" sm="6" md="4">
+                <div class="text-center">
+                  <v-btn class="text-white bg-red-darken-3 font-weight-bold mb-3" variant="outlined"
+                    type="submit">Enviar</v-btn>
+                </div>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card>
+      </v-container>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -119,9 +153,13 @@ import { useVideogameStore } from "../stores/videogames"
 import { paymentStore } from "../stores/paymentStore"
 import { useLoginStore } from "../stores/login"
 import { userData } from "../stores/userData"
+import { reviewStore } from "../stores/reviewStore"
+
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
+const form = ref()
+const useReviewStore = reviewStore()
 const getVideogamesMain = useVideogameStore()
 const usePaymentStore = paymentStore()
 const loginStore = useLoginStore()
@@ -129,7 +167,7 @@ const userStore = userData()
 const nuevoJuego = ref()
 let videogames = reactive([]);
 const dialog = ref(false)
-
+const comprado = ref(false)
 onMounted(async () => {
   const games = await getVideogamesMain.getVideogames();
   console.log('Games desde onMounted: ' + games);
@@ -137,6 +175,7 @@ onMounted(async () => {
   console.log('Games desde onMounted:', videogames);
 });
 
+const review = ref(false)
 const newTransaction = reactive({
   description: '',
   price: '',
@@ -145,6 +184,13 @@ const newTransaction = reactive({
   idVideogame: '',
   videogame: '',
   platform: ''
+})
+
+const rating = reactive({
+  rating: null,
+  idUserProfile: '',
+  nicknameUserProfile: '',
+  comment: ''
 })
 
 // watch(() => videogames, () => {
@@ -156,21 +202,49 @@ const verJuego = (videogame) => {
   dialog.value = true
 }
 
+const sendReview = async () => {
+  const isValid = form.value.validate()
+
+  if (isValid) {
+    rating.idUserProfile = nuevoJuego.value.userId
+    rating.nicknameUserProfile = nuevoJuego.value.nickname
+    await useReviewStore.newReview(rating)
+    review.value = false;
+
+    toast.success('¡Gracias por aportar tu valoración', {
+      theme: 'colored',
+      autoClose: 3000
+    })
+  } else {
+    toast.error('¡Ha ocurrido un problema al validar tu valoración', {
+      theme: 'colored',
+      autoClose: 3000
+    })
+  }
+}
+
+console.log('valor de comprado: ' + comprado.value);
 const createOrder = async () => {
 
   const user = await userStore.getUserByNickname()
 
   newTransaction.description = `Transacción realizada entre el comprador ${user.nickname} y el vendedor ${nuevoJuego.value.nickname}`
   newTransaction.price = nuevoJuego.value.price,
-  newTransaction.idSeller = nuevoJuego.value.userId
+    newTransaction.idSeller = nuevoJuego.value.userId
   newTransaction.nicknameSeller = nuevoJuego.value.nickname;
   newTransaction.idVideogame = nuevoJuego.value._id
   newTransaction.videogame = nuevoJuego.value.name
   newTransaction.platform = nuevoJuego.value.platform
 
-  console.log('Plataforma: '+nuevoJuego.value.platform);
+  console.log('Plataforma: ' + nuevoJuego.value.platform);
 
-  if(user.number_namekoins < newTransaction.price){
+
+  if (user.nickname === nuevoJuego.value.nickname) {
+    toast.error('No puedes comprar tus propios juegos', {
+      autoClose: 2000,
+      theme: 'colored'
+    })
+  } else if (user.number_namekoins < newTransaction.price) {
     toast.error('Namekoins insuficientes', {
       autoClose: 2000,
       theme: 'colored'
@@ -183,7 +257,12 @@ const createOrder = async () => {
       theme: 'colored'
     })
 
-    dialog.value = false; 
+    dialog.value = false;
+    comprado.value = true;
+
+    if (comprado.value == true) {
+      review.value = true;
+    }
   }
 }
 </script>
@@ -228,4 +307,5 @@ const createOrder = async () => {
 .col-dialog-info {
   width: 100%;
   height: auto;
-}</style>
+}
+</style>
