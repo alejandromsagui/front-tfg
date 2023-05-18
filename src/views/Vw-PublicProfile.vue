@@ -27,7 +27,7 @@
                         <h4 class="mt-6 mx-3 text-h4 text-center mb-2">Últimas valoraciones</h4>
                         <v-card class="mx-3" height="350" width="100%" outlined>
                             <v-list dense>
-                                <v-list-item v-for="review in reviewArray" :key="review.id">
+                                <v-list-item v-for="review in dataReview" :key="review.id">
                                     <v-row class="py-4">
                                         <v-col cols="6" md="6" class="d-flex justify-start">
                                             <v-list-item-title class="text-body-1 text-white font-weight-bold">{{
@@ -42,16 +42,16 @@
 
                                     </v-row>
                                     <v-list-item-subtitle>{{ review.comment }}</v-list-item-subtitle>
-                                    <v-list-item-subtitle class="text--secondary">{{ review.date
+                                    <v-list-item-subtitle class="text--secondary text-end text-white">{{ review.date
                                     }}</v-list-item-subtitle>
                                     <v-divider></v-divider>
                                 </v-list-item>
                             </v-list>
                         </v-card>
                         <div class="d-flex mx-auto justify-center">
-                            <!-- <v-pagination v-model="pageReviews" :length="4" prev-icon="fa-solid fa-arrow-left"
-                                next-icon="fa-solid fa-arrow-right" active-color="red-darken-3">
-                            </v-pagination> -->
+                            <v-pagination v-model="pageReviews" :length="pageCountReviews" prev-icon="fa-solid fa-arrow-left"
+                                next-icon="fa-solid fa-arrow-right" active-color="red-darken-3" @update:modelValue="getDataPageReviews()">
+                            </v-pagination>
                         </div>
                     </v-col>
                     <v-col cols="12" md="6" class="align-self-stretch" style="width: 100%;">
@@ -77,7 +77,7 @@
                         </v-card>
                         <v-pagination v-model="page" :length="pageCount" prev-icon="fa-solid fa-arrow-left"
                             next-icon="fa-solid fa-arrow-right" active-color="red-darken-3"
-                            @update:modelValue="getDataPage()" :items-per-page="6">
+                            @update:modelValue="getDataPage()">
                         </v-pagination>
                     </v-col>
                 </v-row>
@@ -95,15 +95,16 @@ import { paymentStore } from "../stores/paymentStore"
 import { reviewStore } from "../stores/reviewStore"
 import Vue3Toastify from "vue3-toastify";
 const page = ref(1)
-const rating = ref()
-const currentPage = ref(1)
 const nickname = ref("");
 const exists = ref(true);
 const useReviewStore = reviewStore();
 const itemsPerPage = ref(6)
+const itemsPerPageReview = ref(3)
 var transactionsArray = ref([])
 var reviewArray = ref([])
 const usePaymentStore = paymentStore()
+const pageReviews = ref(1)
+
 
 const totalRecords = () => {
     return transactionsArray.value.length;
@@ -112,11 +113,8 @@ const pageCount = computed(() => {
     return Math.ceil(totalRecords() / itemsPerPage.value)
 })
 
-const transactionsDetails = reactive({
-    namekoins: '',
-    operation: '',
-    game: '',
-    platform: ''
+const pageCountReviews = computed (() => {
+    return Math.ceil(reviewArray.value.length / itemsPerPageReview.value)
 })
 
 onMounted(async () => {
@@ -159,6 +157,7 @@ onMounted(async () => {
     }
 
     getDataPage()
+    getDataPageReviews()
 });
 
 
@@ -166,17 +165,24 @@ const datosPaginados = ref([]);
 
 const getDataPage = () => {
     datosPaginados.value = [];
-    console.log('Estoy aqui');
     let ini = (page.value * itemsPerPage.value) - itemsPerPage.value;
     let end = (page.value * itemsPerPage.value);
-
     datosPaginados.value = transactionsArray.value.slice(ini, end);
-
-    console.log('Numero de pagina: '+page.value);
-    console.log('Item por pagina '+itemsPerPage.value);
-    console.log('Datos paginados: ', datosPaginados);
 }
 
+const dataReview = ref([])
+const getDataPageReviews = () => {
+    dataReview.value = [];
+    let ini = (pageReviews.value - 1) * itemsPerPageReview.value;
+let end = pageReviews.value * itemsPerPageReview.value;
+
+if (end > reviewArray.value.length) {
+    end = reviewArray.value.length;
+}
+        console.log('Valor de pageReviews: ' + pageReviews.value);
+    console.log('Items por page: ' + itemsPerPageReview.value);
+    dataReview.value = reviewArray.value.slice(ini, end);
+}
 
 // const beforePage = () => {
 //     indice -= 6;
