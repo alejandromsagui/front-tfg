@@ -31,18 +31,18 @@
                                     <v-row class="py-4">
                                         <v-col cols="6" md="6" class="d-flex justify-start">
                                             <v-list-item-title class="text-body-1 text-white font-weight-bold">{{
-                                                rating.nickname }}</v-list-item-title>
+                                                review.nickname }}</v-list-item-title>
                                         </v-col>
                                         <v-col cols="6" md="6" class="d-flex justify-end">
                                             <v-list-item-action>
-                                                <v-rating v-model="rating.value" size="x-small" color="yellow-darken-1"
-                                                    class="d-flex"></v-rating>
+                                                <v-rating size="x-small" color="yellow-darken-1" class="d-flex"
+                                                    v-model="review.rating" disabled></v-rating>
                                             </v-list-item-action>
                                         </v-col>
 
                                     </v-row>
-                                    <v-list-item-subtitle>{{ rating.comment }}</v-list-item-subtitle>
-                                    <v-list-item-subtitle class="text--secondary">{{ rating.date
+                                    <v-list-item-subtitle>{{ review.comment }}</v-list-item-subtitle>
+                                    <v-list-item-subtitle class="text--secondary">{{ review.date
                                     }}</v-list-item-subtitle>
                                     <v-divider></v-divider>
                                 </v-list-item>
@@ -66,16 +66,19 @@
                                     <v-col cols="3" class="text-center font-weight-bold">Plataforma</v-col>
                                 </v-row>
                                 <v-divider class="my-3"></v-divider>
-                                <v-row v-for="transaction in transactionsArray" :key="transaction.id">
+                                <v-row v-for="transaction in datosPaginados" :key="transaction.id">
                                     <v-col cols="3" class="text-center">{{ transaction.price }}</v-col>
                                     <v-col cols="3" class="text-center">{{ transaction.description }}</v-col>
                                     <v-col cols="3" class="text-center">{{ transaction.videogame }}</v-col>
                                     <v-col cols="3" class="text-center">{{ transaction.platform }}</v-col>
+
                                 </v-row>
                             </v-card-text>
                         </v-card>
-                       
-                       
+                        <v-pagination v-model="page" :length="pageCount" prev-icon="fa-solid fa-arrow-left"
+                            next-icon="fa-solid fa-arrow-right" active-color="red-darken-3"
+                            @update:modelValue="getDataPage()" :items-per-page="6">
+                        </v-pagination>
                     </v-col>
                 </v-row>
             </v-container>
@@ -90,21 +93,23 @@ import { instance_axios } from "../middlewares/axios";
 import { router } from "../routes";
 import { paymentStore } from "../stores/paymentStore"
 import { reviewStore } from "../stores/reviewStore"
-
+import Vue3Toastify from "vue3-toastify";
+const page = ref(1)
+const rating = ref()
 const currentPage = ref(1)
 const nickname = ref("");
 const exists = ref(true);
 const useReviewStore = reviewStore();
-
+const itemsPerPage = ref(6)
 var transactionsArray = ref([])
-var reviewArray = reactive([])
+var reviewArray = ref([])
 const usePaymentStore = paymentStore()
 
 const totalRecords = () => {
     return transactionsArray.value.length;
 }
 const pageCount = computed(() => {
-    return Math.ceil(totalRecords() / itemsPerPage.value) 
+    return Math.ceil(totalRecords() / itemsPerPage.value)
 })
 
 const transactionsDetails = reactive({
@@ -129,9 +134,10 @@ onMounted(async () => {
     }
 
     try {
-    const responseReview = await useReviewStore.getReviews(nickname.value)
-    console.log('Array de valoraciones: '+responseReview); 
-    reviewArray = responseReview
+        const responseReview = await useReviewStore.getReviews(nickname.value)
+        console.log('Array de valoraciones: ', responseReview);
+        reviewArray.value = responseReview;
+
     } catch (error) {
         console.log(error);
     }
@@ -151,20 +157,26 @@ onMounted(async () => {
     } catch (error) {
         console.log(error);
     }
+
+    getDataPage()
 });
 
 
+const datosPaginados = ref([]);
 
-let indice = 0;
-let removedItems = [];
+const getDataPage = () => {
+    datosPaginados.value = [];
+    console.log('Estoy aqui');
+    let ini = (page.value * itemsPerPage.value) - itemsPerPage.value;
+    let end = (page.value * itemsPerPage.value);
 
-// const nextPage = () => {
-//     removedItems = transactionsArray.value.splice(indice, 6);
-//     transactionsArray.value = transactionsArray.value.slice(0, 6);
-//     indice += 6;
-//     console.log('Indice: ' + indice);
-//     console.log('Longitud desde next: ' + transactionsArray.value.length);
-// }
+    datosPaginados.value = transactionsArray.value.slice(ini, end);
+
+    console.log('Numero de pagina: '+page.value);
+    console.log('Item por pagina '+itemsPerPage.value);
+    console.log('Datos paginados: ', datosPaginados);
+}
+
 
 // const beforePage = () => {
 //     indice -= 6;
@@ -218,11 +230,13 @@ function startChat() {
 .d-none.d-md-block.pa-0 {
     margin-left: -50px;
 }
+
 .pagination-container {
     display: flex;
     column-gap: 10px;
-  }
-  .paginate-buttons {
+}
+
+.paginate-buttons {
     height: 40px;
     width: 40px;
     border-radius: 20px;
@@ -230,16 +244,18 @@ function startChat() {
     background-color: rgb(242, 242, 242);
     border: 1px solid rgb(217, 217, 217);
     color: black;
-  }
-  .paginate-buttons:hover {
+}
+
+.paginate-buttons:hover {
     background-color: #d8d8d8;
-  }
-  .active-page {
+}
+
+.active-page {
     background-color: #3498db;
     border: 1px solid #3498db;
     color: white;
-  }
-  .active-page:hover {
+}
+
+.active-page:hover {
     background-color: #2988c8;
-  }
-</style>
+}</style>
