@@ -49,9 +49,9 @@
                             </v-list>
                         </v-card>
                         <div class="d-flex mx-auto justify-center">
-                            <v-pagination v-model="pageReviews" :length="4" prev-icon="fa-solid fa-arrow-left"
+                            <!-- <v-pagination v-model="pageReviews" :length="4" prev-icon="fa-solid fa-arrow-left"
                                 next-icon="fa-solid fa-arrow-right" active-color="red-darken-3">
-                            </v-pagination>
+                            </v-pagination> -->
                         </div>
                     </v-col>
                     <v-col cols="12" md="6" class="align-self-stretch" style="width: 100%;">
@@ -97,7 +97,7 @@ const exists = ref(true);
 const useReviewStore = reviewStore();
 
 var transactionsArray = ref([])
-
+var reviewArray = reactive([])
 const usePaymentStore = paymentStore()
 
 const totalRecords = () => {
@@ -126,6 +126,13 @@ onMounted(async () => {
         console.log(error);
         exists.value = false;
         router.push({ path: '/404' })
+    }
+
+    try {
+    const responseReview = await useReviewStore.getReviews(nickname.value)
+    console.log('Array de valoraciones: '+responseReview); 
+    } catch (error) {
+        console.log(error);
     }
 
     try {
