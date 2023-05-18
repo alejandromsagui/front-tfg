@@ -80,6 +80,7 @@
 import { ref, reactive, onBeforeMount, watchEffect, watch, onMounted } from 'vue';
 import { useLoginStore } from "../stores/login"
 import { userData } from "../stores/userData";
+import { Buffer } from 'buffer';
 
 const showNickname = ref(false);
 const showEmail = ref(false);
@@ -92,10 +93,18 @@ const data = reactive({
     email: ''
 });
 
-onBeforeMount(() => {
-    data.nickname = useAuthStore.$state.nickname;
-    data.email = useAuthStore.$state.email;
-})
+const getData = async () => {
+    const token = localStorage.getItem('token');
+    const [header, payload, signature] = token.split(".");
+    const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+    return decodedPayload;
+}
+
+onBeforeMount(async () => {
+    const tokenData = await getData()
+    data.nickname = tokenData.nickname;
+    data.email = tokenData.email;
+});
 
 //watch(() => data.nickname, async (newNickname, oldNickname) => {
 //    if (newNickname !== oldNickname) {
