@@ -20,6 +20,7 @@ export const reviewStore = defineStore({
         async getReviews(nickname){
             try {
                 const res = await instance_axios.get(`/ratings/${nickname}`)
+                console.log('Valor de nickname: ', nickname);
                 console.log(res.data);
                 return res.data;
             } catch (error) {
