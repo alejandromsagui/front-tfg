@@ -130,10 +130,10 @@ export const userData = defineStore({
             const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
 
             try {
-                const response = await instance_axios.get(`/getUser/${decodedPayload.nickname}`)
+                const response = await instance_axios.get(`/getNamekoins/${decodedPayload.nickname}`)
                 console.log(response.data);
-                console.log(response.data.user.number_namekoins);
-                return response.data.user;
+                console.log(response.data.coins);
+               return response.data.coins
             } catch (error) {
                 console.log(error);
             }

@@ -106,14 +106,14 @@ onBeforeMount(async () => {
     data.email = tokenData.email;
 });
 
-watch(() => data.nickname, async (newNickname, oldNickname) => {
-   if (newNickname !== oldNickname) {
-       console.log('Valor de nickname: ' + data.nickname);
-       await userDataStore.updateTokenByNickname(newNickname);
-       console.log('El nombre ha sido cambiado por: ' + newNickname);
-       data.nickname = newNickname;
-   }
-});
+// watch(() => data.nickname, async (newNickname, oldNickname) => {
+//    if (newNickname !== oldNickname) {
+//        console.log('Valor de nickname: ' + data.nickname);
+//        await userDataStore.updateTokenByNickname(newNickname);
+//        console.log('El nombre ha sido cambiado por: ' + newNickname);
+//        data.nickname = newNickname;
+//    }
+// });
 
 // watch(() => getData.getEmail, async (newEmail, oldEmail) => {
 //     if(newEmail !== oldEmail){
