@@ -21,7 +21,6 @@ onMounted(async () => {
   if (token) {
     try {
       const res = await instance_axios.get('/checkJWT')
-      console.log(res.data);
     } catch (error) {
       if (error.res && error.res.status === 401) {
         loginStore.logout()

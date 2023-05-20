@@ -1,56 +1,103 @@
 <template>
+  <v-app>
     <v-container>
-      <v-card>
-        <v-card-text class="text-center text-h6 mt-5">
-          Namekians<span class="text-red-darken-3 font-weight-bold">Games</span> es una aplicación nueva. Por ello, necesitamos tu opinión para mejorar la calidad de nuestra plataforma
+      <v-card class="chat-window">
+        <v-card-title class="header">
+          <span class="username">Chat</span>
+        </v-card-title>
+        <v-card-text class="chat-box" ref="chatBox">
+          <div v-for="(message, index) in messages" :key="index" class="message" :class="message.from === 'me' ? 'from-me' : 'from-others'">
+            <span>{{ message.text }}</span>
+          </div>
         </v-card-text>
-        <v-form ref="form" @submit.prevent="sendReview">
-        <v-row justify="center">
-          <v-col cols="12" sm="6" md="4">
-            <div class="text-center">
-              <v-rating size="large" color="yellow darken-1" class="mt-3 mb-4"></v-rating>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row justify="center">
-          <v-col cols="12" sm="8" md="6">
-            <v-textarea variant="underlined" placeholder="Escribe tu opinión aquí" no-resize
-            :rules="[v => (v || '' ).length <= 200 || 'Por favor, reduce tu comentario hasta un máximo de 200 caracteres']"
-            ></v-textarea>
-          </v-col>
-        </v-row>
-        <v-row justify="center">
-          <v-col cols="12" sm="6" md="4">
-            <div class="text-center">
-              <v-btn class="text-white bg-red-darken-3 font-weight-bold mb-3" variant="outlined" type="submit">Enviar</v-btn>
-            </div>
-          </v-col>
-        </v-row>
-    </v-form>
+        <v-card-actions class="text-area">
+          <v-text-field v-model="inputText" @keyup.enter="sendMessage" placeholder="Type a message..." outlined></v-text-field>
+          <v-btn @click="sendMessage" color="primary">Send</v-btn>
+        </v-card-actions>
       </v-card>
     </v-container>
-  </template>
-  
-  
+  </v-app>
+</template>
+
 
 <script setup>
-import { ref, watch } from "vue";
+import { socket } from "../services/socket";
+import { ref, onMounted } from 'vue';
+const inputText = ref('');
+const messages = ref([]);
 
-const form = ref()
+const sendMessage = () => {
+  if (inputText.value.trim() !== '') {
+    const message = {
+      from: 'me',
+      text: inputText.value
+    };
 
-const sendReview = () => {
-    const isValid = form.value.validate()
+    socket.emit('chat message', message);
+    messages.value.push(message);
+    inputText.value = '';
+  }
+};
 
-    if(isValid){
-        console.log('Formulario válido');
-    }else {
-        console.log('Inválido');
-    }
-}
+
+onMounted(() => {
+  socket.on('chat message', (message) => {
+    messages.value.push({
+      from: 'others',
+      text: message
+    });
+  });
+});
 </script>
 
-<style lang="css" scoped>
-.selected {
-    box-shadow: 0px 0px 10px #C62828;
+<style>
+.chat-window {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  margin-right: 10px;
+}
+
+.username {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.chat-box {
+  max-height: 300px;
+  overflow-y: scroll;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.message {
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.from-me {
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  align-self: flex-end;
+}
+
+.from-others {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.text-area {
+  display: flex;
+  align-items: center;
 }
 </style>
