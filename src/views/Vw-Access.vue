@@ -72,7 +72,9 @@
                                     <v-form ref="form" @submit.prevent="registerUser">
                                         <v-text-field label="Usuario" prepend-icon="fa-solid fa-user" type="text"
                                             class="text-white" v-model="userLogin.nickname"
-                                            :rules="[(val) => (val && val.length > 0 || 'Este campo es obligatorio')]" />
+                                            :rules="[(val) => (val && val.length > 0 || 'Este campo es obligatorio'),
+                                        (val) => (val && val.length > 3 || 'El nombre de usuario debe ser superior a 3 caracteres')
+                                        ]" />
 
                                         <v-text-field label="Email" prepend-icon="fa-solid fa-envelope" type="text"
                                             class="text-white" v-model="userLogin.email" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
@@ -245,39 +247,11 @@ const sendEmailUser = async () => {
 
 const registerUser = async () => {
 
-    let formIsValid = await form.value.validate();
-
-    if (formIsValid.valid) {
-
-        const userExists = await registerStore.getNickname(userLogin.nickname);
-        console.log('Nickname existe?: ' + userLogin.nickname);
-        const emailExists = await registerStore.getEmail(userLogin.email);
-        console.log('Nickname existe?: ' + userLogin.email);
-
-        console.log('Codigo de estado usuario: ' + userExists);
-        console.log('Codigo de estado email:' + emailExists);
-        if (userExists === 200) {
-            toast.error('Ese nombre de usuario ya existe', {
-                autoClose: 2000,
-                theme: 'colored'
-            });
-        }
-
-        if (emailExists === 200) {
-            toast.error('Ese email ya existe', {
-                autoClose: 2000,
-                theme: 'colored'
-            });
-        }
-
-        if (userExists === 404 && emailExists === 404) {
-            await registerStore.signIn(userLogin.nickname, userLogin.email, userLogin.password)
-            transition.value = 1;
-            form.value.reset();
-        }
-    }
+        const register =  await registerStore.signIn(userLogin.nickname, userLogin.email, userLogin.password)
+    // transition.value = 1;
+    // form.value.reset();
+    
 }
-
 
 </script>
 

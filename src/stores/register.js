@@ -3,13 +3,12 @@ import { instance_axios } from '../middlewares/axios';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { router } from '../routes';
-
-
+import  form  from "../views/Vw-Access.vue"
 export const useRegister = defineStore({
     id: 'register',
     state: () => ({
         user: null,
-        nicknameExists: false
+        nicknameExists: false,
     }),
 
     actions: {
@@ -31,18 +30,19 @@ export const useRegister = defineStore({
             }
         },
 
+        //Registro del usuario
         async signIn(nickname, email, password) {
             try {
                 const user = await instance_axios.post('/register', { nickname, email, password })
                 this.user = user;
 
-                toast.success("Te has registrado correctamente", {
+                toast.success(user.data.message, {
                     autoClose: 2000,
                     theme: 'colored'
                 })
             } catch (error) {
-                if (error.response && error.response.status === 500) {
-                    toast.error("Ha ocurrido un error", {
+                if (error.response && error.response.status === 500 || error.response.status === 400) {
+                    toast.error(error.response.data.message, {
                         autoClose: 2000,
                         theme: 'colored'
                     });
