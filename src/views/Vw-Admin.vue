@@ -29,7 +29,8 @@
                     <v-divider class="py-3"></v-divider>
                     <v-row v-for="user in users" :key="user._id" class="d-flex justify-center">
                         <v-col cols="4" class="text-center">
-                            <a :href="'/perfil/' + user.nickname" target="_blank" class="text-red-darken-1">{{ user.nickname }}</a>
+                            <a :href="'/perfil/' + user.nickname" target="_blank" class="text-red-darken-1">{{ user.nickname
+                            }}</a>
                         </v-col>
                         <v-col cols="4" class="text-center">
                             <p> {{ user.email }}</p>
@@ -37,8 +38,8 @@
                         <v-col cols="4">
                             <v-card-actions>
                                 <div class="d-flex mx-auto">
-                                    <v-btn class="bg-amber-accent-4 text-white font-weight-bold"
-                                        variant="outlined">Bloquear</v-btn>
+                                    <v-btn class="bg-amber-accent-4 text-white font-weight-bold" variant="outlined"
+                                        @click="blockUser(user.nickname)">Bloquear</v-btn>
                                     <v-btn class="bg-red-darken-1 text-white font-weight-bold"
                                         variant="outlined">Borrar</v-btn>
                                 </div>
@@ -59,10 +60,12 @@
 import { reactive, ref, onBeforeMount, onMounted } from "vue";
 import { useLoginStore } from '../stores/login'
 import { userData } from '../stores/userData'
+import { reportStore } from "../stores/reportStore"
 import { router } from "../routes";
 
 const authStore = useLoginStore();
 const userDataStore = userData();
+const useReportStore = reportStore();
 const nickname = ref()
 const showUsers = ref(false);
 const showAlerts = ref(false);
@@ -78,7 +81,7 @@ const users = reactive([])
 console.log(users);
 
 onBeforeMount(() => {
-    console.log('Nickname de admin: '+authStore.getNickname);
+    console.log('Nickname de admin: ' + authStore.getNickname);
     nickname.value = authStore.getNickname;
 })
 
@@ -95,6 +98,10 @@ const handleItemClick = async (item) => {
         showAlerts.value = true;
         showUsers.value = false;
     }
+}
+
+const blockUser = async (nickname) => {
+    await useReportStore.reportUser(nickname)
 }
 </script>
 

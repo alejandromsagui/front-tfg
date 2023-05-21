@@ -15,7 +15,7 @@
                                 <h2 class="text-white mb-15">
                                     Inicia sesión en Namekians<span style="color:#F80808;">Games</span>
                                 </h2>
-                                <v-form>
+                                <v-form @keyup.enter="authUser">
                                     <v-text-field label="Email o nombre de usuario" name="usuario"
                                         prepend-icon="fa-solid fa-user" type="text"
                                         class="user-data text-center text-white mr-3" />
@@ -39,7 +39,7 @@
                                 <h2 class="text-center text-white mb-15">
                                     Inicia sesión en Namekians<span style="color:red;">Games</span>
                                 </h2>
-                                <v-form class="mx-auto">
+                                <v-form class="mx-auto" @keyup.enter="authUser">
                                     <v-text-field label="Email o nombre de usuario" name="usuario"
                                         prepend-icon="fa-solid fa-user" type="text"
                                         class="user-data text-center text-white mr-3" v-model="userLogin.email"
@@ -69,7 +69,7 @@
                                 <h2 class="text-white mb-15 text-center">Crea una nueva <span
                                         style="color: #F80808;">cuenta</span></h2>
                                 <div>
-                                    <v-form ref="form" @submit.prevent="registerUser">
+                                    <v-form ref="form" @submit.prevent="registerUser" @keyup.enter="registerUser">
                                         <v-text-field label="Usuario" prepend-icon="fa-solid fa-user" type="text"
                                             class="text-white" v-model="userLogin.nickname"
                                             :rules="[(val) => (val && val.length > 0 || 'Este campo es obligatorio'),
@@ -100,7 +100,7 @@
                                 <h2 class="text-white mb-15 text-center">Crea una nueva <span
                                         style="color: #F80808;">cuenta</span></h2>
                                 <div>
-                                    <v-form ref="form" @submit.prevent="registerUser">
+                                    <v-form ref="form" @submit.prevent="registerUser" @keyup.enter="registerUser">
                                         <v-text-field label="Usuario" prepend-icon="fa-solid fa-user" type="text"
                                             class="text-white" v-model="userLogin.nickname"
                                             :rules="[(val) => (val && val.length > 0 || 'Este campo es obligatorio')]" />
@@ -134,7 +134,7 @@
                                         style="color:red;font-weight: bold;">usuario</span>
                                     y te enviaremos un correo electrónico de recuperación
                                 </h2>
-                                <v-form ref="form">
+                                <v-form ref="form" @keyup.enter="sendEmailUser">
                                     <v-text-field label="Email o nombre de usuario" name="user-data"
                                         prepend-icon="fa-solid fa-user" type="text"
                                         class="data-user text-center text-white mr-3"

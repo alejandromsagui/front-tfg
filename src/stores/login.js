@@ -49,7 +49,7 @@ export const useLoginStore = defineStore({
         })
         router.push('/')
       } catch (error) {
-        toast.error('Nombre de usuario o contraseña incorrectos', {
+        toast.error(error.response.data.error, {
           autoClose: 2000,
           theme: 'colored'
         })
@@ -76,7 +76,7 @@ export const useLoginStore = defineStore({
         })
         router.push('/')
       } catch (error) {
-        toast.error('Nombre de usuario o contraseña incorrectos', {
+        toast.error(error.response.data.error, {
           autoClose: 2000,
           theme: 'colored'
         })
