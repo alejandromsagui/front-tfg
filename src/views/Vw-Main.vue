@@ -37,7 +37,7 @@
                 <div v-if="authenticated">
                   <v-tooltip text="Denunciar publicación">
                     <template v-slot:activator="{ props }">
-                      <i class="fa-solid fa-flag" v-bind="props" @click="reportVideogame(videogame._id); dialog = false"></i>
+                      <i class="fa-solid fa-flag" v-bind="props" @click.stop="reportVideogame(videogame._id);"></i>
                     </template>
                   </v-tooltip>
                 </div>
