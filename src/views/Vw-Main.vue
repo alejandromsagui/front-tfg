@@ -37,7 +37,7 @@
                 <div v-if="authenticated">
                   <v-tooltip text="Denunciar publicación">
                     <template v-slot:activator="{ props }">
-                      <i class="fa-solid fa-flag" v-bind="props" @click="reportVideogame()"></i>
+                      <i class="fa-solid fa-flag" v-bind="props" @click="reportVideogame(videogame._id); dialog = false"></i>
                     </template>
                   </v-tooltip>
                 </div>
@@ -159,27 +159,30 @@
 
 <script setup>
 import { reactive, onMounted, ref, watch } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useVideogameStore } from "../stores/videogames"
 import { paymentStore } from "../stores/paymentStore"
 import { useLoginStore } from "../stores/login"
 import { userData } from "../stores/userData"
 import { reviewStore } from "../stores/reviewStore"
-import { storeToRefs } from 'pinia';
+import { reportStore } from "../stores/reportStore"
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 const form = ref()
+// 
 const loginStore = useLoginStore()
-const { authenticated } = storeToRefs(loginStore)
 const useReviewStore = reviewStore()
 const getVideogamesMain = useVideogameStore()
 const usePaymentStore = paymentStore()
+const useReportStore = reportStore()
 
 const userStore = userData()
 const nuevoJuego = ref()
 let videogames = reactive([]);
 const dialog = ref(false)
 const comprado = ref(false)
+const { authenticated } = storeToRefs(loginStore)
 onMounted(async () => {
   const games = await getVideogamesMain.getVideogames();
   console.log('Games desde onMounted: ' + games);
@@ -198,6 +201,9 @@ const newTransaction = reactive({
   platform: ''
 })
 
+const reportVideogame = async(id) => {
+  await useReportStore.reportGame(id)
+}
 const token = localStorage.getItem('token')
 onMounted(async () => {
   if (token) {

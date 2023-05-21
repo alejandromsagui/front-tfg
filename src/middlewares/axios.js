@@ -21,7 +21,10 @@ instance_axios.interceptors.response.use(
     if (error.response.status === 401) {
       const loginStore = useLoginStore();
       loginStore.logout();
-      toast.error('La sesión ha caducado. Por favor, vuelve a iniciar sesión', {
+      
+      const errorMessage = error.response.data.error; // Obtener el mensaje de error del backend
+      
+      toast.error(errorMessage, {
         autoClose: 3000,
         theme: "colored"
       })
