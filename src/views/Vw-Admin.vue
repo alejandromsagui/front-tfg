@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer id="app-drawer" class="cyan lighten-1" app permanent>
+    <v-navigation-drawer id="app-drawer" class="cyan lighten-1 d-none d-md-block" app permanent>
         <v-list>
             <v-list-item avatar class="text-center">
                 <v-avatar size="80" class="mt-3">
@@ -51,7 +51,13 @@
             </v-card>
         </template>
         <template v-if="showAlerts">
-            <h2>Adios</h2>
+            <v-card class="mb-10">
+                <v-card-title class="pa-5 pb-5 bg-red-darken-3 text-white text-h6">Notificaciones</v-card-title>
+                <v-card width="600" elevation="10" class="d-flex mx-auto mt-5">
+                    <v-card-text class="mt-3">Notificación</v-card-text>
+
+                </v-card>
+            </v-card>
         </template>
     </v-container>
 </template>
@@ -61,7 +67,10 @@ import { reactive, ref, onBeforeMount, onMounted } from "vue";
 import { useLoginStore } from '../stores/login'
 import { userData } from '../stores/userData'
 import { reportStore } from "../stores/reportStore"
+import { socket } from "../services/socket"
 import { router } from "../routes";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const authStore = useLoginStore();
 const userDataStore = userData();
@@ -84,6 +93,17 @@ onBeforeMount(() => {
     console.log('Nickname de admin: ' + authStore.getNickname);
     nickname.value = authStore.getNickname;
 })
+
+
+const notification = ref()
+onMounted(() => {
+  socket.on('adminNotification', (message) => {
+  console.log('Mensaje del servidor:', message);
+  notification.value = message;
+});
+})
+
+
 
 const handleItemClick = async (item) => {
     if (item.action === 'users') {
