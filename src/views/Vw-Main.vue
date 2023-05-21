@@ -27,12 +27,22 @@
             <v-card-title class="text-center">{{ videogame.name }}</v-card-title>
             <v-card-text>
               <p class="text-red-darken-1">{{ videogame.genre.join(",").replaceAll(',', ', ') }}</p>
-              <div style="display: flex; align-items: center; justify-content: flex-end;">
-                <i class="fas fa-user fa-fw"></i>
-                <router-link :to="'/perfil/' + videogame.nickname" class="text-decoration-none">
-                  <p style="margin-left: 5px;" class="text-red-darken-1">{{ videogame.nickname }}</p>
-                </router-link>
+              <div style="display: flex; align-items: center; justify-content: space-between;" class="mt-5">
+                <div style="display: flex; align-items: center;">
+                  <i class="fas fa-user fa-fw"></i>
+                  <router-link :to="'/perfil/' + videogame.nickname" class="text-decoration-none">
+                    <p style="margin-left: 5px;" class="text-red-darken-1">{{ videogame.nickname }}</p>
+                  </router-link>
+                </div>
+                <div v-if="authenticated">
+                  <v-tooltip text="Denunciar publicación">
+                    <template v-slot:activator="{ props }">
+                      <i class="fa-solid fa-flag" v-bind="props" @click="reportVideogame()"></i>
+                    </template>
+                  </v-tooltip>
+                </div>
               </div>
+
             </v-card-text>
           </v-card>
         </v-lazy>
@@ -154,15 +164,17 @@ import { paymentStore } from "../stores/paymentStore"
 import { useLoginStore } from "../stores/login"
 import { userData } from "../stores/userData"
 import { reviewStore } from "../stores/reviewStore"
-
+import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 const form = ref()
+const loginStore = useLoginStore()
+const { authenticated } = storeToRefs(loginStore)
 const useReviewStore = reviewStore()
 const getVideogamesMain = useVideogameStore()
 const usePaymentStore = paymentStore()
-const loginStore = useLoginStore()
+
 const userStore = userData()
 const nuevoJuego = ref()
 let videogames = reactive([]);
@@ -184,6 +196,15 @@ const newTransaction = reactive({
   idVideogame: '',
   videogame: '',
   platform: ''
+})
+
+const token = localStorage.getItem('token')
+onMounted(async () => {
+  if (token) {
+    authenticated.value = true
+  } else {
+    authenticated.value = false
+  }
 })
 
 const rating = reactive({
@@ -230,7 +251,7 @@ const createOrder = async () => {
 
   newTransaction.description = `Transacción realizada entre el comprador ${user.nickname} y el vendedor ${nuevoJuego.value.nickname}`
   newTransaction.price = nuevoJuego.value.price,
-    newTransaction.idSeller = nuevoJuego.value.userId
+  newTransaction.idSeller = nuevoJuego.value.userId
   newTransaction.nicknameSeller = nuevoJuego.value.nickname;
   newTransaction.idVideogame = nuevoJuego.value._id
   newTransaction.videogame = nuevoJuego.value.name

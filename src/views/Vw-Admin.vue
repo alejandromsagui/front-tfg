@@ -77,7 +77,7 @@ const items = reactive([
     { text: 'Transacciones', action: 'transactions', icon: 'fa-solid fa-shop' },
 ]);
 
-const users = reactive([])
+const users = ref([])
 console.log(users);
 
 onBeforeMount(() => {
@@ -92,7 +92,7 @@ const handleItemClick = async (item) => {
 
         const getUsers = await userDataStore.getUsers()
         console.log(Array.isArray(getUsers));
-        users.push(...getUsers)
+        users.value.push(...getUsers)
         console.log(users);
     } else {
         showAlerts.value = true;

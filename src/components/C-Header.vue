@@ -195,13 +195,13 @@ const dialog = ref(false)
 const namekoins = ref()
 const selectedAmount = ref(null)
 const namekoinsRecarge = ref(0)
-onMounted(async () => {
-  if (token) {
-    authenticated.value = true
-  } else {
-    authenticated.value = false
-  }
-})
+// onMounted(async () => {
+//   if (token) {
+//     authenticated.value = true
+//   } else {
+//     authenticated.value = false
+//   }
+// })
 
 const getNamekoins = async () => {
   try {

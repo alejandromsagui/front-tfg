@@ -31,7 +31,6 @@ router.beforeEach(async (to, from, next) => {
     if (to.meta.requiresAdmin) {
         try {
             const response = await userDataStore.getPermission()
-            console.log('Response desde router: '+response);
             if (!response) {
                 next({ name: 'Home' });
             } else {
@@ -39,7 +38,6 @@ router.beforeEach(async (to, from, next) => {
             }
         } catch (error) {
             console.log(userDataStore.nickname);
-            console.log(error);
             next({ name: 'Home' });
         }
     } else if (to.name === 'acceso' && userStore.isAuthenticated) {

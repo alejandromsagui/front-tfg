@@ -24,6 +24,21 @@ export const reportStore = defineStore({
                     theme: "colored"
                 })
             }
+        },
+
+        async reportGame(id){
+            try {
+                const response = await instance_axios.put(`reportGame/${id}`)
+                toast.success(response.data.message, {
+                    autoClose: 3000,
+                    theme: "colored"
+                })
+            } catch (error) {
+                toast.error(error.response.data.message, {
+                    autoClose: 3000,
+                    theme: "colored"
+                })
+            }
         }
     }
 })
