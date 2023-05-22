@@ -26,6 +26,14 @@ export const reviewStore = defineStore({
             } catch (error) {
                 console.log(error);
             }
+        },
+        async getAllReviews(){
+            try {
+                const res = await instance_axios.get('/allRatings')
+                return res.data;
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 })

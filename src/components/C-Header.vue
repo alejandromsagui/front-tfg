@@ -31,6 +31,15 @@
         <v-spacer></v-spacer>
         <v-toolbar-items class="d-none d-md-block">
 
+          <!-- <v-btn class="text-none" stacked>
+            <v-badge content="2" color="error">
+              <v-icon icon="fa-solid fa-bell"></v-icon>
+            </v-badge>
+          </v-btn> -->
+
+          <!-- <v-btn class="link" text @click="goPerfil()" v-if="isAdmin">
+            <i class="fa-solid fa-user mr-1"></i> Admin
+          </v-btn> -->
           <CDialog />
 
           <v-btn class="link" text @click="goPerfil()">
@@ -66,7 +75,8 @@
                     Saldo</v-card-title>
                   <v-card-text class="text-center">
                     <p class="mb-5" style="font-family: 'Roboto', sans-serif;">Selecciona la cantidad de Name<span
-                        class="text-red-darken-3 font-weight-bold mb-3" style="font-family: 'Roboto', sans-serif;">koins</span>
+                        class="text-red-darken-3 font-weight-bold mb-3"
+                        style="font-family: 'Roboto', sans-serif;">koins</span>
                       a recargar:</p>
                     <v-row class="d-flex justify-center">
                       <v-col cols="12" sm="4" class="mb-4">
@@ -195,13 +205,22 @@ const dialog = ref(false)
 const namekoins = ref()
 const selectedAmount = ref(null)
 const namekoinsRecarge = ref(0)
+const isAdmin = ref()
+
 onMounted(async () => {
   if (token) {
     authenticated.value = true
+    
+    // const res = await userDataStore.getPermission()
+    // console.log('Valor de res: ', res);
+    // if (res) {
+    //   isAdmin.value = true;
+    // }
   } else {
     authenticated.value = false
   }
 })
+
 
 const getNamekoins = async () => {
   try {
@@ -384,4 +403,5 @@ const goPerfil = () => {
 
 .selected {
   box-shadow: 0px 0px 10px #C62828;
-}</style>
+}
+</style>

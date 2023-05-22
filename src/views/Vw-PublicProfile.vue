@@ -184,26 +184,6 @@ if (end > reviewArray.value.length) {
     dataReview.value = reviewArray.value.slice(ini, end);
 }
 
-// const beforePage = () => {
-//     indice -= 6;
-//     transactionsArray.value.splice(indice, ...removedItems);
-//     transactionsArray.value = transactionsArray.value.slice(indice, indice + 13);
-
-//     console.log('Indice: ' + indice);
-//     console.log('Longitud desde back: ' + transactionsArray.value.length);
-// }
-
-const ratings = ref([
-    { id: 1, user: 'Sarah Johnson', comment: 'Excelente trabajo, altamente recomendado.', value: 5, date: '2023-05-01' },
-    { id: 2, user: 'David Brown', comment: 'Muy profesional y amable, siempre dispuesto a ayudar.', value: 4, date: '2023-04-25' },
-    { id: 3, user: 'Emily Davis', comment: 'No me gustó mucho el resultado final, pero entregó a tiempo.', value: 2, date: '2023-04-18' }
-]);
-const headers = ref([
-    { text: 'Fecha', value: 'date' },
-    { text: 'Descripción', value: 'description' },
-    { text: 'Monto', value: 'amount' }
-]);
-
 
 const getTransactions = async () => {
     const res = await usePaymentStore.getTransactions(nickname.value)
