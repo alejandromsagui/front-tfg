@@ -1,6 +1,6 @@
 <template>
-    <v-navigation-drawer id="app-drawer" class="cyan lighten-1 d-none d-md-block" app permanent>
-        <v-list density="compact">
+    <v-navigation-drawer id="app-drawer" class="cyan lighten-1" app permanent v-if="!isMobile">
+        <v-list dense>
             <v-list-item avatar class="text-center">
                 <v-avatar size="80" class="mt-3">
                     <img src="../assets/images/avatar.jpg" style="width: 80px;" alt="avatar">
@@ -22,30 +22,32 @@
             </v-list-item>
         </v-list>
     </v-navigation-drawer>
+
     <v-container fluid>
         <template v-if="!showUsers && !showAlerts">
             <v-row class="justify-center mt-5">
-                <v-col cols="6">
-                    <v-card rounded height="500">
+                <v-col cols="12" md="6">
+                    <v-card rounded>
                         <v-card-title>Namekians<span class="text-red-darken-3 font-weight-bold">Games</span>
                             dashboard</v-card-title>
                         <v-card-subtitle>Actividad reciente</v-card-subtitle>
                         <v-card-item class="text-center">
-                                <CChart/>
+                            <CChart />
                         </v-card-item>
                     </v-card>
                 </v-col>
-                <v-col cols="6">
-                    <v-card rounded height="500">
+                <v-col cols="12" md="6">
+                    <v-card rounded>
                         <v-card-title>Usuarios <span
                                 class="text-red-darken-3 font-weight-bold">conectados</span></v-card-title>
-                        <v-card-subtitle>Usuarios en línea</v-card-subtitle>
+                        <v-card-subtitle>Concurrencia de usuarios en tiempo real</v-card-subtitle>
                         <v-card-item class="text-center">
-                            Gráfica
+                            <CChartConnection />
                         </v-card-item>
                     </v-card>
                 </v-col>
             </v-row>
+
             <v-row class="justify-center">
                 <v-col cols="12" sm="12" md="12">
                     <v-card rounded height="400">
@@ -128,7 +130,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onBeforeMount, onMounted } from "vue";
+import { reactive, ref, onBeforeMount, onMounted, computed } from "vue";
 import { useLoginStore } from '../stores/login'
 import { userData } from '../stores/userData'
 import { reportStore } from "../stores/reportStore"
@@ -136,7 +138,7 @@ import { reviewStore } from "../stores/reviewStore"
 import { socket } from "../services/socket"
 import { router } from "../routes";
 import { toast } from 'vue3-toastify';
-import { CChart } from "../components"
+import { CChart, CChartConnection } from "../components"
 import 'vue3-toastify/dist/index.css';
 
 const authStore = useLoginStore();
@@ -147,6 +149,8 @@ const nickname = ref()
 const showUsers = ref(false);
 const showAlerts = ref(false);
 const showMain = ref(false)
+
+const isMobile = computed(() => window.innerWidth <= 960)
 
 const items = reactive([
     { text: 'Principal', action: 'main', icon: 'fa-sharp fa-solid fa-house' },
@@ -235,7 +239,7 @@ const blockUser = async (nickname) => {
 }
 
 canvas {
-  max-width: 600px;
-  margin: 0 auto;
+    max-width: 600px;
+    margin: 0 auto;
 }
 </style>
