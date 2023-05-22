@@ -86,35 +86,58 @@
             </v-row>
         </template>
         <template v-if="showUsers">
-            <v-card>
-                <v-card-text>
-                    <v-row class="d-flex justify-center">
-                        <v-col cols="4" class="text-center font-weight-bold text-h6 mb-2">Nombre de usuario</v-col>
-                        <v-col cols="4" class="text-center font-weight-bold text-h6 mb-2">Correo electrónico</v-col>
-                        <v-col cols="4" class="text-center font-weight-bold text-h6 mb-2">Acciones</v-col>
+            <v-card elevation="10">
+                <v-row align="center">
+                    <v-col cols="auto">
+                        <v-sheet class="bg-red-darken-3 d-flex justify-center" width="70" height="70"
+                            style="align-items: center;" rounded elevation="10">
+                            <v-icon icon="fa-solid fa-user"></v-icon>
+                        </v-sheet>
+                    </v-col>
+                    <v-col cols="auto" style="padding: 0" class="p-0">
+                        <v-card-title class="font-italic text-start mr-7 pa-0">Lista de usuarios</v-card-title>
+                    </v-col>
+                    <v-col class="ml-auto d-flex" cols="3" style="flex-grow: 1; flex-shrink: 1;">
+                        <v-text-field hide-details label="Buscar..." placeholder="Usuario o correo"
+                            prepend-icon="fa-solid fa-search" filled rounded dense single-line class="shrink mt-2 mr-7"
+                            v-model="searchQuery" variant="outlined">
+                        </v-text-field>
+                    </v-col>
+                </v-row>
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="12" md="12" sm="12">
+                            <v-table>
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">Nombre de usuario</th>
+                                        <th class="text-left">Correo electrónico</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="user in filteredUsers" :key="user._id">
+                                        <td>{{ user.nickname }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>
+                                            <div class="d-flex justify-end">
+                                                <v-btn class="bg-amber-accent-4 text-white font-weight-bold mr-3"
+                                                    variant="outlined" @click="blockUser(user.nickname)">
+                                                    Bloquear
+                                                </v-btn>
+                                                <v-btn class="bg-red-darken-1 text-white font-weight-bold"
+                                                    variant="outlined">
+                                                    Borrar
+                                                </v-btn>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </v-table>
+                        </v-col>
                     </v-row>
-                    <v-divider class="py-3"></v-divider>
-                    <v-row v-for="user in users" :key="user._id" class="d-flex justify-center">
-                        <v-col cols="4" class="text-center">
-                            <a :href="'/perfil/' + user.nickname" target="_blank" class="text-red-darken-1">{{ user.nickname
-                            }}</a>
-                        </v-col>
-                        <v-col cols="4" class="text-center">
-                            <p> {{ user.email }}</p>
-                        </v-col>
-                        <v-col cols="4">
-                            <v-card-actions>
-                                <div class="d-flex mx-auto">
-                                    <v-btn class="bg-amber-accent-4 text-white font-weight-bold" variant="outlined"
-                                        @click="blockUser(user.nickname)">Bloquear</v-btn>
-                                    <v-btn class="bg-red-darken-1 text-white font-weight-bold"
-                                        variant="outlined">Borrar</v-btn>
-                                </div>
-                            </v-card-actions>
-                        </v-col>
-                        <v-divider class="py-3"></v-divider>
-                    </v-row>
-                </v-card-text>
+                </v-container>
             </v-card>
         </template>
         <template v-if="showAlerts">
@@ -130,7 +153,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onBeforeMount, onMounted, computed } from "vue";
+import { reactive, ref, onBeforeMount, onMounted, computed, watch } from "vue";
 import { useLoginStore } from '../stores/login'
 import { userData } from '../stores/userData'
 import { reportStore } from "../stores/reportStore"
@@ -149,11 +172,14 @@ const nickname = ref()
 const showUsers = ref(false);
 const showAlerts = ref(false);
 const showMain = ref(false)
+const searchQuery = ref()
+
+
 
 const isMobile = computed(() => window.innerWidth <= 960)
 
 const items = reactive([
-    { text: 'Principal', action: 'main', icon: 'fa-sharp fa-solid fa-house' },
+    { text: 'Principal', action: 'main', icon: 'fa-sharp fa-solid fa-house', selected: true },
     { text: 'Lista de usuarios', action: 'users', icon: 'fa-solid fa-user' },
     { text: 'Panel de alertas', action: 'alerts', icon: 'fa-sharp fa-solid fa-bell' },
     { text: 'Videojuegos', action: 'videogames', icon: 'fa-sharp fa-solid fa-gamepad' },
@@ -162,6 +188,20 @@ const items = reactive([
 
 const ratings = reactive([])
 const users = ref([])
+
+
+
+const filteredUsers = computed(() => {
+  if (!searchQuery.value) {
+    return users.value;
+  } else {
+    const query = searchQuery.value.toLowerCase().replace(/\s/g, ''); // Eliminar espacios en blanco
+    return users.value.filter(user =>
+      user.nickname.toLowerCase().replace(/\s/g, '').includes(query) ||
+      user.email.toLowerCase().replace(/\s/g, '').includes(query)
+    );
+  }
+});
 
 onBeforeMount(() => {
     console.log('Nickname de admin: ' + authStore.getNickname);
@@ -225,10 +265,6 @@ const handleItemClick = async (item) => {
 const blockUser = async (nickname) => {
     await useReportStore.reportUser(nickname)
 }
-
-
-
-
 </script>
 
 <style scoped>
