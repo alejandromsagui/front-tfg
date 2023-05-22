@@ -31,7 +31,7 @@
                             dashboard</v-card-title>
                         <v-card-subtitle>Actividad reciente</v-card-subtitle>
                         <v-card-item class="text-center">
-                            Gráfica
+                                <CChart/>
                         </v-card-item>
                     </v-card>
                 </v-col>
@@ -136,6 +136,7 @@ import { reviewStore } from "../stores/reviewStore"
 import { socket } from "../services/socket"
 import { router } from "../routes";
 import { toast } from 'vue3-toastify';
+import { CChart } from "../components"
 import 'vue3-toastify/dist/index.css';
 
 const authStore = useLoginStore();
@@ -177,13 +178,18 @@ onMounted(() => {
     });
 })
 
+
 onMounted(async () => {
 
     const res = await useReviewStore.getAllReviews();
     ratings.values = res.dataRating;
     ratings.values.reverse()
-    console.log('Ratings values ',ratings.values );
+    console.log('Ratings values ', ratings.values);
 })
+
+const lineChart = ref()
+
+
 
 
 
@@ -215,6 +221,10 @@ const handleItemClick = async (item) => {
 const blockUser = async (nickname) => {
     await useReportStore.reportUser(nickname)
 }
+
+
+
+
 </script>
 
 <style scoped>
@@ -222,5 +232,10 @@ const blockUser = async (nickname) => {
     background-color: #C62828;
     color: white;
     transition: 0.3s;
+}
+
+canvas {
+  max-width: 600px;
+  margin: 0 auto;
 }
 </style>
