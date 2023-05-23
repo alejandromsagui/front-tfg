@@ -15,38 +15,48 @@
       </v-col>
     </v-row> -->
     <v-row align-content="center">
-      <v-col v-for="videogame in videogames.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))"
-        :key="videogame._id" cols="12" sm="6" md="4">
-        <v-lazy :options="{ 'threshold': 0.5 }" transition="fade-transition">
-          <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" height="100%"
-            @click="verJuego(videogame)">
-            <div style="position: relative; padding-top: 75%;">
-              <img :src="videogame.image" alt="videogame"
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
-            </div>
-            <v-card-title class="text-center">{{ videogame.name }}</v-card-title>
-            <v-card-text>
-              <p class="text-red-darken-1">{{ videogame.genre }}</p>
-              <div style="display: flex; align-items: center; justify-content: space-between;" class="mt-5">
-                <div style="display: flex; align-items: center;">
-                  <i class="fas fa-user fa-fw"></i>
-                  <router-link :to="'/perfil/' + videogame.nickname" class="text-decoration-none">
-                    <p style="margin-left: 5px;" class="text-red-darken-1">{{ videogame.nickname }}</p>
-                  </router-link>
-                </div>
-                <div v-if="authenticated">
-                  <v-tooltip text="Denunciar publicación">
-                    <template v-slot:activator="{ props }">
-                      <i class="fa-solid fa-flag" v-bind="props" @click.stop="reportVideogame(videogame._id);"></i>
-                    </template>
-                  </v-tooltip>
-                </div>
-              </div>
+  <v-col cols="12" sm="12" md="12">
+    <v-text-field hide-details label="Buscar..." placeholder="Título o género" prepend-icon="fa-solid fa-search"
+      filled rounded dense single-line class="shrink mt-2 mr-7" v-model="searchQuery" variant="outlined">
+    </v-text-field>
+  </v-col>
+</v-row>
 
-            </v-card-text>
-          </v-card>
-        </v-lazy>
-      </v-col>
+  <v-row>
+      <TransitionGroup name="list">
+        <v-col
+          v-for="videogame in getVideogamesMain.videogames.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) "
+          :key="videogame._id" cols="12" sm="6" md="4">
+          <v-lazy :options="{ 'threshold': 0.5 }" transition="fade-transition">
+            <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" height="100%"
+              @click="verJuego(videogame)">
+              <div style="position: relative; padding-top: 75%;">
+                <img :src="videogame.image" alt="videogame"
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <v-card-title class="text-center">{{ videogame.name }}</v-card-title>
+              <v-card-text>
+                <p class="text-red-darken-1">{{ videogame.genre }}</p>
+                <div style="display: flex; align-items: center; justify-content: space-between;" class="mt-5">
+                  <div style="display: flex; align-items: center;">
+                    <i class="fas fa-user fa-fw"></i>
+                    <router-link :to="'/perfil/' + videogame.nickname" class="text-decoration-none">
+                      <p style="margin-left: 5px;" class="text-red-darken-1">{{ videogame.nickname }}</p>
+                    </router-link>
+                  </div>
+                  <div v-if="authenticated">
+                    <v-tooltip text="Denunciar publicación">
+                      <template v-slot:activator="{ props }">
+                        <i class="fa-solid fa-flag" v-bind="props" @click.stop="reportVideogame(videogame._id);"></i>
+                      </template>
+                    </v-tooltip>
+                  </div>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-lazy>
+        </v-col>
+      </TransitionGroup>
     </v-row>
     <v-row v-if="nuevoJuego">
       <v-col cols="12" sm="6" md="4">
@@ -67,9 +77,9 @@
                 <v-card-title class="text-center text-white text-h4 mb-3">Descripción</v-card-title>
                 <v-card-text class="text-subtitle-1 text-justify">{{ nuevoJuego.description }}.</v-card-text>
                 <v-card-title class="text-center text-white text-h4 mb-3">Género</v-card-title>
-                <v-card-text class="text-subtitle-1 text-center text-body-1">
+                <!-- <v-card-text class="text-subtitle-1 text-center text-body-1">
                   {{ nuevoJuego.genre.join(',').replace(/,\s*/g, ', ') }}
-                </v-card-text>
+                </v-card-text> -->
                 <v-card-title class="text-center text-white text-h4 mb-2 my-6">Opiniones de venta</v-card-title>
                 <v-card elevation="10" class="bg-red-darken-3">
                   <v-card-text class="text-white">Pepe: Lorem ipsum dolor sit amet consectetur adipiscing,
@@ -170,7 +180,7 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 const form = ref()
-
+const searchQuery = ref()
 const loginStore = useLoginStore()
 const useReviewStore = reviewStore()
 const getVideogamesMain = useVideogameStore()
@@ -183,12 +193,7 @@ let videogames = reactive([]);
 const dialog = ref(false)
 const comprado = ref(false)
 const { authenticated } = storeToRefs(loginStore)
-// onMounted(async () => {
-//   const games = await getVideogamesMain.getVideogames();
-//   console.log('Games desde onMounted: ' + games);
-//   await videogames.push(...await getVideogamesMain.getVideogames());
-//   console.log('Games desde onMounted:', videogames);
-// });
+
 
 const games = ref()
 const review = ref(false)
@@ -203,11 +208,10 @@ const newTransaction = reactive({
 })
 
 
-onBeforeMount(async() => {
-  console.log('Videojuegos desde store: ', await getVideogamesMain.getVideogames);
-  console.log('Array desde store: ', getVideogamesMain.videogames);
+onBeforeMount(async () => {
+  await getVideogamesMain.getVideogames();
 })
-const reportVideogame = async(id) => {
+const reportVideogame = async (id) => {
   await useReportStore.reportGame(id)
 }
 const token = localStorage.getItem('token')
@@ -225,10 +229,6 @@ const rating = reactive({
   nicknameUserProfile: '',
   comment: ''
 })
-
-// watch(() => videogames, () => {
-//     console.log('new value',);
-// }, { deep: true });
 
 const verJuego = (videogame) => {
   nuevoJuego.value = videogame
@@ -256,14 +256,14 @@ const sendReview = async () => {
   }
 }
 
-console.log('valor de comprado: ' + comprado.value);
+
 const createOrder = async () => {
 
   const user = await userStore.getUserByNickname()
 
   newTransaction.description = `Transacción realizada entre el comprador ${user.nickname} y el vendedor ${nuevoJuego.value.nickname}`
   newTransaction.price = nuevoJuego.value.price,
-  newTransaction.idSeller = nuevoJuego.value.userId
+    newTransaction.idSeller = nuevoJuego.value.userId
   newTransaction.nicknameSeller = nuevoJuego.value.nickname;
   newTransaction.idVideogame = nuevoJuego.value._id
   newTransaction.videogame = nuevoJuego.value.name
@@ -340,5 +340,16 @@ const createOrder = async () => {
 .col-dialog-info {
   width: 100%;
   height: auto;
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 </style>

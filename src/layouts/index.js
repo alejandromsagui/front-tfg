@@ -1,0 +1,1 @@
+export {default as LCardDetails} from './L-CardDetails.vue';
