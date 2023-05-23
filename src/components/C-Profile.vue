@@ -24,7 +24,29 @@
                             <v-list-item-title v-text="item.text"></v-list-item-title>
                         </v-list-item>
                         <v-list-item>
-                            <v-btn class="font-weight-bold bg-red-darken-3 mt-10" variant="outlined">ELIMINAR CUENTA</v-btn>
+                            <v-btn class="font-weight-bold bg-red-darken-3 mt-10" variant="outlined">ELIMINAR CUENTA
+
+                                <v-dialog v-model="dialog" activator="parent" max-width="500">
+                                    <v-card>
+                                        <div class="bg-white text-black d-flex align-center pa-2">
+                                            <v-card-title class="text-left flex-grow-1 font-weight-bold text-h6">Confirmar</v-card-title>
+                                            <div class="d-flex mr-3">
+                                                <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3"
+                                                    @click="dialog = false"></v-icon>
+                                            </div>
+                                        </div>
+                                        <v-card-text class="text-h5 text-center">
+                                            ¿Estás seguro de que quieres eliminar tu cuenta? Una vez realizada esta acción,
+                                            no la podrás
+                                            <span class="text-red-darken-3 font-weight-bold">recuperar</span>
+                                        </v-card-text>
+                                        <v-card-actions class="justify-center mt-5">
+                                            <v-btn class="text-white bg-red-darken-3 font-weight-bold" variant="outlined" @click="deleteUser()">Eliminar de todas
+                                                formas</v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-dialog>
+                            </v-btn>
                         </v-list-item>
                     </v-list>
                 </v-col>
@@ -87,7 +109,7 @@ const showEmail = ref(false);
 const showPassword = ref(false);
 const userDataStore = userData();
 const useAuthStore = useLoginStore();
-
+const dialog = ref()
 const data = reactive({
     nickname: '',
     email: ''
@@ -105,6 +127,10 @@ onBeforeMount(async () => {
     data.nickname = tokenData.nickname;
     data.email = tokenData.email;
 });
+
+const deleteUser = async() => {
+    await userDataStore.deleteUser()
+}
 
 // watch(() => data.nickname, async (newNickname, oldNickname) => {
 //    if (newNickname !== oldNickname) {

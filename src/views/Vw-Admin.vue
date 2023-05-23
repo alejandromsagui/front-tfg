@@ -107,32 +107,37 @@
                 <v-container fluid>
                     <v-row>
                         <v-col cols="12" md="12" sm="12">
-                            <v-table>
+                            <v-table v-auto-animate>
                                 <thead>
                                     <tr>
                                         <th class="text-left">Nombre de usuario</th>
                                         <th class="text-left">Correo electrónico</th>
-                                        <th class="text-center">Acciones</th>
+                                        <th class="text-left">Estado</th>
+                                        <th class="text-left"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="user in filteredUsers" :key="user._id">
-                                        <td>{{ user.nickname }}</td>
-                                        <td>{{ user.email }}</td>
-                                        <td>
-                                            <div class="d-flex justify-end">
-                                                <v-btn class="bg-amber-accent-4 text-white font-weight-bold mr-3"
-                                                    variant="outlined" @click="blockUser(user.nickname)">
-                                                    Bloquear
-                                                </v-btn>
-                                                <v-btn class="bg-red-darken-1 text-white font-weight-bold"
-                                                    variant="outlined">
-                                                    Borrar
-                                                </v-btn>
-                                            </div>
-                                        </td>
-
-                                    </tr>
+                                    <TransitionGroup name="list">
+                                        <tr v-for="user in filteredUsers" :key="user.nickname">
+                                            <td>{{ user.nickname }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td>{{ user.blocked ? 'Bloqueado' : 'Activo' }}</td>
+                                            <td>
+                                                <div class="d-flex justify-end">
+                                                    <v-btn v-if="user.blocked == false" class="bg-amber-accent-4 text-white font-weight-bold mr-3"
+                                                        variant="outlined" @click="blockUser(user.nickname)">
+                                                        Bloquear
+                                                    </v-btn>
+                                                    <v-btn v-if="user.blocked == true">DESBLOQUEAR</v-btn>
+                                                    <v-btn class="bg-red-darken-1 text-white font-weight-bold"
+                                                        variant="outlined"
+                                                        @click="deleteUser(user.nickname); animationDelete(user)">
+                                                        Borrar
+                                                    </v-btn>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </TransitionGroup>
                                 </tbody>
                             </v-table>
                         </v-col>
@@ -192,18 +197,24 @@ const users = ref([])
 
 
 const filteredUsers = computed(() => {
-  if (!searchQuery.value) {
-    return users.value;
-  } else {
-    const query = searchQuery.value.toLowerCase().replace(/\s/g, ''); // Eliminar espacios en blanco
-    return users.value.filter(user =>
-      user.nickname.toLowerCase().replace(/\s/g, '').includes(query) ||
-      user.email.toLowerCase().replace(/\s/g, '').includes(query)
-    );
-  }
+    if (!searchQuery.value) {
+        return users.value;
+    } else {
+        const query = searchQuery.value.toLowerCase().replace(/\s/g, '');
+        return users.value.filter(user =>
+            user.nickname.toLowerCase().replace(/\s/g, '').includes(query) ||
+            user.email.toLowerCase().replace(/\s/g, '').includes(query)
+        );
+    }
 });
 
 onBeforeMount(() => {
+    // if (!users.value) userDataStore.getUsers().then(r => {
+    //     if (r.status === 200) {
+    //         showUsers.value = true;
+    //     }
+    // })
+
     console.log('Nickname de admin: ' + authStore.getNickname);
     nickname.value = authStore.getNickname;
 })
@@ -224,7 +235,6 @@ onMounted(() => {
 
 
 onMounted(async () => {
-
     const res = await useReviewStore.getAllReviews();
     ratings.values = res.dataRating;
     ratings.values.reverse()
@@ -232,10 +242,6 @@ onMounted(async () => {
 })
 
 const lineChart = ref()
-
-
-
-
 
 const handleItemClick = async (item) => {
     // quita la seleccion anterior
@@ -250,8 +256,11 @@ const handleItemClick = async (item) => {
         showAlerts.value = false;
 
         const getUsers = await userDataStore.getUsers()
+
         console.log(Array.isArray(getUsers));
+        users.value = [];
         users.value.push(...getUsers)
+
         console.log(users);
     } else if (item.action === 'alerts') {
         showAlerts.value = true;
@@ -265,6 +274,14 @@ const handleItemClick = async (item) => {
 const blockUser = async (nickname) => {
     await useReportStore.reportUser(nickname)
 }
+
+const deleteUser = async (nickname) => {
+    await userDataStore.deleteUserByAdmin(nickname)
+}
+
+const animationDelete = (toRemove) => {
+    users.value = users.value.filter((user) => user !== toRemove)
+}
 </script>
 
 <style scoped>
@@ -277,5 +294,16 @@ const blockUser = async (nickname) => {
 canvas {
     max-width: 600px;
     margin: 0 auto;
+}
+
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
 }
 </style>

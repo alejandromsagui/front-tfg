@@ -115,7 +115,7 @@ export const userData = defineStore({
         },
         async getUsers() {
             try {
-                const response = await instance_axios.get('/users');
+                const response = await instance_axios.get('/getUsersDetails');
                 console.log(response.data.users);
                 return response.data.users;
             } catch (error) {
@@ -155,6 +155,43 @@ export const userData = defineStore({
                 return this.admin;
             } catch (error) {
                 console.log(error);
+            }
+        },
+        async deleteUser(){
+
+            const loginStore = useLoginStore()
+            const token = localStorage.getItem('token');
+            const [header, payload, signature] = token.split(".");
+            const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+
+            try {
+               const response = await instance_axios.delete(`deleteUser/${decodedPayload.id}`)
+                loginStore.logout()
+
+                toast.success(response.data.message, {
+                    theme: "colored",
+                    autoClose: 3000
+                })
+            } catch (error) {
+                toast.error(error.response.data.message, {
+                    theme: "colored",
+                    autoClose: 3000
+                })
+            }
+        },
+
+        async deleteUserByAdmin(nickname){
+            try {
+                const response = await instance_axios.delete(`deleteUserByAdmin/${nickname}`)
+                toast.success(response.data.message, {
+                    theme: "colored", 
+                    autoClose: 3000
+                })
+            } catch (error) {
+                toast.error(error.response.data.message, {
+                    theme: "colored",
+                    autoClose: 3000
+                })
             }
         }
     },

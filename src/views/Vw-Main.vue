@@ -26,7 +26,7 @@
             </div>
             <v-card-title class="text-center">{{ videogame.name }}</v-card-title>
             <v-card-text>
-              <p class="text-red-darken-1">{{ videogame.genre.join(",").replaceAll(',', ', ') }}</p>
+              <p class="text-red-darken-1">{{ videogame.genre }}</p>
               <div style="display: flex; align-items: center; justify-content: space-between;" class="mt-5">
                 <div style="display: flex; align-items: center;">
                   <i class="fas fa-user fa-fw"></i>
@@ -158,7 +158,7 @@
 </template>
 
 <script setup>
-import { reactive, onMounted, ref, watch } from 'vue';
+import { reactive, onMounted, ref, watch, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useVideogameStore } from "../stores/videogames"
 import { paymentStore } from "../stores/paymentStore"
@@ -170,7 +170,7 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 const form = ref()
-// 
+
 const loginStore = useLoginStore()
 const useReviewStore = reviewStore()
 const getVideogamesMain = useVideogameStore()
@@ -183,13 +183,14 @@ let videogames = reactive([]);
 const dialog = ref(false)
 const comprado = ref(false)
 const { authenticated } = storeToRefs(loginStore)
-onMounted(async () => {
-  const games = await getVideogamesMain.getVideogames();
-  console.log('Games desde onMounted: ' + games);
-  await videogames.push(...await getVideogamesMain.getVideogames());
-  console.log('Games desde onMounted:', videogames);
-});
+// onMounted(async () => {
+//   const games = await getVideogamesMain.getVideogames();
+//   console.log('Games desde onMounted: ' + games);
+//   await videogames.push(...await getVideogamesMain.getVideogames());
+//   console.log('Games desde onMounted:', videogames);
+// });
 
+const games = ref()
 const review = ref(false)
 const newTransaction = reactive({
   description: '',
@@ -201,6 +202,11 @@ const newTransaction = reactive({
   platform: ''
 })
 
+
+onBeforeMount(async() => {
+  console.log('Videojuegos desde store: ', await getVideogamesMain.getVideogames);
+  console.log('Array desde store: ', getVideogamesMain.videogames);
+})
 const reportVideogame = async(id) => {
   await useReportStore.reportGame(id)
 }

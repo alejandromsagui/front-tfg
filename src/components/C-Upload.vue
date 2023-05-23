@@ -92,7 +92,6 @@ const requiredField = (value) => !!value || "Este campo es obligatorio";
 const onChange = (e) => {
     file.value = e.target.files[0];
     console.log(file.value);
-
     newVideogame.image = file.value
 };
 

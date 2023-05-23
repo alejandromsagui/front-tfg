@@ -9,8 +9,22 @@ export const useVideogameStore = defineStore({
     id: 'videogame',
 
     state: () => ({
-        res: ''
+        res: '',
+        videogames: []
     }),
+
+    getters: {
+        async getVideogames(){
+            try {
+                const response = await instance_axios.get('/videogames');
+                console.log(response.data.videogames);
+                this.videogames.push(response.data.videogames)
+                return this.videogames;
+            } catch (error) {
+                console.log(error);
+            }        
+        }
+    },
     actions: {
         async newVideogame(nvg) {
             try {
@@ -33,14 +47,15 @@ export const useVideogameStore = defineStore({
             }
         },
 
-        async getVideogames() {
-            try {
-                const response = await instance_axios.get('/videogames');
-                console.log(response.data.videogames);
-                return response.data.videogames;
-            } catch (error) {
-                console.log(error);
-            }
-        },
+        // async getVideogames() {
+        //     try {
+        //         const response = await instance_axios.get('/videogames');
+        //         console.log(response.data.videogames);
+        //         this.videogames.push(response.data.videogames)
+        //         return response.data.videogames;
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // },
     }
 })
