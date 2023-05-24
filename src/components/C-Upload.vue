@@ -109,8 +109,9 @@ const uploadVideogame = async (e) => {
     data.append("platform", newVideogame.platform)
     data.append("image", file.value);
 
-    console.log('asi se envia genre: ', newVideogame.genre);
- 
+    // console.log('asi se envia genre: ', newVideogame.genre);
+    
+    console.log('Como se envia data ', data.genre);
     try {
         const videogame = await videogameStore.newVideogame(data)
         console.log(videogame);

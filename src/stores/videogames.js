@@ -10,19 +10,21 @@ export const useVideogameStore = defineStore({
   state: () => ({
     res: "",
     videogames: [],
+    search: ''
   }),
 
   getters: {
-    // async getVideogames(){
-    //     try {
-    //         const response = await instance_axios.get('/videogames');
-    //         console.log(response.data.videogames);
-    //         this.videogames.push(...response.data.videogames)
-    //         return this.videogames;
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    searchVideogame() {
+      if (!this.search) {
+        return this.videogames
+      } else {
+        const query = this.search.toLowerCase().replace(/\s/g, '');
+        return this.videogames.filter(v =>
+          v.name.toLowerCase().replace(/\s/g, '').includes(query) ||
+          v.genre.some(g => g.toLowerCase().replace(/\s/g, '').includes(query))
+        );
+      }
+    }
   },
   actions: {
     async newVideogame(nvg) {
@@ -51,7 +53,7 @@ export const useVideogameStore = defineStore({
       try {
         const response = await instance_axios.get("/videogames");
         console.log(response.data.videogames);
-        this.videogames.splice(0, this.videogames.length); // Limpiar la lista antes de agregar los nuevos elementos
+        this.videogames.splice(0, this.videogames.length);
         this.videogames.push(...response.data.videogames);
         return this.videogames;
       } catch (error) {

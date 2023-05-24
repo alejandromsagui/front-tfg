@@ -17,7 +17,7 @@
     <v-row align-content="center">
   <v-col cols="12" sm="12" md="12">
     <v-text-field hide-details label="Buscar..." placeholder="Título o género" prepend-icon="fa-solid fa-search"
-      filled rounded dense single-line class="shrink mt-2 mr-7" v-model="searchQuery" variant="outlined">
+      filled rounded dense single-line class="shrink mt-2 mr-7" v-model="videogameStore.search" variant="outlined">
     </v-text-field>
   </v-col>
 </v-row>
@@ -25,7 +25,7 @@
   <v-row>
       <TransitionGroup name="list">
         <v-col
-          v-for="videogame in getVideogamesMain.videogames.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) "
+          v-for="videogame in videogameStore.searchVideogame.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))"
           :key="videogame._id" cols="12" sm="6" md="4">
           <v-lazy :options="{ 'threshold': 0.5 }" transition="fade-transition">
             <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" height="100%"
@@ -36,7 +36,7 @@
               </div>
               <v-card-title class="text-center">{{ videogame.name }}</v-card-title>
               <v-card-text>
-                <p class="text-red-darken-1">{{ videogame.genre }}</p>
+                <p class="text-red-darken-1">{{ videogame.genre.join(",").replaceAll(',', ', ') }}</p>
                 <div style="display: flex; align-items: center; justify-content: space-between;" class="mt-5">
                   <div style="display: flex; align-items: center;">
                     <i class="fas fa-user fa-fw"></i>
@@ -183,7 +183,7 @@ const form = ref()
 const searchQuery = ref()
 const loginStore = useLoginStore()
 const useReviewStore = reviewStore()
-const getVideogamesMain = useVideogameStore()
+const videogameStore = useVideogameStore()
 const usePaymentStore = paymentStore()
 const useReportStore = reportStore()
 
@@ -209,7 +209,7 @@ const newTransaction = reactive({
 
 
 onBeforeMount(async () => {
-  await getVideogamesMain.getVideogames();
+  await videogameStore.getVideogames();
 })
 const reportVideogame = async (id) => {
   await useReportStore.reportGame(id)
@@ -263,7 +263,7 @@ const createOrder = async () => {
 
   newTransaction.description = `Transacción realizada entre el comprador ${user.nickname} y el vendedor ${nuevoJuego.value.nickname}`
   newTransaction.price = nuevoJuego.value.price,
-    newTransaction.idSeller = nuevoJuego.value.userId
+  newTransaction.idSeller = nuevoJuego.value.userId
   newTransaction.nicknameSeller = nuevoJuego.value.nickname;
   newTransaction.idVideogame = nuevoJuego.value._id
   newTransaction.videogame = nuevoJuego.value.name
