@@ -14,12 +14,12 @@
                 <v-col cols="12" sm="6" md="8">
                     <v-list class="bg-transparent">
                         <v-list-subheader class="font-weight-bold text-white">PERFIL</v-list-subheader>
-                        <v-list-item v-for="(item, i) in items.slice(0, 3)" :key="i" :value="item" active-color="#F80808"
+                        <v-list-item v-for="(item, i) in items.slice(0, 4)" :key="i" :value="item" active-color="#F80808"
                             variant="plain" @click="handleItemClick(item)">
                             <v-list-item-title v-text="item.text"></v-list-item-title>
                         </v-list-item>
                         <v-list-subheader class="font-weight-bold text-white">TRANSACCIONES</v-list-subheader>
-                        <v-list-item v-for="(item, i) in items.slice(3, 6)" :key="i" :value="item" active-color="#F80808"
+                        <v-list-item v-for="(item, i) in items.slice(4, 6)" :key="i" :value="item" active-color="#F80808"
                             variant="plain">
                             <v-list-item-title v-text="item.text"></v-list-item-title>
                         </v-list-item>
@@ -94,6 +94,22 @@
                     </v-sheet>
                 </v-col>
             </v-row>
+            <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showRecommendations">
+                <v-col cols="12" md="8" xl="6" class="pa-0">
+                    <v-sheet :height="480" max-width="900" class="mb-16 d-flex justify-center align-center d-none" rounded>
+                        <div style="text-align: center; width: 400px;">
+                            <h2 class="text-center text-white font-weight-bold mb-10">Envíanos una recomendación</h2>
+                            <p class="text-center text-subtitle-2 mb-10 text-grey">Si tienes alguna sugerencia para mejorar la plataforma,
+                                escríbela aquí y lo tendremos en cuenta
+                            </p>
+                            <v-textarea label="Recomendación" clearable 
+                            no-resize v-model="message"></v-textarea>
+
+                            <v-btn class="font-weight-bold bg-red-darken-3" variant="outlined" @click="newRecommendation(message)">ENVIAR</v-btn>
+                        </div>
+                    </v-sheet>
+                </v-col>
+            </v-row>
         </v-row>
     </v-container>
 </template>
@@ -107,6 +123,7 @@ import { Buffer } from 'buffer';
 const showNickname = ref(false);
 const showEmail = ref(false);
 const showPassword = ref(false);
+const showRecommendations = ref(false);
 const userDataStore = userData();
 const useAuthStore = useLoginStore();
 const dialog = ref()
@@ -115,6 +132,7 @@ const data = reactive({
     email: ''
 });
 
+const message = ref()
 const getData = async () => {
     const token = localStorage.getItem('token');
     const [header, payload, signature] = token.split(".");
@@ -122,6 +140,9 @@ const getData = async () => {
     return decodedPayload;
 }
 
+const newRecommendation = (message) => {
+    userDataStore.newRecommendation(message)
+}
 onBeforeMount(async () => {
     const tokenData = await getData()
     data.nickname = tokenData.nickname;
@@ -161,6 +182,7 @@ const items = reactive([
     { text: 'Modificar nombre de usuario', action: 'username' },
     { text: 'Modificar email', action: 'email' },
     { text: 'Modificar contraseña', action: 'password' },
+    { text: 'Recomendaciones', action: 'recommendation' },
     { text: 'Saldo' },
     { text: 'Historial de compras' },
     { text: 'Exportar datos' },
@@ -171,16 +193,23 @@ const handleItemClick = (item) => {
         showNickname.value = true;
         showEmail.value = false;
         showPassword.value = false;
+        showRecommendations.value = false;
 
     } else if (item.action === 'email') {
         showNickname.value = false;
         showEmail.value = true;
         showPassword.value = false;
-
+        showRecommendations.value = false;
     } else if (item.action === 'password') {
         showNickname.value = false;
         showEmail.value = false;
         showPassword.value = true;
+        showRecommendations.value = false;
+    } else if (item.action === 'recommendation'){
+        showNickname.value = false;
+        showEmail.value = false;
+        showPassword.value = false;
+        showRecommendations.value = true;
     }
 };
 

@@ -1,14 +1,14 @@
 <template>
     <div class="background" v-if="!isMobile"></div>
     <div class="background-mobile" v-else></div>
-    <div class="background-register" v-if="transition == 2 && !isMobile"></div>
-    <div class="background-register-mobile" v-if="transition == 2 && isMobile"></div>
-    <div class="background-recovery" v-if="transition == 3"></div>
+    <div class="background-register" v-if="registerStore.transition == 2 && !isMobile"></div>
+    <div class="background-register-mobile" v-if="registerStore.transition == 2 && isMobile"></div>
+    <div class="background-recovery" v-if="registerStore.transition == 3"></div>
     <div class="dark-layer"></div>
     <v-container fluid class="fill-height">
         <v-row align="center" justify="center">
             <v-col cols="12" sm="8" md="6">
-                <v-window v-model="transition">
+                <v-window v-model="registerStore.transition">
                     <v-window-item :value="1">
                         <v-row v-if="!isMobile">
                             <v-col cols="12" md="8" sm="12" xs="12" class="text-center mx-auto">
@@ -27,10 +27,10 @@
                                     <v-btn rounded color="#F80808" dark class="button mb-6 mt-2" @click="authUser()">Iniciar
                                         sesión</v-btn>
                                 </div>
-                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 3"
+                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="registerStore.transition = 3"
                                         class="password-recovery">¿Has olvidado tu contraseña?</v-btn></h3>
                                 <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
-                                        @click="transition++">Registrate aquí</v-btn></h3>
+                                        @click="registerStore.transition++">Registrate aquí</v-btn></h3>
                             </v-col>
                         </v-row>
 
@@ -55,10 +55,10 @@
                                         <v-btn rounded color="#F80808" dark class="button mb-6" @click="authUser()">Iniciar
                                             sesión</v-btn>
                                     </div>
-                                    <h3 class="text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 3"
+                                    <h3 class="text-center mt-3 text-white"><v-btn variant="plain" @click="registerStore.transition = 3"
                                             class="password-recovery">¿Has olvidado tu contraseña?</v-btn></h3>
                                     <h3 class="text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
-                                            @click="transition++">Registrate aquí</v-btn></h3>
+                                            @click="registerStore.transition++">Registrate aquí</v-btn></h3>
                                 </v-form>
                             </v-col>
                         </v-row>
@@ -69,7 +69,7 @@
                                 <h2 class="text-white mb-15 text-center">Crea una nueva <span
                                         style="color: #F80808;">cuenta</span></h2>
                                 <div>
-                                    <v-form ref="form" @submit.prevent="registerUser" @keyup.enter="registerUser">
+                                    <v-form ref="form" @submit.prevent="registerUser">
                                         <v-text-field label="Usuario" prepend-icon="fa-solid fa-user" type="text"
                                             class="text-white" v-model="userLogin.nickname"
                                             :rules="[(val) => (val && val.length > 0 || 'Este campo es obligatorio'),
@@ -88,7 +88,7 @@
                                                 type="submit">Registro</v-btn>
                                         </div>
                                         <h3 class=" text-center mt-3 text-white"><v-btn variant="plain"
-                                                class="password-recovery" @click="transition--">Inicia sesión aquí</v-btn>
+                                                class="password-recovery" @click="registerStore.transition--">Inicia sesión aquí</v-btn>
                                         </h3>
                                     </v-form>
 
@@ -118,7 +118,7 @@
                                                 type="submit">Registro</v-btn>
                                         </div>
                                         <h3 class=" text-center mt-3 text-white"><v-btn variant="plain"
-                                                class="password-recovery" @click="transition--">Inicia sesión aquí</v-btn>
+                                                class="password-recovery" @click="registerStore.transition--">Inicia sesión aquí</v-btn>
                                         </h3>
                                     </v-form>
 
@@ -147,10 +147,10 @@
                                     </div>
                                 </v-form>
 
-                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="transition = 1"
+                                <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="registerStore.transition = 1"
                                         class="password-recovery">Inicia sesión aquí</v-btn></h3>
                                 <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" class="password-recovery"
-                                        @click="transition = 2">Registrate aquí</v-btn></h3>
+                                        @click="registerStore.transition = 2">Registrate aquí</v-btn></h3>
                             </v-col>
 
                         </v-row>
@@ -175,7 +175,7 @@ const emailStore = useEmailStore();
 
 
 
-const transition = ref(1)
+// const registerStore.transition = ref(1)
 const form = ref(null);
 const isEmail = ref(false)
 
@@ -248,7 +248,7 @@ const sendEmailUser = async () => {
 const registerUser = async () => {
 
         const register =  await registerStore.signIn(userLogin.nickname, userLogin.email, userLogin.password)
-    // transition.value = 1;
+    // registerStore.transition.value = 1;
     // form.value.reset();
     
 }

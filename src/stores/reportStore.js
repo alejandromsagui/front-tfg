@@ -7,7 +7,9 @@ import "vue3-toastify/dist/index.css";
 export const reportStore = defineStore({
   id: "report",
 
-  state: () => ({}),
+  state: () => ({
+    notifications: ''
+  }),
 
   actions: {
     async reportUser(nickname) {
@@ -41,5 +43,18 @@ export const reportStore = defineStore({
         });
       }
     },
+
+    async getReports(){
+      try {
+        const response = await instance_axios.get('/reports')
+        console.log('response data de reports ', response.data);
+        this.notifications = response.data;
+      } catch (error) {
+        toast.error(error.response.data.message, {
+          autoClose: 3000,
+          theme: "colored",
+        });
+      }
+    }
   },
 });

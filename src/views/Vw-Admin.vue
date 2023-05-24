@@ -99,7 +99,7 @@
                     </v-col>
                     <v-col class="ml-auto d-flex" cols="3" style="flex-grow: 1; flex-shrink: 1;">
                         <v-text-field hide-details label="Buscar..." placeholder="Usuario o correo"
-                            prepend-icon="fa-solid fa-search" filled rounded dense single-line class="shrink mt-2 mr-7"
+                            append-inner-icon="fa-solid fa-search" filled rounded dense single-line class="shrink mt-2 mr-7"
                             v-model="searchQuery" variant="outlined">
                         </v-text-field>
                     </v-col>
@@ -124,7 +124,8 @@
                                             <td>{{ user.blocked ? 'Bloqueado' : 'Activo' }}</td>
                                             <td>
                                                 <div class="d-flex justify-end">
-                                                    <v-btn v-if="user.blocked == false" class="bg-amber-accent-4 text-white font-weight-bold mr-3"
+                                                    <v-btn v-if="user.blocked == false"
+                                                        class="bg-amber-accent-4 text-white font-weight-bold mr-3"
                                                         variant="outlined" @click="blockUser(user.nickname)">
                                                         Bloquear
                                                     </v-btn>
@@ -146,19 +147,14 @@
             </v-card>
         </template>
         <template v-if="showAlerts">
-            <v-card class="mb-10">
-                <v-card-title class="pa-5 pb-5 bg-red-darken-3 text-white text-h6">Notificaciones</v-card-title>
-                <v-card width="600" elevation="10" class="d-flex mx-auto mt-5">
-                    <v-card-text class="mt-3">Notificación</v-card-text>
-
-                </v-card>
-            </v-card>
+            <CNotifications />
         </template>
     </v-container>
 </template>
 
 <script setup>
 import { reactive, ref, onBeforeMount, onMounted, computed, watch } from "vue";
+import { CChart, CChartConnection, CNotifications } from "../components"
 import { useLoginStore } from '../stores/login'
 import { userData } from '../stores/userData'
 import { reportStore } from "../stores/reportStore"
@@ -166,7 +162,6 @@ import { reviewStore } from "../stores/reviewStore"
 import { socket } from "../services/socket"
 import { router } from "../routes";
 import { toast } from 'vue3-toastify';
-import { CChart, CChartConnection } from "../components"
 import 'vue3-toastify/dist/index.css';
 
 const authStore = useLoginStore();

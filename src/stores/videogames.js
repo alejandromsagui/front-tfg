@@ -10,7 +10,8 @@ export const useVideogameStore = defineStore({
   state: () => ({
     res: "",
     videogames: [],
-    search: ''
+    search: '', 
+    dialog: false
   }),
 
   getters: {
@@ -36,13 +37,15 @@ export const useVideogameStore = defineStore({
 
         this.getVideogames();
 
-        toast.success("¡Videojuego subido correctamente!", {
+        toast.success(res.data.message, {
           autoClose: 2000,
           theme: "colored",
         });
+
+        this.dialog = false;
       } catch (error) {
         console.log(error);
-        toast.error("Ha ocurrido un error al subir el videojuego", {
+        toast.error(error.response.data.message, {
           autoClose: 2000,
           theme: "colored",
         });
@@ -56,7 +59,10 @@ export const useVideogameStore = defineStore({
         console.log(response.data.videogames);
         return this.videogames;
       } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.message, {
+          autoClose: 2000,
+          theme: "colored",
+        });
       }
     },
   },

@@ -9,6 +9,8 @@ export const useRegister = defineStore({
     state: () => ({
         user: null,
         nicknameExists: false,
+        transition: 1,
+        form: ''
     }),
 
     actions: {
@@ -40,6 +42,8 @@ export const useRegister = defineStore({
                     autoClose: 2000,
                     theme: 'colored'
                 })
+
+                this.transition = 1
             } catch (error) {
                 if (error.response && error.response.status === 500 || error.response.status === 400) {
                     toast.error(error.response.data.message, {

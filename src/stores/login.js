@@ -14,7 +14,8 @@ export const useLoginStore = defineStore({
     returnUrl: null,
     authenticated: false,
     nickname: '',
-    email: ''
+    email: '',
+
   }),
   getters: {
     isAuthenticated() {
