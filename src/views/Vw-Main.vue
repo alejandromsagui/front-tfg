@@ -16,8 +16,9 @@
     </v-row> -->
     <v-row align-content="center">
   <v-col cols="12" sm="12" md="12">
-    <v-text-field hide-details label="Buscar..." placeholder="Título o género" prepend-icon="fa-solid fa-search"
-      filled rounded dense single-line class="shrink mt-2 mr-7" v-model="videogameStore.search" variant="outlined">
+    <v-text-field hide-details label="Buscar..." placeholder="Introduce el título o género" append-inner-icon="fa-solid fa-search"
+       rounded class="shrink mt-2 mr-7" v-model="videogameStore.search" variant="outlined" active
+      color="white">
     </v-text-field>
   </v-col>
 </v-row>
