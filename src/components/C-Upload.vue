@@ -65,7 +65,7 @@
 </template>
 
 <script setup>
-import { defineEmits, reactive, ref } from "vue";
+import { defineEmits, reactive, ref, watch } from "vue";
 import { useVideogameStore } from "../stores/videogames"
 
 const videogameStore = useVideogameStore()

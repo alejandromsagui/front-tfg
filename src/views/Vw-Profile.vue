@@ -88,6 +88,7 @@ const isValidEmailRule = (val) => {
 const changeNickname = () => {
     useModifierStore.changeNickname(userModifier.nickname, userModifier.password).then(r => {
         if (r.status === 200) form.value.reset()
+        window.location.reload()
     })
 }
 
@@ -99,6 +100,7 @@ const changeEmail = () => {
                 autoClose: 3000
             })
             form.value.reset()
+            window.location.reload()
         }
     }).catch((e) => {
         toast.error(e.message, {

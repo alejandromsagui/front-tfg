@@ -30,9 +30,8 @@ export const userData = defineStore({
                     theme: "colored"
                 })
 
-                console.log('Authorization: ', response.headers.get('Authorization'));
-                // const token =  response.headers.get('Authorization')
-                // localStorage.setItem('token', token)
+                // Da undefined --> console.log('Authorization: ', response.headers.get('Authorization'));
+                localStorage.setItem('token', response.data.data.token)
 
                 return response;
             } catch (error) {
@@ -75,7 +74,7 @@ export const userData = defineStore({
             }
         },
 
-        
+
         async getUsers() {
             try {
                 const response = await instance_axios.get('/getUsersDetails');

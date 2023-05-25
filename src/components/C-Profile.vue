@@ -153,10 +153,12 @@ const deleteUser = async() => {
     await userDataStore.deleteUser()
 }
 
-// watch(() => data.nickname, async (newNickname, oldNickname) => {
+// const token = localStorage.getItem('token')
+
+// watch(() => data.nickname, (newNickname, oldNickname) => {
+//     console.log('Antiguo valor: ', oldNickname, 'Nuevo valor: ', newNickname);
 //    if (newNickname !== oldNickname) {
-//        console.log('Valor de nickname: ' + data.nickname);
-//        await userDataStore.updateTokenByNickname(newNickname);
+//        console.log('Valor de nickname antiguo: ' + data.nickname);
 //        console.log('El nombre ha sido cambiado por: ' + newNickname);
 //        data.nickname = newNickname;
 //    }
