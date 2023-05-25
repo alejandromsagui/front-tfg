@@ -15,10 +15,36 @@ export const userData = defineStore({
         email: '',
         nickname: '',
         newToken: '',
-        admin: false
+        admin: false,
+        form: ''
     }),
 
     actions: {
+
+        async changeNickname(nickname, password) {
+            try {
+                const response = await instance_axios.put('/updateNickname', { nickname, password })
+
+                toast.success(response.data.message, {
+                    autoClose: 3000,
+                    theme: "colored"
+                })
+
+                console.log('Authorization: ', response.headers.get('Authorization'));
+                // const token =  response.headers.get('Authorization')
+                // localStorage.setItem('token', token)
+
+                return response;
+            } catch (error) {
+                console.log('error: ', error);
+                toast.error(error.response.data.message, {
+                    autoClose: 3000,
+                    theme: "colored"
+                })
+
+                return error.response;
+            }
+        },
         async updateTokenByNickname(nickname) {
             const res = await instance_axios.put('/updateToken', { nickname })
             console.log('Token actualizado: ' + res.data.data.token);
@@ -30,89 +56,26 @@ export const userData = defineStore({
             console.log('Token actualizado: ' + res.data.data.token);
             localStorage.setItem('Authorization', res.data.data.token)
         },
-        async changeNickname(nickname, password) {
-            try {
 
-                const response = await instance_axios.put(`/updateNickname/${nickname}`, { nickname, password });
 
-                console.log('Response: ', response.data);
-                if (
-                    response.data.message === "El nombre de usuario debe ser diferente al actual" ||
-                    response.data.message === "La contraseña no es válida" ||
-                    response.data.message === "Debe proporcionar un nombre de usuario válido" ||
-                    response.data.message === "El nombre de usuario ya está en uso"
-                ) {
-                    toast.error(response.data.message, {
-                        autoClose: 2000,
-                        theme: 'colored'
-                    });
-                } else {
-                    toast.success(`Nombre actualizado a, ${nickname}`, {
-                        autoClose: 2000,
-                        theme: 'colored'
-                    });
-
-                    console.log(`Valor de nickname desde changeNickname: ${nickname}`);
-                }
-            } catch (error) {
-                console.log(`Error: ${error.message}`);
-                toast.error(error.message, {
-                    autoClose: 2000,
-                    theme: 'colored'
-                });
-            }
-        },
         async changeEmail(email, password) {
             try {
-                const res = await instance_axios.put('/updateEmail/' + this.email, { email, password })
-
-                if (res.data.message === "Debe proporcionar un correo válido" || res.data.message === "El correo debe ser diferente al actual"
-                    || res.data.message === "La contraseña no es válida" || res.data.message === "El correo proporcionado ya está en uso") {
-                    toast.error(res.data.message, {
-                        autoClose: 2000,
-                        theme: 'colored'
-                    });
-                } else {
-                    toast.success("Correo actualizado a, " + email, {
-                        autoClose: 2000,
-                        theme: 'colored'
-                    });
-
-                    this.email = email
-                    console.log('Valor de email desde changeEmail: ' + this.email);
-                }
-
+                const response = await instance_axios.put('/updateEmail', { email, password });
+                return response;
             } catch (error) {
-                toast.error("Ha ocurrido un error al actualizar el correo", {
-                    autoClose: 2000,
-                    theme: 'colored'
-                });
+                throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
             }
         },
         async changePassword(oldPassword, newPassword) {
             try {
-                const res = await instance_axios.put('/updatePassword/' + this.nickname, { oldPassword, newPassword })
-
-                if (res.data.message === "La contraseña antigua no es válida" || res.data.message === "La contraseña nueva no puede coincidir con la antigua") {
-                    toast.error(res.data.message, {
-                        autoClose: 2000,
-                        theme: 'colored'
-                    });
-                } else {
-                    toast.success("¡Contraseña actualizada!", {
-                        autoClose: 2000,
-                        theme: 'colored'
-                    });
-                }
+                const response = await instance_axios.put('/updatePassword/', { oldPassword, newPassword })
+                return response;
             } catch (error) {
-                if (res.data.message === "Error en el servidor") {
-                    toast.error(res.data.message, {
-                        autoClose: 2000,
-                        theme: 'colored'
-                    });
-                }
+                throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
             }
         },
+
+        
         async getUsers() {
             try {
                 const response = await instance_axios.get('/getUsersDetails');
@@ -133,7 +96,7 @@ export const userData = defineStore({
                 const response = await instance_axios.get(`/getNamekoins/${decodedPayload.nickname}`)
                 console.log(response.data);
                 console.log(response.data.coins);
-               return response.data.coins
+                return response.data.coins
             } catch (error) {
                 console.log(error);
             }
@@ -157,7 +120,7 @@ export const userData = defineStore({
                 console.log(error);
             }
         },
-        async deleteUser(){
+        async deleteUser() {
 
             const loginStore = useLoginStore()
             const token = localStorage.getItem('token');
@@ -165,7 +128,7 @@ export const userData = defineStore({
             const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
 
             try {
-               const response = await instance_axios.delete(`deleteUser/${decodedPayload.id}`)
+                const response = await instance_axios.delete(`deleteUser/${decodedPayload.id}`)
                 loginStore.logout()
 
                 toast.success(response.data.message, {
@@ -180,11 +143,11 @@ export const userData = defineStore({
             }
         },
 
-        async deleteUserByAdmin(nickname){
+        async deleteUserByAdmin(nickname) {
             try {
                 const response = await instance_axios.delete(`deleteUserByAdmin/${nickname}`)
                 toast.success(response.data.message, {
-                    theme: "colored", 
+                    theme: "colored",
                     autoClose: 3000
                 })
             } catch (error) {
@@ -195,11 +158,11 @@ export const userData = defineStore({
             }
         },
 
-        async newRecommendation(message){
+        async newRecommendation(message) {
             try {
                 const response = await instance_axios.post('/newRecommendation', { message })
                 toast.success(response.data.message, {
-                    theme: "colored", 
+                    theme: "colored",
                     autoClose: 3000
                 })
             } catch (error) {

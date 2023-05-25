@@ -3,12 +3,14 @@
         <template #username>
             <v-form ref="form" @submit.prevent="changeNickname">
                 <v-text-field label="Nuevo nombre de usuario" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" :rules="[requiredField]" v-model="userModifier.nickname" @blur="onChange"></v-text-field>
+                    style="width: 400px;" :rules="[requiredField]" v-model="userModifier.nickname"
+                    @blur="onChange"></v-text-field>
                 <v-text-field label="Contraseña actual" variant="outlined" class="align-items-center mx-auto"
                     style="width: 400px;" type="password" :rules="[requiredField, passwordLength]"
                     v-model="userModifier.password"></v-text-field>
                 <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
-                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit" variant="outlined">CAMBIAR
+                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit"
+                        variant="outlined">CAMBIAR
                         NOMBRE DE USUARIO</v-btn>
                 </div>
             </v-form>
@@ -22,7 +24,8 @@
                     style="width: 400px;" type="password" :rules="[requiredField, passwordLength]"
                     v-model="userModifier.password"></v-text-field>
                 <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
-                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit" variant="outlined">CAMBIAR
+                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit"
+                        variant="outlined">CAMBIAR
                         EMAIL</v-btn>
                 </div>
             </v-form>
@@ -39,7 +42,8 @@
                     style="width: 400px;" type="password" :rules="[requiredField, passwordLength, passwordMatch]"
                     v-model="userModifier.confirmPassword"></v-text-field>
                 <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
-                    <v-btn variant="outlined" class="text-white text-center font-weight-bold bg-red-darken-3" type="submit" block>CAMBIAR
+                    <v-btn variant="outlined" class="text-white text-center font-weight-bold bg-red-darken-3" type="submit"
+                        block>CAMBIAR
                         CONTRASEÑA</v-btn>
                 </div>
             </v-form>
@@ -47,9 +51,11 @@
     </CProfile>
 </template>
 <script setup>
-import { reactive, ref, computed } from 'vue';
+import { reactive, ref } from 'vue';
 import { CProfile } from "../components"
 import { userData } from '../stores/userData';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const useModifierStore = userData()
 const form = ref(null);
@@ -79,36 +85,52 @@ const isValidEmailRule = (val) => {
     return emailPattern.test(val) || "El email no es válido";
 };
 
-const changeNickname = async () => {
-    try {
-        console.log(userModifier.nickname);
-        console.log(userModifier.password);
-        await useModifierStore.changeNickname(userModifier.nickname, userModifier.password)
-        form.value.reset();
-    } catch (error) {
-        console.log(error);
-    }
-
+const changeNickname = () => {
+    useModifierStore.changeNickname(userModifier.nickname, userModifier.password).then(r => {
+        if (r.status === 200) form.value.reset()
+    })
 }
 
-const changeEmail = async () => {
-    try {
-        await useModifierStore.changeEmail(userModifier.email, userModifier.password)
-        form.value.reset();
-    } catch (error) {
-        console.log(error);
-    }
-
+const changeEmail = () => {
+    useModifierStore.changeEmail(userModifier.email, userModifier.password).then(r => {
+        if (r.status === 200) {
+            toast.success(r.data.message, {
+                theme: "colored",
+                autoClose: 3000
+            })
+            form.value.reset()
+        }
+    }).catch((e) => {
+        toast.error(e.message, {
+            theme: "colored",
+            autoClose: 3000
+        })
+    })
 }
 
-const changePassword = async () => {
-    try {
-        await useModifierStore.changePassword(userModifier.oldPassword, userModifier.newPassword)
-        form.value.reset();
-    } catch (error) {
-        console.log(error);
-    }
+const changePassword =  () => {
+    if(userModifier.newPassword === userModifier.confirmPassword){
+        useModifierStore.changePassword(userModifier.oldPassword, userModifier.confirmPassword).then(r => {
+            if(r.status === 200){
+                toast.success(r.data.message, {
+                    theme: "colored",
+                    autoClose: 3000
+                })
 
+                form.value.reset()
+            }
+        }).catch((e) => {
+            toast.error(e.message, {
+                theme: "colored",
+                autoClose: 3000
+            })
+        })
+    }else {
+        toast.error('Las contraseñas no coinciden', {
+                theme: "colored",
+                autoClose: 3000
+            })
+    }
 
 }
 
@@ -134,5 +156,4 @@ const changePassword = async () => {
 
 .d-none.d-md-block.pa-0 {
     margin-left: -50px;
-}
-</style>
+}</style>

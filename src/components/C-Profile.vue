@@ -16,12 +16,12 @@
                         <v-list-subheader class="font-weight-bold text-white">PERFIL</v-list-subheader>
                         <v-list-item v-for="(item, i) in items.slice(0, 4)" :key="i" :value="item" active-color="#F80808"
                             variant="plain" @click="handleItemClick(item)">
-                            <v-list-item-title v-text="item.text"></v-list-item-title>
+                            <v-list-item-title>{{item.text}}</v-list-item-title>
                         </v-list-item>
                         <v-list-subheader class="font-weight-bold text-white">TRANSACCIONES</v-list-subheader>
                         <v-list-item v-for="(item, i) in items.slice(4, 6)" :key="i" :value="item" active-color="#F80808"
                             variant="plain">
-                            <v-list-item-title v-text="item.text"></v-list-item-title>
+                            <v-list-item-title>{{item.text}}</v-list-item-title>
                         </v-list-item>
                         <v-list-item>
                             <v-btn class="font-weight-bold bg-red-darken-3 mt-10" variant="outlined">ELIMINAR CUENTA
@@ -103,7 +103,7 @@
                                 escríbela aquí y lo tendremos en cuenta
                             </p>
                             <v-textarea label="Recomendación" clearable 
-                            no-resize v-model="message"></v-textarea>
+                            no-resize v-model="message" variant="outlined"></v-textarea>
 
                             <v-btn class="font-weight-bold bg-red-darken-3" variant="outlined" @click="newRecommendation(message)">ENVIAR</v-btn>
                         </div>
@@ -183,7 +183,6 @@ const items = reactive([
     { text: 'Modificar email', action: 'email' },
     { text: 'Modificar contraseña', action: 'password' },
     { text: 'Recomendaciones', action: 'recommendation' },
-    { text: 'Saldo' },
     { text: 'Historial de compras' },
     { text: 'Exportar datos' },
 ]);
