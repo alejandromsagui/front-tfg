@@ -16,12 +16,13 @@
                         <v-list-subheader class="font-weight-bold text-white">PERFIL</v-list-subheader>
                         <v-list-item v-for="(item, i) in items.slice(0, 4)" :key="i" :value="item" active-color="#F80808"
                             variant="plain" @click="handleItemClick(item)">
-                            <v-list-item-title>{{item.text}}</v-list-item-title>
+                            <v-list-item-title>{{ item.text }}</v-list-item-title>
                         </v-list-item>
                         <v-list-subheader class="font-weight-bold text-white">TRANSACCIONES</v-list-subheader>
                         <v-list-item v-for="(item, i) in items.slice(4, 6)" :key="i" :value="item" active-color="#F80808"
                             variant="plain">
-                            <v-list-item-title>{{item.text}}</v-list-item-title>
+                            <v-list-item-title v-if="item.text === 'Exportar datos'"
+                                @click="handleExportDataClick()">{{ item.text }}</v-list-item-title>
                         </v-list-item>
                         <v-list-item>
                             <v-btn class="font-weight-bold bg-red-darken-3 mt-10" variant="outlined">ELIMINAR CUENTA
@@ -29,7 +30,8 @@
                                 <v-dialog v-model="dialog" activator="parent" max-width="500">
                                     <v-card>
                                         <div class="bg-white text-black d-flex align-center pa-2">
-                                            <v-card-title class="text-left flex-grow-1 font-weight-bold text-h6">Confirmar</v-card-title>
+                                            <v-card-title
+                                                class="text-left flex-grow-1 font-weight-bold text-h6">Confirmar</v-card-title>
                                             <div class="d-flex mr-3">
                                                 <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3"
                                                     @click="dialog = false"></v-icon>
@@ -41,7 +43,8 @@
                                             <span class="text-red-darken-3 font-weight-bold">recuperar</span>
                                         </v-card-text>
                                         <v-card-actions class="justify-center mt-5">
-                                            <v-btn class="text-white bg-red-darken-3 font-weight-bold" variant="outlined" @click="deleteUser()">Eliminar de todas
+                                            <v-btn class="text-white bg-red-darken-3 font-weight-bold" variant="outlined"
+                                                @click="deleteUser()">Eliminar de todas
                                                 formas</v-btn>
                                         </v-card-actions>
                                     </v-card>
@@ -99,13 +102,15 @@
                     <v-sheet :height="480" max-width="900" class="mb-16 d-flex justify-center align-center d-none" rounded>
                         <div style="text-align: center; width: 400px;">
                             <h2 class="text-center text-white font-weight-bold mb-10">Envíanos una recomendación</h2>
-                            <p class="text-center text-subtitle-2 mb-10 text-grey">Si tienes alguna sugerencia para mejorar la plataforma,
+                            <p class="text-center text-subtitle-2 mb-10 text-grey">Si tienes alguna sugerencia para mejorar
+                                la plataforma,
                                 escríbela aquí y lo tendremos en cuenta
                             </p>
-                            <v-textarea label="Recomendación" clearable 
-                            no-resize v-model="message" variant="outlined"></v-textarea>
+                            <v-textarea label="Recomendación" clearable no-resize v-model="message"
+                                variant="outlined"></v-textarea>
 
-                            <v-btn class="font-weight-bold bg-red-darken-3" variant="outlined" @click="newRecommendation(message)">ENVIAR</v-btn>
+                            <v-btn class="font-weight-bold bg-red-darken-3" variant="outlined"
+                                @click="newRecommendation(message)">ENVIAR</v-btn>
                         </div>
                     </v-sheet>
                 </v-col>
@@ -119,7 +124,8 @@ import { ref, reactive, onBeforeMount, watchEffect, watch, onMounted } from 'vue
 import { useLoginStore } from "../stores/login"
 import { userData } from "../stores/userData";
 import { Buffer } from 'buffer';
-
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 const showNickname = ref(false);
 const showEmail = ref(false);
 const showPassword = ref(false);
@@ -149,7 +155,7 @@ onBeforeMount(async () => {
     data.email = tokenData.email;
 });
 
-const deleteUser = async() => {
+const deleteUser = async () => {
     await userDataStore.deleteUser()
 }
 
@@ -185,7 +191,6 @@ const items = reactive([
     { text: 'Modificar email', action: 'email' },
     { text: 'Modificar contraseña', action: 'password' },
     { text: 'Recomendaciones', action: 'recommendation' },
-    { text: 'Historial de compras' },
     { text: 'Exportar datos' },
 ]);
 
@@ -206,7 +211,7 @@ const handleItemClick = (item) => {
         showEmail.value = false;
         showPassword.value = true;
         showRecommendations.value = false;
-    } else if (item.action === 'recommendation'){
+    } else if (item.action === 'recommendation') {
         showNickname.value = false;
         showEmail.value = false;
         showPassword.value = false;
@@ -214,6 +219,30 @@ const handleItemClick = (item) => {
     }
 };
 
+            // console.log('response ', response);
+            // var link = document.createElement('a');
+            // link.href = response.data;
+            // link.download = 'transaccion.pdf';
+            // link.dispatchEvent(new MouseEvent('click'));
+            
+const handleExportDataClick = () => {
+  userDataStore.exportData()
+    .then((response) => {
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      console.log('blob', blob);
+      const url = URL.createObjectURL(blob);
+      var link = document.createElement('a');
+      link.href = url;
+      link.download = 'transaccion.pdf';
+      link.dispatchEvent(new MouseEvent('click'));
+    })
+    .catch((error) => {
+      toast.error(error.message, {
+        theme: 'colored',
+        autoClose: 3000,
+      });
+    });
+};
 </script>
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
@@ -236,5 +265,4 @@ const handleItemClick = (item) => {
 
 .d-none.d-md-block.pa-0 {
     margin-left: -50px;
-}
-</style>
+}</style>

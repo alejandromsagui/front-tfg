@@ -30,7 +30,8 @@
                     <v-row>
                         <v-col cols="6" sm="6" md="6">
                             <v-file-input label="Portada" variant="underlined" required
-                                prepend-icon="fa-solid fa-camera-retro" name="image" @change="onChange"></v-file-input>
+                                prepend-icon="fa-solid fa-camera-retro" name="image" @input="onChange" clearable
+                                :rules="[requiredField]" @click:clear="clear"></v-file-input>
                         </v-col>
                         <v-col cols="6" sm="6" md="6">
                             <v-select chips variant="underlined" :items="['PC', 'PS5', 'PS4', 'PS3', 'PS2', 'PS1', 'XBOX', 'Nintendo Switch' 
@@ -66,11 +67,13 @@
 
 <script setup>
 import { defineEmits, reactive, ref, watch } from "vue";
+import { toast } from "vue3-toastify";
 import { useVideogameStore } from "../stores/videogames"
 
 const videogameStore = useVideogameStore()
 const form = ref(null)
-const file = ref()
+const file = ref(null)
+const fileInput = ref(null)
 
 const emit = defineEmits(['change-dialog-value'])
 const emitValue = (value) => {
@@ -91,13 +94,23 @@ const requiredField = (value) => !!value || "Este campo es obligatorio";
 
 const onChange = (e) => {
     file.value = e.target.files[0];
-    console.log(file.value);
     newVideogame.image = file.value
+
+    console.log(file.value);
 };
+
+const clear = () => {
+    file.value = ''
+    newVideogame.image = ''
+}
 
 const uploadVideogame = async (e) => {
     e.preventDefault();
     if (!file.value) {
+        toast.error('La imagen es obligatoria', {
+            theme: "colored",
+            autoClose: 3000
+        })
         return;
     }
 

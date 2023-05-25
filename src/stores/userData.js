@@ -170,6 +170,15 @@ export const userData = defineStore({
                     autoClose: 3000
                 })
             }
+        },
+
+        async exportData(){
+            try {
+                const response = await instance_axios.get('/export')
+                return response;
+            } catch (error) {
+                throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
+            }
         }
     },
 
