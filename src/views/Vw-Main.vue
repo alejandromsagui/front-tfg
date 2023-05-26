@@ -1,5 +1,10 @@
 <template>
   <v-container>
+    <div v-if="videogameStore.loading" class="d-flex justify-center align-center"
+      style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
+      <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000">
+      </half-circle-spinner>
+    </div>
     <!-- <v-row align="center" justify="center" sm="6" md="4" d-flex flex-row>
       <v-col col="2" class="d-none d-lg-block">
         <img src="../assets/images/GamingZone.jpg" alt="Game Zone" class="mt-7 ml-9" style="object-fit: cover; width: 550px; height: 500px;">
@@ -15,15 +20,15 @@
       </v-col>
     </v-row> -->
     <v-row align-content="center">
-  <v-col cols="12" sm="12" md="12">
-    <v-text-field hide-details label="Buscar..." placeholder="Introduce el título o género" append-inner-icon="fa-solid fa-search"
-       rounded class="shrink mt-2 mr-7" v-model="videogameStore.search" variant="outlined" active
-      color="white">
-    </v-text-field>
-  </v-col>
-</v-row>
+      <v-col cols="12" sm="12" md="12">
+        <v-text-field hide-details label="Buscar..." placeholder="Introduce el título o género"
+           rounded class="shrink mt-2" v-model="videogameStore.search"
+          variant="outlined" active color="white" append-inner-icon="fa-solid fa-magnifying-glass">
+        </v-text-field>
+      </v-col>
+    </v-row>
 
-  <v-row>
+    <v-row>
       <TransitionGroup name="list">
         <v-col
           v-for="videogame in videogameStore.searchVideogame.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))"
@@ -175,6 +180,7 @@ import { useVideogameStore } from "../stores/videogames"
 import { paymentStore } from "../stores/paymentStore"
 import { useLoginStore } from "../stores/login"
 import { userData } from "../stores/userData"
+import { HalfCircleSpinner } from 'epic-spinners'
 import { reviewStore } from "../stores/reviewStore"
 import { reportStore } from "../stores/reportStore"
 import { toast } from 'vue3-toastify';
@@ -264,7 +270,7 @@ const createOrder = async () => {
 
   newTransaction.description = `Transacción realizada entre el comprador ${user.nickname} y el vendedor ${nuevoJuego.value.nickname}`
   newTransaction.price = nuevoJuego.value.price,
-  newTransaction.idSeller = nuevoJuego.value.userId
+    newTransaction.idSeller = nuevoJuego.value.userId
   newTransaction.nicknameSeller = nuevoJuego.value.nickname;
   newTransaction.idVideogame = nuevoJuego.value._id
   newTransaction.videogame = nuevoJuego.value.name

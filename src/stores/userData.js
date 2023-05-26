@@ -17,7 +17,8 @@ export const userData = defineStore({
         newToken: '',
         admin: false,
         form: '',
-        loading: false
+        loading: false,
+        position: null
     }),
 
     actions: {
@@ -184,6 +185,23 @@ export const userData = defineStore({
             } catch (error) {
               throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
             }
+          },
+
+          getRanking(nickname) {
+            instance_axios
+              .get(`/findRanking/${nickname}`)
+              .then((response) => {
+                this.position = response.data.ranking.position;
+                console.log('Valor de position:', this.position);
+              })
+              .catch((error) => {
+                if (error.response && error.response.status === 500) {
+                    toast.error(error.response.data.message, {
+                        theme: "colored",
+                        autoClose: 3000
+                    })
+                } 
+              });
           }
     },
 

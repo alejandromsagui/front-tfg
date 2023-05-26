@@ -14,10 +14,24 @@
             <!-- Información del usuario -->
             <v-container class="mt-4">
                 <v-row>
-                    <v-col cols="12" md="6" class="d-flex justify-center">
-                        <i class="fa-solid fa-ranking-star fa-2xl" style="color: #ffff00;"></i>
-                        <p class="ml-3 text-white font-weight-bold text-subtitle-1">2</p>
-                    </v-col>
+
+  <v-col cols="12" md="6" class="d-flex justify-center" v-if="!useUserStore.position">
+    <v-tooltip
+  text="Debes haber comprado o vendido un videojuego 
+  para participar en el ranking">
+
+  <template v-slot:activator="{ props }" >
+    <i class="fa-solid fa-ranking-star fa-2xl" :style="{ color: '#808080' }" v-bind="props"></i>
+</template>
+</v-tooltip>
+  </v-col>
+  <v-col cols="12" md="6" class="d-flex justify-center" v-else>
+    <i class="fa-solid fa-ranking-star fa-2xl" style="color: #ffff00;"></i>
+    <p  class="ml-3 text-white font-weight-bold text-subtitle-1">{{ useUserStore.position }}</p>
+</v-col>
+
+
+
                     <v-col class="justify-center d-flex">
                         <v-btn variant="outlined" class="bg-red-darken-3 text-white font-weight-bold">Iniciar Chat</v-btn>
                     </v-col>
@@ -87,12 +101,13 @@
 </template>
 <script setup>
 
-import { onMounted, reactive, ref, computed } from "vue";
+import { onMounted, reactive, ref, computed, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 import { instance_axios } from "../middlewares/axios";
 import { router } from "../routes";
 import { paymentStore } from "../stores/paymentStore"
 import { reviewStore } from "../stores/reviewStore"
+import { userData } from "../stores/userData"
 import Vue3Toastify from "vue3-toastify";
 const page = ref(1)
 const nickname = ref("");
@@ -104,7 +119,7 @@ var transactionsArray = ref([])
 var reviewArray = ref([])
 const usePaymentStore = paymentStore()
 const pageReviews = ref(1)
-
+const useUserStore = userData()
 
 const totalRecords = () => {
     return transactionsArray.value.length;
@@ -158,8 +173,14 @@ onMounted(async () => {
 
     getDataPage()
     getDataPageReviews()
+
 });
 
+onBeforeMount(() => {
+    const route = useRoute();
+    nickname.value = route.params.nickname;
+    useUserStore.getRanking(nickname.value)
+})
 
 const datosPaginados = ref([]);
 
@@ -194,9 +215,8 @@ function startChat() {
     // Lógica para iniciar el chat con el usuario
 }
 </script>
-<style scoped>
+<style lang="css" scoped>
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
-
 * {
     font-family: "Roboto", sans-serif;
 }

@@ -1,5 +1,9 @@
 <template>
     <v-card>
+        <div v-if="videogameStore.loading" class="d-flex justify-center align-center" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
+    <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000">
+    </half-circle-spinner>
+  </div>
         <v-form ref="form" @submit.prevent="uploadVideogame">
             <v-card-title class="title d-none d-md-block">
                 <v-row>
@@ -69,6 +73,7 @@
 import { defineEmits, reactive, ref, watch } from "vue";
 import { toast } from "vue3-toastify";
 import { useVideogameStore } from "../stores/videogames"
+import { HalfCircleSpinner } from 'epic-spinners'
 
 const videogameStore = useVideogameStore()
 const form = ref(null)
