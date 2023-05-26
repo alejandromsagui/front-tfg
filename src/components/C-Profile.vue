@@ -1,9 +1,9 @@
 <template>
     <div style="background-color: #212121; width: 100%; height: 15%;"></div>
     <div v-if="userDataStore.loading" class="d-flex justify-center align-center" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
-    <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000"></half-circle-spinner>
+    <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000">
+    </half-circle-spinner>
   </div>
-
 
     <v-container class=" mt-4" fluid>
         <div class="d-flex align-items-center" style="margin-left: 50px;">
@@ -15,8 +15,7 @@
             </div>
         </div>
         <v-row class="mt-4 ml-10">
-            <div style="display: inline-block; max-width: 450px; width: 450px;">
-                <v-col cols="12" sm="6" md="8">
+            <div style="display: inline-block; max-width: 245px; width: 245px;">
                     <v-list class="bg-transparent">
                         <v-list-subheader class="font-weight-bold text-white">PERFIL</v-list-subheader>
                         <v-list-item v-for="(item, i) in items.slice(0, 4)" :key="i" :value="item" active-color="#F80808"
@@ -57,7 +56,6 @@
                             </v-btn>
                         </v-list-item>
                     </v-list>
-                </v-col>
             </div>
             <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showNickname">
                 <v-col cols="12" md="8" xl="6" class="pa-0">
@@ -131,8 +129,6 @@ import { useLoginStore } from "../stores/login"
 import { userData } from "../stores/userData";
 import { Buffer } from 'buffer';
 import { toast } from 'vue3-toastify';
-import { saveAs } from "file-saver"
-import { instance_axios } from '../middlewares/axios';
 import { HalfCircleSpinner } from 'epic-spinners'
 import 'vue3-toastify/dist/index.css';
 const showNickname = ref(false);
@@ -140,7 +136,6 @@ const showEmail = ref(false);
 const showPassword = ref(false);
 const showRecommendations = ref(false);
 const userDataStore = userData();
-const useAuthStore = useLoginStore();
 const dialog = ref()
 const data = reactive({
     nickname: '',
