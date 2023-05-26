@@ -172,14 +172,16 @@ export const userData = defineStore({
             }
         },
 
-        async exportData(){
+        async exportData() {
             try {
-                const response = await instance_axios.get('/export')
-                return response;
+              const response = await instance_axios.get('/export', {
+                responseType: 'blob',
+              });
+              return response;
             } catch (error) {
-                throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
+              throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
             }
-        }
+          }
     },
 
 })

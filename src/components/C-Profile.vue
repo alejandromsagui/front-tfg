@@ -125,6 +125,8 @@ import { useLoginStore } from "../stores/login"
 import { userData } from "../stores/userData";
 import { Buffer } from 'buffer';
 import { toast } from 'vue3-toastify';
+import { saveAs } from "file-saver"
+import { instance_axios } from '../middlewares/axios';
 import 'vue3-toastify/dist/index.css';
 const showNickname = ref(false);
 const showEmail = ref(false);
@@ -225,16 +227,15 @@ const handleItemClick = (item) => {
             // link.download = 'transaccion.pdf';
             // link.dispatchEvent(new MouseEvent('click'));
             
-const handleExportDataClick = () => {
+            const handleExportDataClick = () => {
   userDataStore.exportData()
     .then((response) => {
       const blob = new Blob([response.data], { type: 'application/pdf' });
-      console.log('blob', blob);
       const url = URL.createObjectURL(blob);
-      var link = document.createElement('a');
-      link.href = url;
-      link.download = 'transaccion.pdf';
-      link.dispatchEvent(new MouseEvent('click'));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'factura.pdf';
+      a.click();
     })
     .catch((error) => {
       toast.error(error.message, {
