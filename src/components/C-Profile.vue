@@ -1,5 +1,10 @@
 <template>
     <div style="background-color: #212121; width: 100%; height: 15%;"></div>
+    <div v-if="userDataStore.loading" class="d-flex justify-center align-center" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
+    <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000"></half-circle-spinner>
+  </div>
+
+
     <v-container class=" mt-4" fluid>
         <div class="d-flex align-items-center" style="margin-left: 50px;">
             <v-avatar size="100" style="margin-top: -50px;" align="center" justify="center">
@@ -21,8 +26,8 @@
                         <v-list-subheader class="font-weight-bold text-white">TRANSACCIONES</v-list-subheader>
                         <v-list-item v-for="(item, i) in items.slice(4, 6)" :key="i" :value="item" active-color="#F80808"
                             variant="plain">
-                            <v-list-item-title v-if="item.text === 'Exportar datos'"
-                                @click="handleExportDataClick()">{{ item.text }}</v-list-item-title>
+                            <v-list-item-title v-if="item.text === 'Exportar datos'" @click="handleExportDataClick()">{{
+                                item.text }}</v-list-item-title>
                         </v-list-item>
                         <v-list-item>
                             <v-btn class="font-weight-bold bg-red-darken-3 mt-10" variant="outlined">ELIMINAR CUENTA
@@ -117,6 +122,7 @@
             </v-row>
         </v-row>
     </v-container>
+
 </template>
 
 <script setup>
@@ -127,6 +133,7 @@ import { Buffer } from 'buffer';
 import { toast } from 'vue3-toastify';
 import { saveAs } from "file-saver"
 import { instance_axios } from '../middlewares/axios';
+import { HalfCircleSpinner } from 'epic-spinners'
 import 'vue3-toastify/dist/index.css';
 const showNickname = ref(false);
 const showEmail = ref(false);
@@ -221,28 +228,28 @@ const handleItemClick = (item) => {
     }
 };
 
-            // console.log('response ', response);
-            // var link = document.createElement('a');
-            // link.href = response.data;
-            // link.download = 'transaccion.pdf';
-            // link.dispatchEvent(new MouseEvent('click'));
-            
-            const handleExportDataClick = () => {
-  userDataStore.exportData()
-    .then((response) => {
-      const blob = new Blob([response.data], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'factura.pdf';
-      a.click();
-    })
-    .catch((error) => {
-      toast.error(error.message, {
-        theme: 'colored',
-        autoClose: 3000,
-      });
-    });
+// console.log('response ', response);
+// var link = document.createElement('a');
+// link.href = response.data;
+// link.download = 'transaccion.pdf';
+// link.dispatchEvent(new MouseEvent('click'));
+
+const handleExportDataClick = () => {
+    userDataStore.exportData()
+        .then((response) => {
+            const blob = new Blob([response.data], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'factura.pdf';
+            a.click();
+        })
+        .catch((error) => {
+            toast.error(error.message, {
+                theme: 'colored',
+                autoClose: 3000,
+            });
+        });
 };
 </script>
 <style>
@@ -266,4 +273,17 @@ const handleItemClick = (item) => {
 
 .d-none.d-md-block.pa-0 {
     margin-left: -50px;
-}</style>
+}
+
+.full-height {
+  height: 100vh;
+}
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* Ajusta la altura según tus necesidades */
+}
+
+</style>

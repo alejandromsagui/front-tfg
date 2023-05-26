@@ -5,6 +5,7 @@ import { Buffer } from 'buffer';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { ref } from 'vue';
+import { HalfCircleSpinner } from 'epic-spinners'
 
 export const useLoginStore = defineStore({
   id: 'login',
@@ -15,6 +16,7 @@ export const useLoginStore = defineStore({
     authenticated: false,
     nickname: '',
     email: '',
+    loading: false
 
   }),
   getters: {
@@ -32,6 +34,7 @@ export const useLoginStore = defineStore({
 
     async loginUser(nickname, password) {
       localStorage.removeItem('token')
+      this.loading = true;
       try {
         const response = await instance_axios.post('/login', { nickname, password })
         const tokenResponse = response.data.data.token

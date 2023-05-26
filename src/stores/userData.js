@@ -16,7 +16,8 @@ export const userData = defineStore({
         nickname: '',
         newToken: '',
         admin: false,
-        form: ''
+        form: '',
+        loading: false
     }),
 
     actions: {
@@ -173,10 +174,12 @@ export const userData = defineStore({
         },
 
         async exportData() {
+            this.loading = true
             try {
               const response = await instance_axios.get('/export', {
                 responseType: 'blob',
               });
+              this.loading = false
               return response;
             } catch (error) {
               throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');

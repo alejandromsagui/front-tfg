@@ -6,6 +6,13 @@
     <div class="background-recovery" v-if="registerStore.transition == 3"></div>
     <div class="dark-layer"></div>
     <v-container fluid class="fill-height">
+        <template>
+            <half-circle-spinner v-if="authStore.loading"
+  :animation-duration="1000"
+  :size="60"
+  color="#ff1d5e"
+/>
+        </template>
         <v-row align="center" justify="center">
             <v-col cols="12" sm="8" md="6">
                 <v-window v-model="registerStore.transition">
