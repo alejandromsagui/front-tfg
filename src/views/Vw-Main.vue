@@ -21,9 +21,9 @@
     </v-row> -->
     <v-row align-content="center">
       <v-col cols="12" sm="12" md="12">
-        <v-text-field hide-details label="Buscar..." placeholder="Introduce el título o género"
-           rounded class="shrink mt-2" v-model="videogameStore.search"
-          variant="outlined" active color="white" append-inner-icon="fa-solid fa-magnifying-glass">
+        <v-text-field hide-details label="Buscar..." placeholder="Introduce el título o género" rounded
+          class="shrink mt-2" v-model="videogameStore.search" variant="outlined" active color="white"
+          append-inner-icon="fa-solid fa-magnifying-glass">
         </v-text-field>
       </v-col>
     </v-row>
@@ -34,11 +34,10 @@
           v-for="videogame in videogameStore.searchVideogame.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))"
           :key="videogame._id" cols="12" sm="6" md="4">
           <v-lazy :options="{ 'threshold': 0.5 }" transition="fade-transition">
-            <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" height="100%"
+            <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" min-height="560" max-height="560"
               @click="verJuego(videogame)">
-              <div style="position: relative; padding-top: 75%;">
-                <img :src="videogame.image" alt="videogame"
-                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: relative">
+                <img :src="videogame.image" alt="videogame" style="width: 100%; max-height: 100%; object-fit: contain;">
               </div>
               <v-card-title class="text-center">{{ videogame.name }}</v-card-title>
               <v-card-text>
