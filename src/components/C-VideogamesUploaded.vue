@@ -35,7 +35,7 @@
                   <td>{{ videogame.status === '' ? 'En venta' : videogame.status }}</td>
                   <td>
                     <v-select variant="underlined" :items="getSelectItems(videogame.status)" flat
-                      :disabled="videogame.status === 'Vendido'" v-model="item.status"></v-select>
+                      :disabled="videogame.status === 'Vendido'" v-model="selectedStates[videogame._id]"></v-select>
                   </td>
                   <td>
                     <v-tooltip text="Editar">
@@ -44,13 +44,15 @@
                           @click="verJuego(videogame)"></i>
                       </template>
                     </v-tooltip>
-                    <v-tooltip text="Guardar" >
+                    <v-tooltip text="Guardar">
                       <template v-slot:activator="{ props }">
-                        <i v-bind="props" class="fas fa-check-circle fa-lg ml-3 text-green icons" @click="updateState(videogame._id, item.status)"></i>
+                        <i v-bind="props" class="fas fa-check-circle fa-lg ml-3 text-green icons"
+                          @click="updateState(videogame._id, item.status)"></i>
                       </template>
                     </v-tooltip>
 
-                    <i class="fa-solid fa-trash fa-lg ml-4 text-red icons" @click="deleteGame = true; deleteJuego(videogame)"></i>
+                    <i class="fa-solid fa-trash fa-lg ml-4 text-red icons"
+                      @click="deleteGame = true; deleteJuego(videogame)"></i>
                   </td>
                 </tr>
 
@@ -73,100 +75,93 @@
               <span class="text-red-darken-3 font-weight-bold">recuperar</span>
             </v-card-text>
             <v-card-actions class="justify-center mt-5">
-              <v-btn class="text-white bg-red-darken-3 font-weight-bold" variant="outlined" @click="deleteVideogame(borrarJuego._id); animationDelete(borrarJuego)">Eliminar de todas
+              <v-btn class="text-white bg-red-darken-3 font-weight-bold" variant="outlined"
+                @click="deleteVideogame(borrarJuego._id); animationDelete(borrarJuego)">Eliminar de todas
                 formas</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
         <!-- Editar -->
         <div v-if="verJuego">
-        <v-dialog v-model="edit" max-width="500">
-          <v-card min-width="800">
-            <v-card>
-              <div v-if="videogameStore.loading" class="d-flex justify-center align-center"
-                style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
-                <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000">
-                </half-circle-spinner>
-              </div>
-              <v-form ref="form">
-                <v-card-title class="title d-none d-md-block">
-                  <v-row>
-                    <v-col cols="12" sm="6" md="6"></v-col>
-                  </v-row>
-                </v-card-title>
-                <v-card-text>
-                  <v-container fluid>
-                    <div class="d-flex">
-                      <v-row align="center" justify="center">
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field label="Título" required variant="underlined" :rules="[requiredField]"
-                            v-model="editarJuego.name"></v-text-field>
+          <v-dialog v-model="edit" max-width="500">
+            <v-card min-width="800">
+              <v-card>
+                <div v-if="videogameStore.loading" class="d-flex justify-center align-center"
+                  style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
+                  <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000">
+                  </half-circle-spinner>
+                </div>
+                <v-form ref="form">
+                  <v-card-title class="title d-none d-md-block">
+                    <v-row>
+                      <v-col cols="12" sm="6" md="6"></v-col>
+                    </v-row>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container fluid>
+                      <div class="d-flex">
+                        <v-row align="center" justify="center">
+                          <v-col cols="12" sm="6" md="4">
+                            <v-text-field label="Título" required variant="underlined" :rules="[requiredField]"
+                              v-model="editarJuego.name"></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="6" md="4">
+                            <v-select multiple chips variant="underlined" :items="['Acción', 'Carrera', 'Deportes', 'Exploración', 'Guerra', 'Lucha', 'Online', 'Rompecabezas', 'Simulador',
+                              'Violento', 'Anime', 'Casual', 'Fantasía', 'Indie', 'Multijugador', 'Plataforma', 'Sandbox', 'Supervivencia', 'Zombies',
+                              'Aventura', 'Cooperativo', 'Estrategia', 'FPS', 'JRPG', 'Mundo Abierto', 'Rol', 'Shooter', 'Terror'
+                            ]" label="Género" required :rules="[requiredField]" v-model="editarJuego.genre"></v-select>
+                          </v-col>
+                          <v-col cols="12" sm="6" md="4">
+                            <v-text-field label="Precio" required variant="underlined" type="number"
+                              :rules="[requiredField]" v-model="editarJuego.price"></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </div>
+                      <v-row>
+                        <v-col cols="6" sm="6" md="6">
+                          <v-file-input label="Portada" variant="underlined" required
+                            prepend-icon="fa-solid fa-camera-retro" name="image" @input="onChange" clearable
+                            :rules="[requiredField]" @click:clear="clear"></v-file-input>
                         </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-select multiple chips variant="underlined" :items="['Acción', 'Carrera', 'Deportes', 'Exploración', 'Guerra', 'Lucha', 'Online', 'Rompecabezas', 'Simulador',
-                            'Violento', 'Anime', 'Casual', 'Fantasía', 'Indie', 'Multijugador', 'Plataforma', 'Sandbox', 'Supervivencia', 'Zombies',
-                            'Aventura', 'Cooperativo', 'Estrategia', 'FPS', 'JRPG', 'Mundo Abierto', 'Rol', 'Shooter', 'Terror'
-                          ]" label="Género" required :rules="[requiredField]" v-model="editarJuego.genre"></v-select>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field label="Precio" required variant="underlined" type="number"
-                            :rules="[requiredField]" v-model="editarJuego.price"></v-text-field>
+                        <v-col cols="6" sm="6" md="6">
+                          <v-select chips variant="underlined" :items="['PC', 'PS5', 'PS4', 'PS3', 'PS2', 'PS1', 'XBOX', 'Nintendo Switch'
+                          ]" label="Plataforma" required :rules="[requiredField]"
+                            v-model="editarJuego.platform"></v-select>
                         </v-col>
                       </v-row>
-                    </div>
-                    <v-row>
-                      <v-col cols="6" sm="6" md="6">
-                        <v-file-input label="Portada" variant="underlined" required
-                          prepend-icon="fa-solid fa-camera-retro" name="image" @input="onChange" clearable
-                          :rules="[requiredField]" @click:clear="clear"></v-file-input>
-                      </v-col>
-                      <v-col cols="6" sm="6" md="6">
-                        <v-select chips variant="underlined" :items="['PC', 'PS5', 'PS4', 'PS3', 'PS2', 'PS1', 'XBOX', 'Nintendo Switch'
-                        ]" label="Plataforma" required :rules="[requiredField]"
-                          v-model="editarJuego.platform"></v-select>
-                      </v-col>
-                    </v-row>
 
-                    <v-row>
-                      <v-col cols="12" sm="12" md="12">
-                        <v-textarea label="Descripción" variant="underlined" clearable :rules="[requiredField]"
-                          v-model="editarJuego.description"></v-textarea>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <div class="d-flex mx-auto justify-center">
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn variant="outlined" @click="edit = false"
-                      class="bg-red-darken-3 text-white font-weight-bold button1">
-                      Cerrar
-                    </v-btn>
-                    <v-btn variant="outlined" class="bg-blue-darken-4 text-white font-weight-bold button2" type="submit" @click.prevent="editVideogame(editarJuego._id)">
-                      Editar videojuego
-                    </v-btn>
+                      <v-row>
+                        <v-col cols="12" sm="12" md="12">
+                          <v-textarea label="Descripción" variant="underlined" clearable :rules="[requiredField]"
+                            v-model="editarJuego.description"></v-textarea>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <div class="d-flex mx-auto justify-center">
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn variant="outlined" @click="edit = false"
+                        class="bg-red-darken-3 text-white font-weight-bold button1">
+                        Cerrar
+                      </v-btn>
+                      <v-btn variant="outlined" class="bg-blue-darken-4 text-white font-weight-bold button2" type="submit"
+                        @click.prevent="editVideogame(editarJuego._id)">
+                        Editar videojuego
+                      </v-btn>
 
-                  </v-card-actions>
-                </div>
-              </v-form>
+                    </v-card-actions>
+                  </div>
+                </v-form>
+              </v-card>
             </v-card>
-          </v-card>
-        </v-dialog>
-      </div>
+          </v-dialog>
+        </div>
       </v-container>
     </v-card>
     <div class="d-flex justify-center mt-4">
-      <v-pagination
-  v-model="page"
-  :length="pageCount"
-  prev-icon="fa-solid fa-arrow-left"
-  next-icon="fa-solid fa-arrow-right"
-  active-color="red-darken-3"
-  @update:modelValue="getDataPage"
-></v-pagination>
-
-
-
+      <v-pagination v-model="page" :length="pageCount" prev-icon="fa-solid fa-arrow-left"
+        next-icon="fa-solid fa-arrow-right" active-color="red-darken-3" @update:modelValue="getDataPage"></v-pagination>
     </div>
   </div>
 </template>
@@ -183,7 +178,7 @@ const file = ref()
 const editarJuego = ref()
 const videogameStore = useVideogameStore()
 const videogames = ref([])
-const selectedStates = ref({})
+const selectedStates = reactive({})
 const container = ref(null)
 const page = ref(1)
 const itemsPerPage = ref(3)
@@ -238,13 +233,17 @@ onBeforeMount(async () => {
   getDataPage();
 });
 
-const totalRecords = ref(0);
+
+const totalRecords = () => {
+  return videogameStore.userVideogames.length;
+};
 
 const pageCount = computed(() => {
-  return Math.ceil(totalRecords.value / itemsPerPage.value);
+  return Math.ceil(totalRecords() / itemsPerPage.value);
 });
 
-const datosPaginados = ref([])
+const datosPaginados = ref([]);
+
 const getDataPage = () => {
   const totalPages = pageCount.value;
   const newPage = Math.max(page.value, 1);
@@ -261,7 +260,6 @@ const getDataPage = () => {
 };
 
 watch([videogameStore.userVideogames, itemsPerPage, page], () => {
-  totalRecords.value = videogameStore.userVideogames.length;
   getDataPage();
 });
 
@@ -281,12 +279,12 @@ const getSelectItems = (state) => {
 const editVideogame = (id) => {
 
   const data = new FormData();
-    data.append("name", editarJuego.value.name)
-    data.append("description", editarJuego.value.description)
-    data.append("price", editarJuego.value.price)
-    data.append("genre", editarJuego.value.genre)
-    data.append("platform", editarJuego.value.platform)
-    data.append("image", file.value);
+  data.append("name", editarJuego.value.name)
+  data.append("description", editarJuego.value.description)
+  data.append("price", editarJuego.value.price)
+  data.append("genre", editarJuego.value.genre)
+  data.append("platform", editarJuego.value.platform)
+  data.append("image", file.value);
 
   videogameStore.editVideogame(id, data)
     .then((response) => {
@@ -344,7 +342,7 @@ const updateState = (id, state) => {
       dialog.value = false
     })
     .catch((error) => {
-      
+
       console.log(error);
       toast.error(error.message, {
         theme: 'colored',
@@ -369,12 +367,15 @@ const updateState = (id, state) => {
   opacity: 0;
   transform: translateX(30px);
 }
+
 .list-item {
   transition: all 1s;
 }
+
 .list-enter {
   opacity: 0;
 }
+
 .icons {
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
