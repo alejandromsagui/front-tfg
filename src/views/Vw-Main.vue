@@ -34,11 +34,15 @@
           v-for="videogame in videogameStore.searchVideogame.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))"
           :key="videogame._id" cols="12" sm="6" md="4">
           <v-lazy :options="{ 'threshold': 0.5 }" transition="fade-transition">
-            <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" min-height="560" max-height="560"
-              @click="verJuego(videogame)">
-              <div style="position: relative">
-                <img :src="videogame.image" alt="videogame" style="width: 100%; max-height: 100%; object-fit: contain;">
+            <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" min-height="570"
+              max-height="570" @click="verJuego(videogame)">
+
+              <div style="position: relative; height: 440px;">
+                <img :src="videogame.image" alt="videogame"
+                  style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+                <div class="card-overlay"></div>
               </div>
+
               <v-card-title class="text-center">{{ videogame.name }}</v-card-title>
               <v-card-text>
                 <p class="text-red-darken-1">{{ videogame.genre.join(",").replaceAll(',', ', ') }}</p>
@@ -50,6 +54,11 @@
                     </router-link>
                   </div>
                   <div v-if="authenticated">
+                    <v-tooltip text="Añadir al carrito">
+                      <template v-slot:activator="{ props }">
+                        <i class="fa-solid fa-cart-shopping mr-2" v-bind="props"></i>
+                      </template>
+                    </v-tooltip>
                     <v-tooltip text="Denunciar publicación">
                       <template v-slot:activator="{ props }">
                         <i class="fa-solid fa-flag" v-bind="props" @click.stop="reportVideogame(videogame._id);"></i>
@@ -66,26 +75,33 @@
     <v-row v-if="nuevoJuego">
       <v-col cols="12" sm="6" md="4">
         <v-dialog v-model="dialog" transition="dialog-bottom-transition" width="1400">
-          <v-card>
-            <div class="d-flex justify-end mt-5 mr-3">
-              <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3 fa-xl" @click="dialog = false"></v-icon>
-            </div>
-            <v-row class="center mx-5 my-5">
+  <v-card class="dialog-card">
+    <div class="d-inline">
+      <div class="d-flex justify-end mr-3 mt-5">
+        <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3 fa-xl" @click="dialog = false"></v-icon>
+      </div>
+      <div class="d-flex justify-center d-inline-block">
+        <a :href="'/perfil/' + nuevoJuego.nickname" target="_blank" class="text-decoration-none mt-2 ml-3">Ver más</a>
+        <i class="fa-solid fa-arrow-up-right-from-square align-self-center ml-3 mt-1"></i>
+        <v-rating v-model="ratingDescription" size="x-small" class="ml-6" color="yellow darken-1 mt-1"></v-rating>
+      </div>
+    </div>
+    <v-row class="center mx-5">
               <v-col cols="12" sm="6" md="4" xs="6" class="col-dialog">
-                <v-card-title class="text-center text-white text-h4 mb-2">{{ nuevoJuego.name }}</v-card-title>
+                <v-card-title class="text-center text-white text-h5">{{ nuevoJuego.name }}</v-card-title>
                 <img :src=nuevoJuego.image alt="Portada" class="d-flex mx-auto rounded">
                 <p class="text-subtitle-1 text-white text-center mt-5">Subido por <a
                     :href="'/perfil/' + nuevoJuego.nickname" target="_blank" class="text-red-darken-1">{{
                       nuevoJuego.nickname }}</a></p>
               </v-col>
               <v-col cols="12" sm="6" md="6" lg="8" class="col-dialog-info">
-                <v-card-title class="text-center text-white text-h4 mb-3">Descripción</v-card-title>
+                <v-card-title class="text-center text-red-darken-2 text-h5 mb-3">Descripción</v-card-title>
                 <v-card-text class="text-subtitle-1 text-justify">{{ nuevoJuego.description }}.</v-card-text>
-                <v-card-title class="text-center text-white text-h4 mb-3">Género</v-card-title>
-                <!-- <v-card-text class="text-subtitle-1 text-center text-body-1">
+                <v-card-title class="text-center text-red-darken-2 text-h5 mb-3">Género</v-card-title>
+                
+                <v-card-text class="text-subtitle-1 text-center text-body-1">
                   {{ nuevoJuego.genre.join(',').replace(/,\s*/g, ', ') }}
-                </v-card-text> -->
-                <v-card-title class="text-center text-white text-h4 mb-2 my-6">Opiniones de venta</v-card-title>
+                </v-card-text>
                 <v-card elevation="10" class="bg-red-darken-3">
                   <v-card-text class="text-white">Pepe: Lorem ipsum dolor sit amet consectetur adipiscing,
                     elit eget magnis sociis et interdum,</v-card-text>
@@ -96,12 +112,12 @@
                 </v-card>
                 <v-row>
                   <v-col cols="6">
-                    <v-card-title class="text-center text-white text-h4 mb-2 my-6">Name<span
+                    <v-card-title class="text-center text-white text-h5 mb-2 my-6">Name<span
                         class="text-red-darken-3 font-weight-bold">koins</span></v-card-title>
                     <v-card-text class="text-center my-6 text-body-1">{{ nuevoJuego.price }}</v-card-text>
                   </v-col>
                   <v-col cols="6">
-                    <v-card-title class="text-center text-white text-h4 mb-2 my-6">Plataforma</v-card-title>
+                    <v-card-title class="text-center text-red-darken-2 text-h5 mb-2 my-6">Plataforma</v-card-title>
                     <v-card-text class=" text-center my-6 text-body-1">{{ nuevoJuego.platform
                     }}</v-card-text>
                   </v-col>
@@ -199,7 +215,7 @@ let videogames = reactive([]);
 const dialog = ref(false)
 const comprado = ref(false)
 const { authenticated } = storeToRefs(loginStore)
-
+const ratingDescription = ref()
 
 const games = ref()
 const review = ref(false)
@@ -357,5 +373,24 @@ const createOrder = async () => {
 .list-leave-to {
   opacity: 0;
   transform: translateX(30px);
+}
+
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(213, 0, 0, 0.5));
+  opacity: 0;
+  transition: opacity 0.7s;
+}
+
+.card:hover .card-overlay {
+  opacity: 1;
+}
+.dialog-card {
+  height: 600px; /* Ajusta la altura según tus necesidades */
+  overflow-y: auto; /* Agrega un desbordamiento vertical si es necesario */
 }
 </style>

@@ -127,6 +127,7 @@
   </v-app-bar>
 
   <v-navigation-drawer v-model="drawer" location="left" temporary floating width="360" class="mx-0">
+
     <template v-if="!authenticated">
       <v-list>
         <v-list-item v-for="(item, i) in items" :key="i" :value="item" active-color="#F80808"
@@ -175,6 +176,7 @@
         </v-btn>
       </div>
     </template>
+
   </v-navigation-drawer>
 </template>
 
@@ -187,6 +189,7 @@ import { storeToRefs } from 'pinia';
 import { Buffer } from "buffer";
 import { CDialog, CMenu } from "../components";
 import { paymentStore } from "../stores/paymentStore"
+
 
 const userDataStore = userData();
 const emits = defineEmits(['open-modal']);
@@ -302,7 +305,7 @@ const menuActionClick = (action) => {
   } else if (action === "register") {
     router.push({ path: '/registro' })
   } else if (action === "profile") {
-    router.push({ path: '#' })
+    router.push({ path: '/perfil' })
   } else {
     logout()
     router.push({ path: '/acceso' })

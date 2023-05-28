@@ -1,9 +1,9 @@
 <template>
     <div class="d-flex justify-center align-center" style="background-image: url('../src/assets/images/zelda-modified.jpg');
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
-    height: 300px;">
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
+            height: 300px;">
         <v-avatar size="100" style="margin-top: -50px;" class="ml-2">
             <img src="../assets/images/avatar.jpg" alt="Profile Picture" style="width: 100px">
         </v-avatar>
@@ -15,20 +15,19 @@
             <v-container class="mt-4">
                 <v-row>
 
-  <v-col cols="12" md="6" class="d-flex justify-center" v-if="!useUserStore.position">
-    <v-tooltip
-  text="Debes haber comprado o vendido un videojuego 
-  para participar en el ranking">
+                    <v-col cols="12" md="6" class="d-flex justify-center" v-if="!useUserStore.position">
+                        <v-tooltip text="Debes haber comprado o vendido un videojuego 
+          para participar en el ranking">
 
-  <template v-slot:activator="{ props }" >
-    <i class="fa-solid fa-ranking-star fa-2xl" :style="{ color: '#808080' }" v-bind="props"></i>
-</template>
-</v-tooltip>
-  </v-col>
-  <v-col cols="12" md="6" class="d-flex justify-center" v-else>
-    <i class="fa-solid fa-ranking-star fa-2xl" style="color: #ffff00;"></i>
-    <p  class="ml-3 text-white font-weight-bold text-subtitle-1">{{ useUserStore.position }}</p>
-</v-col>
+                            <template v-slot:activator="{ props }">
+                                <i class="fa-solid fa-ranking-star fa-2xl" :style="{ color: '#808080' }" v-bind="props"></i>
+                            </template>
+                        </v-tooltip>
+                    </v-col>
+                    <v-col cols="12" md="6" class="d-flex justify-center" v-else>
+                        <i class="fa-solid fa-ranking-star fa-2xl" style="color: #ffff00;"></i>
+                        <p class="ml-3 text-white font-weight-bold text-subtitle-1">{{ useUserStore.position }}</p>
+                    </v-col>
 
 
 
@@ -63,13 +62,13 @@
                             </v-list>
                         </v-card>
                         <div class="d-flex mx-auto justify-center">
-                            <v-pagination v-model="pageReviews" :length="pageCountReviews" prev-icon="fa-solid fa-arrow-left"
-                                next-icon="fa-solid fa-arrow-right" active-color="red-darken-3" @update:modelValue="getDataPageReviews()">
+                            <v-pagination v-model="pageReviews" :length="pageCountReviews"
+                                prev-icon="fa-solid fa-arrow-left" next-icon="fa-solid fa-arrow-right"
+                                active-color="red-darken-3" @update:modelValue="getDataPageReviews()">
                             </v-pagination>
                         </div>
                     </v-col>
                     <v-col cols="12" md="6" class="align-self-stretch" style="width: 100%;">
-
                         <h4 class="mt-6 mx-3 text-h4 text-center mb-2">Últimas transacciones</h4>
                         <v-card class="mx-3" height="350" width="100%" outlined>
                             <v-card-text>
@@ -85,7 +84,6 @@
                                     <v-col cols="3" class="text-center">{{ transaction.description }}</v-col>
                                     <v-col cols="3" class="text-center">{{ transaction.videogame }}</v-col>
                                     <v-col cols="3" class="text-center">{{ transaction.platform }}</v-col>
-
                                 </v-row>
                             </v-card-text>
                         </v-card>
@@ -128,7 +126,7 @@ const pageCount = computed(() => {
     return Math.ceil(totalRecords() / itemsPerPage.value)
 })
 
-const pageCountReviews = computed (() => {
+const pageCountReviews = computed(() => {
     return Math.ceil(reviewArray.value.length / itemsPerPageReview.value)
 })
 
@@ -195,12 +193,12 @@ const dataReview = ref([])
 const getDataPageReviews = () => {
     dataReview.value = [];
     let ini = (pageReviews.value - 1) * itemsPerPageReview.value;
-let end = pageReviews.value * itemsPerPageReview.value;
+    let end = pageReviews.value * itemsPerPageReview.value;
 
-if (end > reviewArray.value.length) {
-    end = reviewArray.value.length;
-}
-        console.log('Valor de pageReviews: ' + pageReviews.value);
+    if (end > reviewArray.value.length) {
+        end = reviewArray.value.length;
+    }
+    console.log('Valor de pageReviews: ' + pageReviews.value);
     console.log('Items por page: ' + itemsPerPageReview.value);
     dataReview.value = reviewArray.value.slice(ini, end);
 }
@@ -217,6 +215,7 @@ function startChat() {
 </script>
 <style lang="css" scoped>
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
 * {
     font-family: "Roboto", sans-serif;
 }
@@ -264,4 +263,5 @@ function startChat() {
 
 .active-page:hover {
     background-color: #2988c8;
-}</style>
+}
+</style>

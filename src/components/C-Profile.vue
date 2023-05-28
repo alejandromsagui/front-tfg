@@ -1,5 +1,5 @@
 <template>
-    <div style="background-color: #212121; width: 100%; height: 15%;"></div>
+    <div style="background-color: #212121; width: 100%; height: 15%;" class="d-none d-md-flex"></div>
     <div v-if="userDataStore.loading" class="d-flex justify-center align-center"
         style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
         <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000">
@@ -7,30 +7,34 @@
     </div>
 
     <v-container class=" mt-4" fluid>
-        <div class="d-flex align-items-center" style="margin-left: 50px;">
-            <v-avatar size="100" style="margin-top: -50px;" align="center" justify="center">
-                <img src="../assets/images/avatar.jpg" alt="Profile Picture" style="width: 100px">
-            </v-avatar>
-            <div>
-                <h4 class="ml-4">{{ data.nickname }}</h4>
-            </div>
-        </div>
+        <div class="d-none d-md-flex align-items-center" style="margin-left: 50px;">
+  <v-avatar size="100" style="margin-top: -50px;" align="center" justify="center">
+    <img src="../assets/images/avatar.jpg" alt="Profile Picture" style="width: 100px">
+  </v-avatar>
+  <div>
+    <h4 class="ml-4">{{ data.nickname }}</h4>
+  </div>
+</div>
+
         <v-row class="mt-4 ml-10">
             <div style="display: inline-block; max-width: 245px; width: 245px;">
                 <v-list class="bg-transparent">
                     <v-list-subheader class="font-weight-bold text-white">PERFIL</v-list-subheader>
-                    <TransitionGroup name="list" tag="ul">
-                        <v-list-item v-for="(item, i) in items.slice(0, 4)" :key="i" :value="item" active-color="#F80808"
-                            variant="plain" @click="handleItemClick(item)">
-                            <v-list-item-title>{{ item.text }}</v-list-item-title>
-                        </v-list-item>
-                    </TransitionGroup>
-                    <v-list-subheader class="font-weight-bold text-white">TRANSACCIONES</v-list-subheader>
-                    <v-list-item v-for="(item, i) in items.slice(4, 6)" :key="i" :value="item" active-color="#F80808"
-                        variant="plain">
-                        <v-list-item-title v-if="item.text === 'Exportar datos'" @click="handleExportDataClick()">{{
-                            item.text }}</v-list-item-title>
+
+                    <v-list-item v-for="(item, i) in items.slice(0, 4)" :key="i" :value="item" active-color="#F80808"
+                        variant="plain" @click="handleItemClick(item)">
+                        <v-list-item-title>{{ item.text }}</v-list-item-title>
                     </v-list-item>
+
+                    <v-list-subheader class="font-weight-bold text-white">TRANSACCIONES</v-list-subheader>
+
+                    <v-list-item v-for="(item, i) in items.slice(4)" :key="i" :value="item" active-color="#F80808"
+                        variant="plain" @click="handleItemClick(item)">
+                        <v-list-item-title>{{ item.text }}</v-list-item-title>
+                    </v-list-item>
+
+
+
                     <v-list-item>
                         <v-btn class="font-weight-bold bg-red-darken-3 mt-10" variant="outlined">ELIMINAR CUENTA
 
@@ -61,6 +65,12 @@
                 </v-list>
 
             </div>
+            <template v-if="showTransactions">
+                <CVideogamesUploaded></CVideogamesUploaded>
+            </template>
+
+
+
             <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showNickname">
                 <v-col cols="12" md="8" xl="6" class="pa-0">
                     <v-sheet :height="450" max-width="900" class="mb-16 d-flex justify-center align-center d-none" rounded>
@@ -134,17 +144,21 @@ import { Buffer } from 'buffer';
 import { toast } from 'vue3-toastify';
 import { HalfCircleSpinner } from 'epic-spinners'
 import 'vue3-toastify/dist/index.css';
+import { CVideogamesUploaded } from "../components/"
+import { useVideogameStore } from '../stores/videogames';
 const showNickname = ref(false);
 const showEmail = ref(false);
 const showPassword = ref(false);
 const showRecommendations = ref(false);
 const userDataStore = userData();
+const videogameStore = useVideogameStore()
 const dialog = ref()
 const data = reactive({
     nickname: '',
     email: ''
 });
 
+const showTransactions = ref(true)
 const message = ref()
 const getData = async () => {
     const token = localStorage.getItem('token');
@@ -160,6 +174,8 @@ onBeforeMount(async () => {
     const tokenData = await getData()
     data.nickname = tokenData.nickname;
     data.email = tokenData.email;
+
+    getVideogames()
 });
 
 const deleteUser = async () => {
@@ -198,6 +214,7 @@ const items = reactive([
     { text: 'Modificar email', action: 'email' },
     { text: 'Modificar contraseña', action: 'password' },
     { text: 'Recomendaciones', action: 'recommendation' },
+    { text: 'Videojuegos subidos', action: 'transaction' },
     { text: 'Exportar datos' },
 ]);
 
@@ -207,22 +224,32 @@ const handleItemClick = (item) => {
         showEmail.value = false;
         showPassword.value = false;
         showRecommendations.value = false;
+        showTransactions.value = false;
 
     } else if (item.action === 'email') {
         showNickname.value = false;
         showEmail.value = true;
         showPassword.value = false;
         showRecommendations.value = false;
+        showTransactions.value = false;
     } else if (item.action === 'password') {
         showNickname.value = false;
         showEmail.value = false;
         showPassword.value = true;
         showRecommendations.value = false;
+        showTransactions.value = false;
     } else if (item.action === 'recommendation') {
         showNickname.value = false;
         showEmail.value = false;
         showPassword.value = false;
         showRecommendations.value = true;
+        showTransactions.value = false;
+    } else if (item.action === 'transaction') {
+        showNickname.value = false;
+        showEmail.value = false;
+        showPassword.value = false;
+        showRecommendations.value = false;
+        showTransactions.value = true;
     }
 };
 
@@ -249,6 +276,12 @@ const handleExportDataClick = () => {
             });
         });
 };
+
+
+let videogames = ref([])
+const getVideogames = async () => {
+    videogames.value = await videogameStore.getVideogamesByUser()
+}
 </script>
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
@@ -302,4 +335,15 @@ const handleExportDataClick = () => {
    animations can be calculated correctly. */
 .list-leave-active {
     position: absolute;
-}</style>
+}
+
+.table-container {
+    max-height: 400px;
+    /* Ajusta la altura máxima según tus necesidades */
+    overflow-y: auto;
+}
+
+.max-height-table {
+    max-height: none;
+}
+</style>

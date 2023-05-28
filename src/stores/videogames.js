@@ -13,6 +13,7 @@ export const useVideogameStore = defineStore({
     search: "",
     dialog: false,
     loading: false,
+    userVideogames: []
   }),
 
   getters: {
@@ -48,13 +49,14 @@ export const useVideogameStore = defineStore({
         this.loading = false;
 
         this.getVideogames();
-
+        this.userVideogames = this.getVideogamesByUser()
         toast.success(res.data.message, {
           autoClose: 2000,
           theme: "colored",
         });
 
         this.dialog = false;
+        // return this.videogames;
       } catch (error) {
         console.log(error);
         toast.error(error.response.data.message, {
@@ -80,5 +82,62 @@ export const useVideogameStore = defineStore({
         });
       }
     },
+
+    async getVideogamesByUser(){
+      this.loading = true;
+      try {
+        const response = await instance_axios.get('/getVideogames')
+        this.loading = false;  
+        // this.videogames = response.data;
+        this.userVideogames = response.data;
+        return this.userVideogames;
+      } catch (error) {
+        
+      }
+      },
+
+      async editVideogame(id){
+        this.loading = true;
+        try {
+          const response = await instance_axios.get(`/updateVideogame/${id}`)
+        this.loading = false;  
+        // getVideogamesByUser()
+        return response.data;
+        } catch (error) {
+          throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
+        }
+      },
+
+      async deleteVideogame(id){
+        this.loading = true;
+
+        try {
+          const response = await instance_axios.delete(`/deleteVideogame/${id}`)
+        this.loading = false;
+        this.videogames= this.getVideogamesByUser() 
+        return response.data;
+        } catch (error) {
+          console.log(error);
+          throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
+        } finally {
+          this.loading = false;
+        }
+      },
+
+      async updateState(id, status){
+        this.loading = true;
+
+        try {
+          const response = await instance_axios.put(`/updateState/${id}`, {status})
+        this.loading = false;  
+          this.getVideogamesByUser()
+        return response.data;
+        } catch (error) {
+          throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
+        } finally {
+          this.loading = false; 
+        }
+      }
+    }
   },
-});
+);
