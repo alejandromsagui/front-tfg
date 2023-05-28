@@ -96,18 +96,23 @@ export const useVideogameStore = defineStore({
       }
       },
 
-      async editVideogame(id){
+      async editVideogame(id, nvg) {
         this.loading = true;
         try {
-          const response = await instance_axios.get(`/updateVideogame/${id}`)
-        this.loading = false;  
-        // getVideogamesByUser()
-        return response.data;
+          const options = {
+            headers: headers(true),
+          };
+
+          const response = await instance_axios.put(`/updateVideogame/${id}`, nvg, options);
+          this.loading = false;
+          return response;
         } catch (error) {
+          console.log(error);
           throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
+        } finally {
+          this.loading = false;
         }
       },
-
       async deleteVideogame(id){
         this.loading = true;
 

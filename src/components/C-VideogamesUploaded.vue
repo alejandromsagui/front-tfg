@@ -142,7 +142,7 @@
                       class="bg-red-darken-3 text-white font-weight-bold button1">
                       Cerrar
                     </v-btn>
-                    <v-btn variant="outlined" class="bg-blue-darken-4 text-white font-weight-bold button2" type="submit" @click="editVideogame(editarJuego._id)">
+                    <v-btn variant="outlined" class="bg-blue-darken-4 text-white font-weight-bold button2" type="submit" @click.prevent="editVideogame(editarJuego._id)">
                       Editar videojuego
                     </v-btn>
 
@@ -156,9 +156,17 @@
       </v-container>
     </v-card>
     <div class="d-flex justify-center mt-4">
-      <v-pagination v-model="page" :length="pageCount" prev-icon="fa-solid fa-arrow-left"
-        next-icon="fa-solid fa-arrow-right" active-color="red-darken-3" @update:modelValue="getDataPage()">
-      </v-pagination>
+      <v-pagination
+  v-model="page"
+  :length="pageCount"
+  prev-icon="fa-solid fa-arrow-left"
+  next-icon="fa-solid fa-arrow-right"
+  active-color="red-darken-3"
+  @update:modelValue="getDataPage"
+></v-pagination>
+
+
+
     </div>
   </div>
 </template>
@@ -171,6 +179,7 @@ import { HalfCircleSpinner } from 'epic-spinners'
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
+const file = ref()
 const editarJuego = ref()
 const videogameStore = useVideogameStore()
 const videogames = ref([])
@@ -208,6 +217,7 @@ const onChange = (e) => {
   console.log(file.value);
 };
 
+
 const clear = () => {
   file.value = ''
 }
@@ -244,22 +254,33 @@ const getDataPage = () => {
   let end = (page.value * itemsPerPage.value);
   datosPaginados.value = videogameStore.userVideogames.slice(ini, end);
 
+  const totalPages = Math.ceil(videogameStore.userVideogames.length / itemsPerPage.value);
+
   // Verificar si la página actual está vacía y no es la página 1
   if (datosPaginados.value.length === 0 && page.value > 1) {
     // Calcular el nuevo número de página
-    const totalPages = Math.ceil(videogameStore.videogames.length / itemsPerPage.value);
     const newPage = Math.max(page.value - 1, 1);
     // Actualizar el número de página si no es mayor que el número total de páginas
     if (newPage <= totalPages) {
       page.value = newPage;
       ini = (newPage * itemsPerPage.value) - itemsPerPage.value;
       end = newPage * itemsPerPage.value;
-      datosPaginados.value = []
-      videogameStore.getVideogamesByUser()
+      datosPaginados.value = videogameStore.userVideogames.slice(ini, end);
+      console.log('Estoy aqui');
+    } else {
+      page.value = totalPages;
+      ini = (totalPages * itemsPerPage.value) - itemsPerPage.value;
+      end = totalPages * itemsPerPage.value;
       datosPaginados.value = videogameStore.userVideogames.slice(ini, end);
     }
+  } else if (page.value > totalPages) {
+    page.value = totalPages;
+    ini = (totalPages * itemsPerPage.value) - itemsPerPage.value;
+    end = totalPages * itemsPerPage.value;
+    datosPaginados.value = videogameStore.userVideogames.slice(ini, end);
   }
 }
+
 
 watch(() => videogameStore.userVideogames, (newVideogames) => {
   // Convertir el objeto en un array
@@ -286,17 +307,28 @@ const getSelectItems = (state) => {
 }
 
 const editVideogame = (id) => {
-  videogameStore.editVideogame(id)
+
+  const data = new FormData();
+    data.append("name", editarJuego.value.name)
+    data.append("description", editarJuego.value.description)
+    data.append("price", editarJuego.value.price)
+    data.append("genre", editarJuego.value.genre)
+    data.append("platform", editarJuego.value.platform)
+    data.append("image", file.value);
+
+  videogameStore.editVideogame(id, data)
     .then((response) => {
       if (response.status === 200) {
         toast.success(response.data.message, {
           theme: "colored",
           autoClose: 3000
         });
+
+        edit.value = false;
       }
     })
+
     .catch((error) => {
-      
       console.log(error);
       toast.error(error.message, {
         theme: 'colored',
@@ -307,13 +339,12 @@ const editVideogame = (id) => {
 const deleteVideogame = (id) => {
   videogameStore.deleteVideogame(id)
     .then((response) => {
-      
-      videogameStore.getVideogamesByUser()
-      deleteGame.value = false
-
+      videogameStore.getVideogamesByUser().then(() => {
+        getDataPage();
+      });
+      deleteGame.value = false;
     })
     .catch((error) => {
-      
       console.log(error);
       toast.error(error.message, {
         theme: 'colored',
