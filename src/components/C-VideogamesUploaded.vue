@@ -233,65 +233,37 @@ const item = reactive({
 })
 
 onBeforeMount(async () => {
-  videogames.value = await videogameStore.getVideogamesByUser()
-  datosPaginados.value = videogameStore.getVideogamesByUser()
-  getDataPage()
- 
-})
-
-const totalRecords = () => {
-  return videogames.value.length;
-}
-const pageCount = computed(() => {
-  return Math.ceil(totalRecords() / itemsPerPage.value)
-})
-
-const datosPaginados = ref([]);
-
-const getDataPage = () => {
-  datosPaginados.value = [];
-  let ini = (page.value * itemsPerPage.value) - itemsPerPage.value;
-  let end = (page.value * itemsPerPage.value);
-  datosPaginados.value = videogameStore.userVideogames.slice(ini, end);
-
-  const totalPages = Math.ceil(videogameStore.userVideogames.length / itemsPerPage.value);
-
-  // Verificar si la página actual está vacía y no es la página 1
-  if (datosPaginados.value.length === 0 && page.value > 1) {
-    // Calcular el nuevo número de página
-    const newPage = Math.max(page.value - 1, 1);
-    // Actualizar el número de página si no es mayor que el número total de páginas
-    if (newPage <= totalPages) {
-      page.value = newPage;
-      ini = (newPage * itemsPerPage.value) - itemsPerPage.value;
-      end = newPage * itemsPerPage.value;
-      datosPaginados.value = videogameStore.userVideogames.slice(ini, end);
-      console.log('Estoy aqui');
-    } else {
-      page.value = totalPages;
-      ini = (totalPages * itemsPerPage.value) - itemsPerPage.value;
-      end = totalPages * itemsPerPage.value;
-      datosPaginados.value = videogameStore.userVideogames.slice(ini, end);
-    }
-  } else if (page.value > totalPages) {
-    page.value = totalPages;
-    ini = (totalPages * itemsPerPage.value) - itemsPerPage.value;
-    end = totalPages * itemsPerPage.value;
-    datosPaginados.value = videogameStore.userVideogames.slice(ini, end);
-  }
-}
-
-
-watch(() => videogameStore.userVideogames, (newVideogames) => {
-  // Convertir el objeto en un array
-  const videogamesArray = Object.values(newVideogames);
-  
-  // Actualizar datosPaginados con los nuevos datos de videogames
-  const startIndex = (page.value - 1) * itemsPerPage.value;
-  const endIndex = startIndex + itemsPerPage.value;
-  datosPaginados.value = videogamesArray.slice(startIndex, endIndex);
+  videogameStore.userVideogames = await videogameStore.getVideogamesByUser();
+  videogames.value = videogameStore.userVideogames;
+  getDataPage();
 });
 
+const totalRecords = ref(0);
+
+const pageCount = computed(() => {
+  return Math.ceil(totalRecords.value / itemsPerPage.value);
+});
+
+const datosPaginados = ref([])
+const getDataPage = () => {
+  const totalPages = pageCount.value;
+  const newPage = Math.max(page.value, 1);
+
+  if (newPage > totalPages) {
+    page.value = totalPages;
+  } else {
+    page.value = newPage;
+  }
+
+  const startIndex = (page.value - 1) * itemsPerPage.value;
+  const endIndex = startIndex + itemsPerPage.value;
+  datosPaginados.value = videogameStore.userVideogames.slice(startIndex, endIndex);
+};
+
+watch([videogameStore.userVideogames, itemsPerPage, page], () => {
+  totalRecords.value = videogameStore.userVideogames.length;
+  getDataPage();
+});
 
 // const change = () => {
 //   console.log('cambio');
@@ -397,7 +369,12 @@ const updateState = (id, state) => {
   opacity: 0;
   transform: translateX(30px);
 }
-
+.list-item {
+  transition: all 1s;
+}
+.list-enter {
+  opacity: 0;
+}
 .icons {
   cursor: pointer;
   transition: transform 0.2s ease-in-out;

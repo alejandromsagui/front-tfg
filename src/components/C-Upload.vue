@@ -78,7 +78,7 @@ import { HalfCircleSpinner } from 'epic-spinners'
 const videogameStore = useVideogameStore()
 const form = ref(null)
 const file = ref(null)
-const fileInput = ref(null)
+
 
 const emit = defineEmits(['change-dialog-value'])
 const emitValue = (value) => {

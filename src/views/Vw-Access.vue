@@ -10,7 +10,7 @@
             <half-circle-spinner v-if="authStore.loading"
   :animation-duration="1000"
   :size="60"
-  color="#ff1d5e"
+  color="#F80808"
 />
         </template>
         <v-row align="center" justify="center">
@@ -175,6 +175,7 @@ import { useRegister } from "../stores/register";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { useEmailStore } from "../stores/sendEmail";
+import { HalfCircleSpinner } from 'epic-spinners'
 
 const authStore = useLoginStore();
 const registerStore = useRegister();

@@ -63,6 +63,8 @@ export const useVideogameStore = defineStore({
           autoClose: 2000,
           theme: "colored",
         });
+      } finally {
+        this.loading = false;
       }
     },
 
@@ -88,7 +90,6 @@ export const useVideogameStore = defineStore({
       try {
         const response = await instance_axios.get('/getVideogames')
         this.loading = false;  
-        // this.videogames = response.data;
         this.userVideogames = response.data;
         return this.userVideogames;
       } catch (error) {
