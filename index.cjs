@@ -6,6 +6,10 @@ const enforce = require('express-sslify');
 //initialise the express package
 const app = express()
 
+if (process.env.NODE_ENV === 'production') {
+    app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
+
 //use the serve-static package to serve the bundled app files in the dist directory
 app.use('/', serveStatic(path.join(__dirname, '/dist')))
 
@@ -21,7 +25,3 @@ app.get(/.*/, function (req, res) {
 const port = process.env.PORT || 5000
 app.listen(port)
 console.log(`app is listening on port: ${port}`)
-
-if (process.env.NODE_ENV === 'production') {
-    app.use(enforce.HTTPS({ trustProtoHeader: true }));
-}
