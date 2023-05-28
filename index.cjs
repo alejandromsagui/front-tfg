@@ -1,6 +1,7 @@
 const express = require('express')
 const serveStatic = require('serve-static')
 const path = require('path')
+const enforce = require('express-sslify');
 
 //initialise the express package
 const app = express()
@@ -20,3 +21,7 @@ app.get(/.*/, function (req, res) {
 const port = process.env.PORT || 5000
 app.listen(port)
 console.log(`app is listening on port: ${port}`)
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
