@@ -222,10 +222,8 @@ const item = reactive({
 onBeforeMount(async () => {
   videogameStore.userVideogames = await videogameStore.getVideogamesByUser();
   videogames.value = videogameStore.userVideogames;
-  
+  console.log(videogames.value);
   getDataPage();
-
-
 });
 
 
@@ -254,15 +252,15 @@ const getDataPage = () => {
   datosPaginados.value = videogameStore.userVideogames.slice(startIndex, endIndex);
 };
 
-watch(() => videogameStore.userVideogames, (newValue, oldValue) => {
-  getDataPage()
+// watch(() => videogameStore.userVideogames, (newValue, oldValue) => {
+//   getDataPage()
+// });
 
-});
+// watch(() =>  videogameStore.userVideogames, (newX) => {
+//   console.log(videogameStore.userVideogames)
+// })
 
-// const change = () => {
-//   console.log('cambio');
-//   console.log('Valor del select: ', items.changeState);
-// }
+
 
 const getSelectItems = (state) => {
   if (state === '' || state === 'En venta') {
@@ -281,6 +279,7 @@ const editVideogame = (id) => {
   data.append("genre", editarJuego.value.genre)
   data.append("platform", editarJuego.value.platform)
   data.append("image", file.value);
+  
 
   videogameStore.editVideogame(id, data)
     .then((response) => {

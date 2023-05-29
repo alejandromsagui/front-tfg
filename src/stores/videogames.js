@@ -49,13 +49,27 @@ export const useVideogameStore = defineStore({
         this.loading = false;
 
         this.getVideogames();
-        this.userVideogames = await this.getVideogamesByUser()
+        this.userVideogames = this.getVideogamesByUser()
         
-        console.log('Valor de user videogames ', this.userVideogames);
+        console.log('Valor de user videogames ',);
         toast.success(res.data.message, {
           autoClose: 2000,
           theme: "colored",
         });
+
+        // const token = localStorage.getItem('token');
+        // const [header, payload, signature] = token.split(".");
+        // const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+
+        // console.log('Lo que trae this.videogames ',  this.videogames);
+        // console.log(this.videogames.find(v => v.userId === decodedPayload.id));
+        // this.videogames.push(res.videogame);
+        // this.userVideogames = this.videogames.find(v => v.userId === decodedPayload.id)
+
+        
+        // console.log('Valor de videogames ', this.videogames);
+        // console.log(this.videogames.length);
+        // console.log('Valor de user videogames ', this.userVideogames);
 
         this.dialog = false;
         // return this.videogames;
