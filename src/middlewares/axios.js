@@ -22,7 +22,7 @@ instance_axios.interceptors.response.use(
       const loginStore = useLoginStore();
       loginStore.logout();
       
-      const errorMessage = error.response.data.error; // Obtener el mensaje de error del backend
+      const errorMessage = error.response.data.error; 
       
       toast.error(errorMessage, {
         autoClose: 3000,

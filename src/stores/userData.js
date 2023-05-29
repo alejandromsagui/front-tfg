@@ -32,7 +32,6 @@ export const userData = defineStore({
                     theme: "colored"
                 })
 
-                // Da undefined --> console.log('Authorization: ', response.headers.get('Authorization'));
                 localStorage.setItem('token', response.data.data.token)
 
                 return response;
@@ -62,6 +61,7 @@ export const userData = defineStore({
         async changeEmail(email, password) {
             try {
                 const response = await instance_axios.put('/updateEmail', { email, password });
+                localStorage.setItem('token', response.data.data.token)
                 return response;
             } catch (error) {
                 throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
@@ -166,6 +166,8 @@ export const userData = defineStore({
                     theme: "colored",
                     autoClose: 3000
                 })
+
+                return response;
             } catch (error) {
                 toast.error(error.response.data.message, {
                     theme: "colored",

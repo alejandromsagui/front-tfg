@@ -10,7 +10,7 @@
                     style="width: 350px;" type="password" :rules="[requiredField, passwordLength]"
                     v-model="userModifier.password"></v-text-field>
                 <div style="width: 350px; margin-top: 20px; margin-left: auto; margin-right: auto; padding-bottom: 20px;">
-                    <v-btn variant="outlined" class="text-white text-center font-weight-bold bg-red-darken-3" type="submit"
+                    <v-btn variant="outlined" class="button text-white text-center font-weight-bold bg-red-darken-3 button" type="submit"
                         block>CAMBIAR
                         NOMBRE DE USUARIO</v-btn>
                 </div>
@@ -22,12 +22,12 @@
             <v-form ref="form" @submit.prevent="changeEmail">
                 <v-text-field label="Nuevo email" variant="outlined" class="align-items-center mx-auto"
                     style="width: 350px;" :rules="[requiredField, isValidEmailRule]"
-                    v-model="userModifier.email"></v-text-field>
+                    v-model="userModifierEmail.email"></v-text-field>
                 <v-text-field label="Contraseña actual" variant="outlined" class="align-items-center mx-auto"
                     style="width: 350px;" type="password" :rules="[requiredField, passwordLength]"
-                    v-model="userModifier.password"></v-text-field>
+                    v-model="userModifierEmail.password"></v-text-field>
                 <div style="width: 350px; margin-top: 20px; margin-left: auto; margin-right: auto; padding-bottom: 20px;">
-                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit"
+                    <v-btn block class="button text-white text-center font-weight-bold bg-red-darken-3 button" type="submit"
                         variant="outlined">CAMBIAR
                         EMAIL</v-btn>
                 </div>
@@ -47,8 +47,8 @@
                     style="width: 350px;" type="password" :rules="[requiredField, passwordLength, passwordMatch]"
                     v-model="userModifier.confirmPassword"></v-text-field>
                 <div style="width: 350px; margin-top: 20px; margin-left: auto; margin-right: auto; padding-bottom: 20px;">
-                    <v-btn variant="outlined" class="text-white text-center font-weight-bold bg-red-darken-3" type="submit"
-                        block>CAMBIAR
+                    <v-btn  class="button text-white text-center font-weight-bold" type="submit"
+                        block variant="outlined">CAMBIAR
                         CONTRASEÑA</v-btn>
                 </div>
             </v-form>
@@ -74,6 +74,10 @@ const userModifier = reactive({
     confirmPassword: ''
 })
 
+const userModifierEmail = reactive({
+    email: '',
+    password: ''
+})
 const onChange = (e) => {
     console.log(e.target.value)
 }
@@ -93,13 +97,15 @@ const isValidEmailRule = (val) => {
 
 const changeNickname = () => {
     useModifierStore.changeNickname(userModifier.nickname, userModifier.password).then(r => {
-        if (r.status === 200) form.value.reset()
-        window.location.reload()
+        if (r.status === 200) {
+            form.value.reset()
+            window.location.reload()
+        }    
     })
 }
 
 const changeEmail = () => {
-    useModifierStore.changeEmail(userModifier.email, userModifier.password).then(r => {
+    useModifierStore.changeEmail(userModifierEmail.email, userModifierEmail.password).then(r => {
         if (r.status === 200) {
             toast.success(r.data.message, {
                 theme: "colored",
@@ -164,5 +170,14 @@ const changePassword = () => {
 
 .d-none.d-md-block.pa-0 {
     margin-left: -50px;
+}
+.button{
+  flex: 0 0 auto !important;
+    background: linear-gradient(to left, #C62828 50%, black 50%) right !important;
+    background-size: 200% !important;
+    transition: .3s ease-out !important
+}
+.button:hover{
+    background-position: left !important;
 }
 </style>

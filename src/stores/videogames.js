@@ -49,7 +49,9 @@ export const useVideogameStore = defineStore({
         this.loading = false;
 
         this.getVideogames();
-        this.userVideogames = this.getVideogamesByUser()
+        this.userVideogames = await this.getVideogamesByUser()
+        
+        console.log('Valor de user videogames ', this.userVideogames);
         toast.success(res.data.message, {
           autoClose: 2000,
           theme: "colored",

@@ -1,69 +1,15 @@
 <template>
-    <div style="background-color: #212121; width: 100%; height: 15%" class="d-none d-md-flex"></div>
+    <div style="background-color: #212121; width: 100%; height: 15%; position: absolute;" class="d-none d-md-flex"></div>
     <div v-if="userDataStore.loading" class="d-flex justify-center align-center"
         style="position: absolute; top: 0; right: 0; bottom: 0; left: 0">
         <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000">
         </half-circle-spinner>
     </div>
 
-    <v-row class="d-none d-md-block">
-        <v-col cols="12" sm="3" md="6">
-            <v-list class="bg-transparent">
-                <v-list-subheader class="font-weight-bold text-white">PERFIL</v-list-subheader>
-                <v-list-item v-for="(item, i) in items.slice(0, 4)" :key="i" :value="item" active-color="#F80808"
-                    variant="plain" @click="handleItemClick(item)">
-                    <v-list-item-title>{{ item.text }}</v-list-item-title>
-                </v-list-item>
-
-                <v-list-subheader class="font-weight-bold text-white">TRANSACCIONES</v-list-subheader>
-
-                <v-list-item v-for="(item, i) in items.slice(4)" :key="i" :value="item" active-color="#F80808"
-                    variant="plain" @click="handleItemClick(item)">
-                    <v-list-item-title>{{ item.text }}</v-list-item-title>
-                </v-list-item>
-
-                <v-list-item>
-                    <v-btn class="font-weight-bold bg-red-darken-3 mt-10" variant="outlined">ELIMINAR CUENTA
-                        <v-dialog v-model="dialog" activator="parent" max-width="500">
-                <v-card>
-                  <div class="bg-white text-black d-flex align-center pa-2">
-                    <v-card-title
-                      class="text-left flex-grow-1 font-weight-bold text-h6"
-                      >Confirmar</v-card-title
-                    >
-                    <div class="d-flex mr-3">
-                      <v-icon
-                        icon="fa-solid fa-rectangle-xmark text-red-darken-3"
-                        @click="dialog = false"
-                      ></v-icon>
-                    </div>
-                  </div>
-                  <v-card-text class="text-h5 text-center">
-                    ¿Estás seguro de que quieres eliminar tu cuenta? Una vez
-                    realizada esta acción, no la podrás
-                    <span class="text-red-darken-3 font-weight-bold"
-                      >recuperar</span
-                    >
-                  </v-card-text>
-                  <v-card-actions class="justify-center mt-5">
-                    <v-btn
-                      class="text-white bg-red-darken-3 font-weight-bold"
-                      variant="outlined"
-                      @click="deleteUser()"
-                      >Eliminar de todas formas</v-btn
-                    >
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-                    </v-btn>
-                </v-list-item>
-            </v-list>
-        </v-col>
-    </v-row>
 
     <!-- Navegacion para movil -->
-    <v-row class="d-md-none">
-        <v-col cols="12" class="scrolling-wrapper">
+    <v-row class="text-center overflow-x-hidden">
+        <v-col cols="12" class="d-md-none">
             <div class="scrolling-wrapper">
                 <div class="card"  @click="showNickname = true; showEmail = false; showPassword = false; showRecommendations = false; showTransactions = false">
                     <v-card class="bg-red-darken-3 d-flex flex-column align-center justify-center" height="100" width="150">
@@ -114,39 +60,123 @@
                     <p class="subtitle-2 text-white text-center mt-1">Exportar historial</p>
                     </v-card>
                 </div>
-                <div class="card">
+                <div class="card" @click="dialog = true">
                     <v-card class="bg-red-darken-3 d-flex align-center flex-column justify-center" height="100" width="150">
                         <div class="d-flex align-center justify-center">
                             <i class="fa-solid fa-user-slash fa-3x"></i>
                     </div>
-                    <p class="subtitle-2 text-white text-center mt-1" @click="dialog = true">Eliminar cuenta</p>
+                    <p class="subtitle-2 text-white text-center mt-1">Eliminar cuenta</p>
                     </v-card>
                 </div>
             </div>
         </v-col>
+
+        <v-col cols="12" class="d-none d-md-block">
+            <div style="position: relative; margin-top: 100px;">
+                <div class="card mr-5 elevation-0"  @click="showNickname = true; showEmail = false; showPassword = false; showRecommendations = false; showTransactions = false">
+                    <v-card class="bg-transparent d-flex flex-column align-center justify-center" height="100" width="150">
+                        <div class="d-flex align-center justify-center">
+                            <i class="fa-solid fa-user fa-3x"></i>
+                        </div>
+                        <p class="subtitle-2 text-white text-center mt-1">Cambiar nombre</p>
+                    </v-card>
+                </div>
+                <div class="card mr-5" @click="showEmail = true; showNickname = false; showPassword = false; showRecommendations = false; showTransactions = false">
+                    <v-card class="bg-transparent d-flex flex-column align-center justify-center" height="100" width="150">
+                        <div class="d-flex align-center justify-center">
+                        <i class="fa-solid fa-envelope fa-3x"></i>
+                    </div>
+                        <p class="subtitle-2 text-white text-center mt-1">Cambiar correo</p>
+                    </v-card>
+                </div>
+                <div class="card mr-5" @click="showPassword = true; showEmail = false; showNickname = false; showRecommendations = false; showTransactions = false">
+                    <v-card class="bg-transparent d-flex flex-column align-center justify-center" height="100" width="150">
+                        <div class="d-flex align-center justify-center">
+                        <i class="fa-solid fa-key fa-3x"></i>
+                        </div>
+                        <p class="subtitle-2 text-white text-center mt-1">Cambiar contraseña</p>
+                    </v-card>
+                </div>
+                <div class="card mr-5" @click="showPassword = false; showEmail = false; showNickname = false; showRecommendations = true; showTransactions = false;">
+                    <v-card class="bg-transparent d-flex align-center flex-column justify-center" height="100" width="150">
+                        <div class="d-flex align-center justify-center">
+                        <i class="fa-solid fa-lightbulb fa-3x"></i>
+                    </div>
+                    <p class="subtitle-2 text-white text-center mt-1">Recomendaciones</p>
+                    </v-card>
+                </div>
+                <div class="card mr-5" @click="showPassword = false; showEmail = false; showNickname = false; showRecommendations = false; showTransactions = true;">
+                    <v-card class="bg-transparent d-flex align-center flex-column justify-center" height="100" width="150">
+                        <div class="d-flex align-center justify-center">
+                        <i class="fa-solid fa-gamepad fa-3x"></i>
+                    </div>
+                    <p class="subtitle-2 text-white text-center mt-1">Juegos subidos</p>
+                    </v-card>
+                </div>
+
+                <div class="card mr-5" @click="handleExportDataClick(); showPassword = false; showEmail = false; showNickname = false; showRecommendations = false; showTransactions = false; showTransactions = false; exportingData = true">
+                    <v-card class="bg-transparent d-flex align-center flex-column justify-center" height="100" width="150">
+                        <div class="d-flex align-center justify-center">
+                            <i class="fa-solid fa-file-export fa-3x"></i>
+                    </div>
+                    <p class="subtitle-2 text-white text-center mt-1">Exportar historial</p>
+                    </v-card>
+                </div>
+                <div class="card mr-5" @click="dialog = true">
+                    <v-card class="bg-transparent d-flex align-center flex-column justify-center" height="100" width="150">
+                        <div class="d-flex align-center justify-center">
+                            <i class="fa-solid fa-user-slash fa-3x"></i>
+                    </div>
+                    <p class="subtitle-2 text-white text-center mt-1">Eliminar cuenta</p>
+                    </v-card>
+                </div>
+
+                <v-dialog v-model="dialog" max-width="500">
+    <v-card>
+      <div class="bg-white text-black d-flex align-center pa-2">
+        <v-card-title class="text-left flex-grow-1 font-weight-bold text-h6">Confirmar</v-card-title>
+        <div class="d-flex mr-3">
+          <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3" @click="dialog = false"></v-icon>
+        </div>
+      </div>
+      <v-card-text class="text-h5 text-center">
+        ¿Estás seguro de que quieres eliminar tu cuenta? Una vez realizada esta acción,
+        no lo podrás
+        <span class="text-red-darken-3 font-weight-bold">recuperar</span>
+      </v-card-text>
+      <v-card-actions class="justify-center mt-5">
+        <v-btn class="text-white bg-red-darken-3 font-weight-bold" variant="outlined"
+          @click="deleteUser()">Eliminar de todas
+          formas</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+            </div>
+        </v-col>
     </v-row>
-      <p class="text-white text-center text-h4 mt-10" v-if="exportingData">Exportando datos...</p>
-      <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showNickname">
-  <v-col cols="12" md="6" sm="1" xs="1" class="pa-0">
-    <v-sheet height="auto" class="mb-16 d-flex justify-center align-center d-none" rounded>
-      <v-col cols="12" md="6" sm="1">
-        <h2 class="text-center text-white font-weight-bold mb-5">
-          Cambiar nombre de usuario
-        </h2>
-        <p class="text-center text-subtitle-2 text-grey mb-4">
-          Selecciona un nuevo nombre de usuario
-        </p>
-        <p class="text-center text-subtitle-2 text-grey mb-4">
-          Nombre de usuario actual
-        </p>
-        <p class="text-center text-white text-subtitle-1 mb-8">
-          {{ data.nickname }}
-        </p>
-        <slot name="username"></slot>
-      </v-col>
-    </v-sheet>
-  </v-col>
-</v-row>
+      <p class="text-white text-center text-h4 mt-10 d-none d-md-block" v-if="exportingData"
+      >Exportando datos...</p>
+        <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showNickname">
+    <v-col cols="12" md="6" sm="1" xs="1" class="pa-0">
+      <v-sheet height="auto" class="mb-16 d-flex justify-center align-center d-none" rounded>
+        <v-col cols="12" md="6" sm="1">
+          <h2 class="text-center text-white font-weight-bold mb-5">
+            Cambiar nombre de usuario
+          </h2>
+          <p class="text-center text-subtitle-2 text-grey mb-4">
+            Selecciona un nuevo nombre de usuario
+          </p>
+          <p class="text-center text-subtitle-2 text-grey mb-4">
+            Nombre de usuario actual
+          </p>
+          <p class="text-center text-white text-subtitle-1 mb-8">
+            {{ data.nickname }}
+          </p>
+          <slot name="username"></slot>
+        </v-col>
+      </v-sheet>
+    </v-col>
+  </v-row>
 
 <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showEmail">
   <v-col cols="12" md="6" sm="1" xs="1" class="pa-0">
@@ -199,7 +229,7 @@
             </p>
             <v-textarea label="Recomendación" clearable no-resize v-model="message" variant="outlined"></v-textarea>
             <div style="width: 350px; margin-top: 20px; margin-left: auto; margin-right: auto; padding-bottom: 20px;">
-                    <v-btn variant="outlined" class="text-white text-center font-weight-bold bg-red-darken-3" @click="newRecommendation(message)"
+                    <v-btn variant="outlined" class="button text-white text-center font-weight-bold bg-red-darken-3" @click="newRecommendation(message)"
                         block>ENVIAR RECOMENDACIÓN</v-btn>
                 </div>
           </v-col>
@@ -241,7 +271,7 @@ const showPassword = ref(false);
 const showRecommendations = ref(false);
 const userDataStore = userData();
 const videogameStore = useVideogameStore();
-const dialog = ref();
+const dialog = ref(false);
 const data = reactive({
     nickname: "",
     email: "",
@@ -259,8 +289,14 @@ const getData = async () => {
 };
 
 let exportingData = ref(false)
-const newRecommendation = (message) => {
-    userDataStore.newRecommendation(message);
+const newRecommendation = (data) => {
+  userDataStore.newRecommendation(data).then((r) => {
+    if(r.status === 200){
+      message.value = ''
+    }
+  }).catch((e) => {
+
+  })
 };
 onBeforeMount(async () => {
     const tokenData = await getData();
@@ -464,6 +500,13 @@ const getVideogames = async () => {
 
 .card {
     flex: 0 0 auto;
+    cursor: pointer;
+    background: linear-gradient(to left, #C62828 50%, black 50%) right;
+    background-size: 200%;
+    transition: .3s ease-out;
+}
+.card:hover {
+  background-position: left;
 }
 
 .scrolling-wrapper {

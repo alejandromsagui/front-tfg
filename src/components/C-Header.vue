@@ -121,7 +121,6 @@
             <i class="fa-solid fa-right-from-bracket mr-1"></i> Salir
           </v-btn>
         </v-toolbar-items>
-        <v-icon class="link fas fa-search mr-5" size="14"></v-icon>
       </template>
     </v-toolbar>
   </v-app-bar>

@@ -1,22 +1,18 @@
 <template>
-    <v-card elevation="10" max-width="700" min-width="auto" min-height="394" max-height="394" mt->
-      <div v-if="videogameStore.loading" class="d-flex justify-center align-center"
-        style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
-        <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000">
-        </half-circle-spinner>
-      </div>
-      <v-row align="center">
-        <v-col cols="12" md="12" sm="12">
-          <v-sheet class="bg-red-darken-3 d-flex justify-center" width="70" height="70" style="align-items: center;"
-            rounded elevation="10">
-            <i class="fa-solid fa-gamepad fa-xl"></i>
-          </v-sheet>
-        </v-col>
-        <v-col cols="12" md="12" sm="12" style="padding: 0" class="p-0">
-          <v-card-title class="font-italic text-start mr-7 pa-0">Videojuegos subidos</v-card-title>
-        </v-col>
-      </v-row>
-        <div ref="container" style="width: 100% !important;">
+<v-card elevation="10" class="mx-auto" max-width="700" min-width="auto" mt->
+  <div v-if="videogameStore.loading" class="d-flex justify-center align-center" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
+    <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000"></half-circle-spinner>
+  </div>
+  <v-row align="center">
+  <v-col cols="12" md="12" sm="12" class="d-flex align-center">
+    <v-sheet class="bg-red-darken-3 d-flex justify-center" width="70" height="70" style="align-items: center;" rounded elevation="10">
+      <i class="fa-solid fa-gamepad fa-xl"></i>
+    </v-sheet>
+    <v-card-title class="font-italic text-start ml-3">Videojuegos subidos</v-card-title>
+  </v-col>
+</v-row>
+<v-row>
+  <v-col cols="12" md="12" sm="12" xs="12">
     <v-table>
       <thead>
         <tr>
@@ -61,8 +57,10 @@
         </TransitionGroup>
       </tbody>
     </v-table>
-  </div>
-  <!-- Eliminar juego -->
+  </v-col>
+</v-row>
+
+ 
   <v-dialog v-model="deleteGame" max-width="500" v-if="borrarJuego">
     <v-card>
       <div class="bg-white text-black d-flex align-center pa-2">
@@ -153,7 +151,7 @@
       </v-card>
     </v-dialog>
   </div>
-    </v-card>
+</v-card>
     <div class="d-flex justify-center mt-4">
       <v-pagination v-model="page" :length="pageCount" prev-icon="fa-solid fa-arrow-left"
         next-icon="fa-solid fa-arrow-right" active-color="red-darken-3" @update:modelValue="getDataPage"></v-pagination>
@@ -224,7 +222,7 @@ const item = reactive({
 onBeforeMount(async () => {
   videogameStore.userVideogames = await videogameStore.getVideogamesByUser();
   videogames.value = videogameStore.userVideogames;
-
+  
   getDataPage();
 
 
@@ -256,8 +254,9 @@ const getDataPage = () => {
   datosPaginados.value = videogameStore.userVideogames.slice(startIndex, endIndex);
 };
 
-watch([videogameStore.userVideogames, itemsPerPage, page], () => {
-  getDataPage();
+watch(() => videogameStore.userVideogames, (newValue, oldValue) => {
+  getDataPage()
+
 });
 
 // const change = () => {
