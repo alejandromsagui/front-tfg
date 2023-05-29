@@ -1,6 +1,11 @@
 <template>
     <div class="background"></div>
     <div class="dark-layer"></div>
+    <div v-if="emailStore.loading" class="d-flex justify-center align-center"
+      style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
+      <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000">
+      </half-circle-spinner>
+    </div>
     <v-container fluid class="fill-height">
         <v-row align="center" justify="center">
             <v-col cols="12" sm="8" md="6">
@@ -33,17 +38,22 @@
                                     seguridad de tu cuenta
                                 </h3>
                                 <v-form ref="form" @submit.prevent="changePassword">
-                                    <v-text-field label="Nueva contraseña" type="password" class="text-white mr-3" :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                                    (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
-                                    ]" v-model="userData.password" />
+                                    <v-text-field label="Nueva contraseña" type="password" class="text-white mr-3" :rules="[
+                                        (val) => (val && val.length > 0) || 'Este campo es obligatorio',
+                                        (val) => (val && val.length > 5) || 'La contraseña debe tener al menos 6 caracteres'
+                                    ]" v-model="userData.newPassword"></v-text-field>
 
                                     <v-text-field label="Repite la contraseña" type="password" class="text-white mr-3"
-                                        :rules="[(val) => (val && val.length > 0) || 'Este campo es obligatorio',
-                                        (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
-                                        ]" v-model="userData.confirmPassword" />
+                                        :rules="[
+                                            (val) => (val && val.length > 0) || 'Este campo es obligatorio',
+                                            (val) => (val && val.length > 5) || 'La contraseña debe tener al menos 6 caracteres'
+                                        ]" v-model="userData.confirmPassword"></v-text-field>
+
                                     <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
                                         type="submit">Continuar</v-btn>
                                 </v-form>
+
+
                             </v-col>
                         </v-row>
                     </v-window-item>
@@ -56,7 +66,7 @@
 <script setup>
 import { reactive, ref } from "vue"
 import { toast } from 'vue3-toastify';
-import { instance_axios } from "../middlewares/axios";
+import { HalfCircleSpinner } from 'epic-spinners'
 import 'vue3-toastify/dist/index.css';
 import { useEmailStore } from "../stores/sendEmail";
 import { router } from "../routes";
@@ -64,64 +74,77 @@ const emailStore = useEmailStore()
 
 
 const userCode = reactive({ code: '' })
-const userData = reactive({ password: '', confirmPassword: '' })
+const userData = reactive({ newPassword: '', confirmPassword: '' })
 const form = ref(null)
 const transition = ref(1)
 const isCorrect = ref(false)
 
-const confirmCode = async () => {
-
-    let formIsValid = await form.value.validate();
-
-    if (formIsValid) {
-
-        if (userCode.code === emailStore.getCode) {
-            toast.success("Código correcto, configura tu nueva contraseña", {
-                autoClose: 2000,
-                theme: 'colored'
-            });
-            isCorrect.value = true
-            transition.value = 2
-        } else {
-            toast.error("Código incorrecto. Inténtalo de nuevo", {
-                autoClose: 2000,
-                theme: 'colored'
-            })
-            form.value.reset()
-        }
-    }
-
-}
-
-const changePassword = async () => {
-    let formIsValid = await form.value.validate();
-
-    const update = {
-        password: userData.password
-    }
-    console.log(emailStore.getNickname)
+const confirmCode = () => {
+    let formIsValid = form.value.validate();
 
     if (formIsValid) {
-        try {
-            console.log(emailStore.getNickname);
-            console.log(userData.confirmPassword);
-            await instance_axios.put('/updatePassword/' + emailStore.getNickname, update);
+        const nickname = emailStore.nickname;
+        const email = emailStore.email;
+        console.log('valor de user code code: ', userCode.code);
 
-            toast.success("¡Contraseña actualizada!", {
-                autoClose: 2000,
-                theme: 'colored'
-            });
+        emailStore
+            .confirmCode(nickname, email, userCode.code)
+            .then((response) => {
+                if (response) {
+                    toast.success(response, {
+                        theme: "colored",
+                        autoClose: 3000
+                    });
 
-            router.push({ path: '/acceso' })
-        } catch (error) {
-            toast.error("Ha habido un error al actualizar la contraseña", {
-                autoClose: 2000,
-                theme: 'colored'
+                    isCorrect.value = true;
+                    transition.value = 2
+                }
+
             })
-
-        }
+            .catch((error) => {
+                toast.error(error.message, {
+                    theme: "colored",
+                    autoClose: 3000
+                });
+            });
     }
-}
+};
+
+
+
+const changePassword = () => {
+  let formIsValid = form.value.validate();
+  const nickname = emailStore.nickname;
+  const email = emailStore.email;
+  const code = emailStore.code;
+
+  if (formIsValid) {
+    emailStore
+      .changePassword(nickname, email, userData.newPassword, userData.confirmPassword, userCode.code)
+      .then((response) => {
+
+        console.log('Valor nickname: ', nickname);
+        console.log('Valor newpasswd: ', userData.newPassword);
+        console.log('Valor confirm: ', userData.confirmPassword);
+        console.log('Valor code: ', userCode.code);
+
+
+        if (response) {
+          toast.success(response.message, {
+            theme: "colored",
+            autoClose: 3000
+          });
+
+          router.push({ path: '/acceso' })
+        }
+      })
+      .catch((error) => {
+     // Imprime el objeto de error completo en la consola
+        toast.error(error || "Ha ocurrido un error");
+      });
+  }
+};
+
 
 </script>
 

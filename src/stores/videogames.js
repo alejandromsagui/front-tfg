@@ -3,6 +3,7 @@ import headers, { instance_axios } from "../middlewares/axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { router } from "../routes";
+import { Buffer } from "buffer";
 
 export const useVideogameStore = defineStore({
   id: "videogame",
@@ -37,53 +38,6 @@ export const useVideogameStore = defineStore({
     },
   },
   actions: {
-    async newVideogame(nvg) {
-      this.loading = true;
-
-      try {
-        const options = {
-          headers: headers(true),
-        };
-        const res = await instance_axios.post("/newVideogame", nvg, options);
-
-        this.loading = false;
-
-        this.getVideogames();
-        this.userVideogames = this.getVideogamesByUser()
-        
-        console.log('Valor de user videogames ',);
-        toast.success(res.data.message, {
-          autoClose: 2000,
-          theme: "colored",
-        });
-
-        // const token = localStorage.getItem('token');
-        // const [header, payload, signature] = token.split(".");
-        // const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
-
-        // console.log('Lo que trae this.videogames ',  this.videogames);
-        // console.log(this.videogames.find(v => v.userId === decodedPayload.id));
-        // this.videogames.push(res.videogame);
-        // this.userVideogames = this.videogames.find(v => v.userId === decodedPayload.id)
-
-        
-        // console.log('Valor de videogames ', this.videogames);
-        // console.log(this.videogames.length);
-        // console.log('Valor de user videogames ', this.userVideogames);
-
-        this.dialog = false;
-        // return this.videogames;
-      } catch (error) {
-        console.log(error);
-        toast.error(error.response.data.message, {
-          autoClose: 2000,
-          theme: "colored",
-        });
-      } finally {
-        this.loading = false;
-      }
-    },
-
     async getVideogames() {
       this.loading = true;
 
@@ -100,6 +54,48 @@ export const useVideogameStore = defineStore({
         });
       }
     },
+
+    async newVideogame(nvg) {
+      this.loading = true;
+
+      try {
+        const options = {
+          headers: headers(true),
+        };
+        const res = await instance_axios.post("/newVideogame", nvg, options);
+
+        this.loading = false;
+
+        await this.getVideogames();
+
+        const token = localStorage.getItem('token');
+        const [header, payload, signature] = token.split(".");
+        const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+
+
+        this.videogames.push(res.data.videogame)
+        console.log(this.videogames.find(v => v.userId === decodedPayload.id))
+        this.userVideogames = this.videogames.find(v => v.userId === decodedPayload.id)
+
+        toast.success(res.data.message, {
+          autoClose: 2000,
+          theme: "colored",
+        });
+
+        this.dialog = false;
+
+      } catch (error) {
+        console.log(error);
+        toast.error(error.response.data.message, {
+          autoClose: 2000,
+          theme: "colored",
+        });
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    
 
     async getVideogamesByUser(){
       this.loading = true;

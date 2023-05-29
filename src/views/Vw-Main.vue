@@ -80,11 +80,6 @@
       <div class="d-flex justify-end mr-3 mt-5">
         <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3 fa-xl" @click="dialog = false"></v-icon>
       </div>
-      <div class="d-flex justify-center d-inline-block">
-        <a :href="'/perfil/' + nuevoJuego.nickname" target="_blank" class="text-decoration-none mt-2 ml-3">Ver más</a>
-        <i class="fa-solid fa-arrow-up-right-from-square align-self-center ml-3 mt-1"></i>
-        <v-rating v-model="ratingDescription" size="x-small" class="ml-6" color="yellow darken-1 mt-1"></v-rating>
-      </div>
     </div>
     <v-row class="center mx-5">
               <v-col cols="12" sm="6" md="4" xs="6" class="col-dialog">

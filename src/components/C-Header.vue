@@ -43,12 +43,12 @@
           <CDialog />
 
           <v-btn class="link" text @click="goPerfil()">
-            <i class="fa-solid fa-user mr-1"></i> Perfil
+            <i class="fa-solid fa-user mr-1"></i> alejandro
           </v-btn>
 
-          <v-btn class="link" text>
+          <!-- <v-btn class="link" text>
             <i class="fa-solid fa-cart-shopping mr-1"></i> Carrito
-          </v-btn>
+          </v-btn> -->
 
           <v-menu transition="slide-x-transition">
             <template v-slot:activator="{ props }">
@@ -149,7 +149,7 @@
           </v-col>
           <v-col class="align-center" cols="auto">
             <v-list-item class="pa-0 d-flex">
-              <p class="data ml-8 mt-4">nombre de usuario</p>
+              <p class="data ml-8 mt-4">{{nickname}}</p>
               <p class="data ml-8">usuario@gmail.com</p>
             </v-list-item>
           </v-col>
@@ -223,7 +223,6 @@ onMounted(async () => {
   }
 })
 
-
 const getNamekoins = async () => {
   try {
     const res = await userDataStore.getUserByNickname()
@@ -234,10 +233,13 @@ const getNamekoins = async () => {
   }
 }
 
-onBeforeUnmount(() => {
+const nickname = ref()
+onBeforeUnmount(async() => {
   if (!token) {
     router.push({ path: '/acceso' })
   }
+
+  console.log('Valor de nickname: ', nickname.value);
 })
 
 const recharge = async () => {

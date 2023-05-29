@@ -71,7 +71,7 @@
             </div>
         </v-col>
 
-        <v-col cols="12" class="d-none d-md-block">
+        <v-col cols="12" md="12" sm="12" xs="12" class="d-none d-md-block">
             <div style="position: relative; margin-top: 100px;">
                 <div class="card mr-5 elevation-0"  @click="showNickname = true; showEmail = false; showPassword = false; showRecommendations = false; showTransactions = false">
                     <v-card class="bg-transparent d-flex flex-column align-center justify-center" height="100" width="150">
@@ -154,12 +154,13 @@
             </div>
         </v-col>
     </v-row>
-      <p class="text-white text-center text-h4 mt-10 d-none d-md-block" v-if="exportingData"
+      <p class="text-white text-center text-h4 mt-10 d-none d-lg-block" v-if="exportingData"
       >Exportando datos...</p>
+
         <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showNickname">
-    <v-col cols="12" md="6" sm="1" xs="1" class="pa-0">
+          <v-col cols="12" md="6" sm="10" xs="10" class="pa-0">
       <v-sheet height="auto" class="mb-16 d-flex justify-center align-center d-none" rounded>
-        <v-col cols="12" md="6" sm="1">
+        <v-col cols="12" md="12" sm="12" xs="12">
           <h2 class="text-center text-white font-weight-bold mb-5">
             Cambiar nombre de usuario
           </h2>
@@ -179,9 +180,9 @@
   </v-row>
 
 <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showEmail">
-  <v-col cols="12" md="6" sm="1" xs="1" class="pa-0">
+  <v-col cols="12" md="6" sm="10" xs="10" class="pa-0">
     <v-sheet height="auto" class="mb-16 d-flex justify-center align-center d-none" rounded>
-      <v-col cols="12" md="6" sm="1">
+      <v-col cols="12" md="6" sm="6" xs="6" class="pa-0">
         <h2 class="text-center text-white font-weight-bold mb-5">
           Cambiar correo de la cuenta
         </h2>
@@ -200,9 +201,9 @@
   </v-col>
 </v-row>
 <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showPassword">
-  <v-col cols="12" md="6" sm="1" xs="1" class="pa-0">
+  <v-col cols="12" md="6" sm="10" xs="10" class="pa-0">
     <v-sheet height="auto" class="mb-16 d-flex justify-center align-center d-none" rounded>
-      <v-col cols="12" md="6" sm="1">
+      <v-col cols="12" md="6" sm="6" xs="6" class="pa-0">
         <h2 class="text-center text-white font-weight-bold mb-5">
           Cambiar contraseña de la cuenta
         </h2>
@@ -215,11 +216,11 @@
   </v-col>
 </v-row>
 <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showRecommendations">
-  <v-col cols="12" md="6" sm="3" class="pa-0">
+  <v-col cols="12" md="6" sm="10" xs="10" class="pa-0">
     <v-sheet :height="480" class="mb-16 d-flex justify-center align-center d-none" rounded>
       <v-container>
         <v-row justify="center">
-          <v-col cols="12" md="8">
+          <v-col cols="12" md="6" sm="6" xs="6" class="pa-0">
             <h2 class="text-center text-white font-weight-bold mb-10">
               Envíanos una recomendación
             </h2>
@@ -240,7 +241,7 @@
 </v-row>
 
 <v-row class="d-flex justify-center align-center" style="height: 60vh" v-if="showTransactions">
-  <v-col cols="12" md="6" sm="3" class="pa-0">
+  <v-col cols="12" md="6" sm="6" xs="6" class="pa-0">
     <CVideogamesUploaded></CVideogamesUploaded>
   </v-col>
 </v-row>
@@ -410,10 +411,10 @@ const handleExportDataClick = () => {
 
 let videogames = ref([]);
 const getVideogames = async () => {
-    videogames.value = await videogameStore.getVideogamesByUser();
+  videogames.value = await videogameStore.getVideogamesByUser();
 };
 </script>
-<style lang="css">
+<style lang="css" scoped>
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 * {

@@ -5,6 +5,7 @@
     <div class="background-register-mobile" v-if="registerStore.transition == 2 && isMobile"></div>
     <div class="background-recovery" v-if="registerStore.transition == 3"></div>
     <div class="dark-layer"></div>
+
     <v-container fluid class="fill-height">
         <template>
             <half-circle-spinner v-if="authStore.loading"
@@ -31,8 +32,8 @@
                                         v-model="userLogin.password" />
                                 </v-form>
                                 <div class="text-center mt-3">
-                                    <v-btn rounded color="#F80808" dark class="button mb-6 mt-2" @click="authUser()">Iniciar
-                                        sesión</v-btn>
+                                    <v-btn rounded dark class="button mb-6 mt-2"
+                                                 @click="authUser()">Acceder</v-btn>
                                 </div>
                                 <h3 class=" text-center mt-3 text-white"><v-btn variant="plain" @click="registerStore.transition = 3"
                                         class="password-recovery">¿Has olvidado tu contraseña?</v-btn></h3>
@@ -59,7 +60,7 @@
                                         v-model="userLogin.password" />
 
                                     <div class="text-center mt-3">
-                                        <v-btn rounded color="#F80808" dark class="button mb-6" @click="authUser()">Iniciar
+                                        <v-btn rounded dark class="button mb-6" @click="authUser()">Iniciar
                                             sesión</v-btn>
                                     </div>
                                     <h3 class="text-center mt-3 text-white"><v-btn variant="plain" @click="registerStore.transition = 3"
@@ -91,7 +92,7 @@
                                             (val) => (val && val.length > 5 || 'La contraseña debe ser superior a 5 caracteres')
                                             ]" />
                                         <div class="text-center mt-3">
-                                            <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
+                                            <v-btn rounded dark class="button mb-6 mt-2"
                                                 type="submit">Registro</v-btn>
                                         </div>
                                         <h3 class=" text-center mt-3 text-white"><v-btn variant="plain"
@@ -121,7 +122,7 @@
                                             ]" />
 
                                         <div class="text-center mt-3">
-                                            <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
+                                            <v-btn rounded dark class="button mb-6 mt-2"
                                                 type="submit">Registro</v-btn>
                                         </div>
                                         <h3 class=" text-center mt-3 text-white"><v-btn variant="plain"
@@ -141,15 +142,14 @@
                                         style="color:red;font-weight: bold;">usuario</span>
                                     y te enviaremos un correo electrónico de recuperación
                                 </h2>
-                                <v-form ref="form" @keyup.enter="sendEmailUser">
+                                <v-form ref="form">
                                     <v-text-field label="Email o nombre de usuario" name="user-data"
                                         prepend-icon="fa-solid fa-user" type="text"
                                         class="data-user text-center text-white mr-3"
                                         :rules="[v => !!v || 'Este campo es obligatorio']" />
 
                                     <div class="text-center mt-3">
-                                        <v-btn rounded color="#F80808" dark class="button mb-6 mt-2"
-                                            @click="sendEmailUser()">Enviar
+                                        <v-btn rounded dark class="button mb-6 mt-2" @click.prevent="sendEmailUser">Enviar
                                         </v-btn>
                                     </div>
                                 </v-form>
@@ -291,16 +291,17 @@ const registerUser = async () => {
 }
 
 .button {
-    color: #fff;
+    flex: 0 0 auto !important;
+    background: linear-gradient(to left, #F80808 50%, #fff 50%) right !important;
+    background-size: 200% !important;
+    transition: .3s ease-out !important;
     font-weight: bold;
 }
 
 .button:hover {
-    background-color: #fff !important;
-    color: #F80808;
-    font-weight: bold;
+    background-position: left !important;
+    color: red;
 }
-
 .password-recovery {
     color: #fff;
     font-weight: bold;
