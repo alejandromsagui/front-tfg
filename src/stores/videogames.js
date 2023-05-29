@@ -130,20 +130,25 @@ export const useVideogameStore = defineStore({
         }
       },
 
-      async updateState(id, status){
+      async updateState(id, status) {
         this.loading = true;
-
+      
         try {
-          const response = await instance_axios.put(`/updateState/${id}`, {status})
-        this.loading = false;  
-          this.getVideogamesByUser()
-        return response.data;
+          const response = await instance_axios.put(`/updateState/${id}`, { status });
+          this.loading = false;
+          this.getVideogamesByUser();
+          return response; 
+      
         } catch (error) {
-          throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
+          throw new Error(
+            error.response ? error.response.data.message : 'Ha ocurrido un error'
+          );
+      
         } finally {
-          this.loading = false; 
+          this.loading = false;
         }
       }
+    
+      }      
     }
-  },
-);
+)

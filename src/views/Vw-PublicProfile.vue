@@ -1,9 +1,9 @@
 <template>
     <div class="d-flex justify-center align-center" style="background-image: url('../src/assets/images/zelda-modified.jpg');
-            background-size: cover;
-            background-position: center top;
-            background-repeat: no-repeat;
-            height: 300px;">
+                    background-size: cover;
+                    background-position: center top;
+                    background-repeat: no-repeat;
+                    height: 300px;">
         <v-avatar size="100" style="margin-top: -50px;" class="ml-2">
             <img src="../assets/images/avatar.jpg" alt="Profile Picture" style="width: 100px">
         </v-avatar>
@@ -17,7 +17,7 @@
 
                     <v-col cols="12" md="6" class="d-flex justify-center" v-if="!useUserStore.position">
                         <v-tooltip text="Debes haber comprado o vendido un videojuego 
-          para participar en el ranking">
+                  para participar en el ranking">
 
                             <template v-slot:activator="{ props }">
                                 <i class="fa-solid fa-ranking-star fa-2xl" :style="{ color: '#808080' }" v-bind="props"></i>

@@ -1,52 +1,58 @@
 <template>
     <CProfile>
         <template #username>
+            <v-row justify="center">
             <v-form ref="form" @submit.prevent="changeNickname">
                 <v-text-field label="Nuevo nombre de usuario" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" :rules="[requiredField]" v-model="userModifier.nickname"
-                    @blur="onChange"></v-text-field>
-                <v-text-field label="Contraseña actual" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" type="password" :rules="[requiredField, passwordLength]"
+                    style="width: 350px;" type="text" :rules="[requiredField]"
+                    v-model="userModifier.nickname"></v-text-field>
+                <v-text-field label="Nueva contraseña" variant="outlined" class="align-items-center mx-auto"
+                    style="width: 350px;" type="password" :rules="[requiredField, passwordLength]"
                     v-model="userModifier.password"></v-text-field>
-                <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
-                    <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit"
-                        variant="outlined">CAMBIAR
+                <div style="width: 350px; margin-top: 20px; margin-left: auto; margin-right: auto; padding-bottom: 20px;">
+                    <v-btn variant="outlined" class="text-white text-center font-weight-bold bg-red-darken-3" type="submit"
+                        block>CAMBIAR
                         NOMBRE DE USUARIO</v-btn>
                 </div>
             </v-form>
+            </v-row>
         </template>
         <template #email>
+            <v-row justify="center">
             <v-form ref="form" @submit.prevent="changeEmail">
                 <v-text-field label="Nuevo email" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" :rules="[requiredField, isValidEmailRule]"
+                    style="width: 350px;" :rules="[requiredField, isValidEmailRule]"
                     v-model="userModifier.email"></v-text-field>
                 <v-text-field label="Contraseña actual" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" type="password" :rules="[requiredField, passwordLength]"
+                    style="width: 350px;" type="password" :rules="[requiredField, passwordLength]"
                     v-model="userModifier.password"></v-text-field>
-                <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
+                <div style="width: 350px; margin-top: 20px; margin-left: auto; margin-right: auto; padding-bottom: 20px;">
                     <v-btn block class="text-white text-center font-weight-bold bg-red-darken-3" type="submit"
                         variant="outlined">CAMBIAR
                         EMAIL</v-btn>
                 </div>
             </v-form>
+        </v-row>
         </template>
         <template #password>
+            <v-row justify="center">
             <v-form ref="form" @submit.prevent="changePassword">
                 <v-text-field label="Contraseña actual" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" type="password" :rules="[requiredField, passwordLength]"
+                    style="width: 350px;" type="password" :rules="[requiredField, passwordLength]"
                     v-model="userModifier.oldPassword"></v-text-field>
                 <v-text-field label="Nueva contraseña" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" type="password" :rules="[requiredField, passwordLength, passwordMatch]"
+                    style="width: 350px;" type="password" :rules="[requiredField, passwordLength, passwordMatch]"
                     v-model="userModifier.newPassword"></v-text-field>
                 <v-text-field label="Repite la nueva contraseña" variant="outlined" class="align-items-center mx-auto"
-                    style="width: 400px;" type="password" :rules="[requiredField, passwordLength, passwordMatch]"
+                    style="width: 350px;" type="password" :rules="[requiredField, passwordLength, passwordMatch]"
                     v-model="userModifier.confirmPassword"></v-text-field>
-                <div style="width: 300px; margin-top: 20px; margin-left: auto; margin-right: auto;">
+                <div style="width: 350px; margin-top: 20px; margin-left: auto; margin-right: auto; padding-bottom: 20px;">
                     <v-btn variant="outlined" class="text-white text-center font-weight-bold bg-red-darken-3" type="submit"
                         block>CAMBIAR
                         CONTRASEÑA</v-btn>
                 </div>
             </v-form>
+            </v-row>
         </template>
     </CProfile>
 </template>
@@ -110,10 +116,10 @@ const changeEmail = () => {
     })
 }
 
-const changePassword =  () => {
-    if(userModifier.newPassword === userModifier.confirmPassword){
+const changePassword = () => {
+    if (userModifier.newPassword === userModifier.confirmPassword) {
         useModifierStore.changePassword(userModifier.oldPassword, userModifier.confirmPassword).then(r => {
-            if(r.status === 200){
+            if (r.status === 200) {
                 toast.success(r.data.message, {
                     theme: "colored",
                     autoClose: 3000
@@ -127,11 +133,11 @@ const changePassword =  () => {
                 autoClose: 3000
             })
         })
-    }else {
+    } else {
         toast.error('Las contraseñas no coinciden', {
-                theme: "colored",
-                autoClose: 3000
-            })
+            theme: "colored",
+            autoClose: 3000
+        })
     }
 
 }
@@ -158,4 +164,5 @@ const changePassword =  () => {
 
 .d-none.d-md-block.pa-0 {
     margin-left: -50px;
-}</style>
+}
+</style>
