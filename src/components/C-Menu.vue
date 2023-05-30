@@ -66,11 +66,12 @@ const emitValueToUpload = () => {
 }
 
 .link::before {
-    background-color: transparent !important;
+  background-color: transparent !important;
 }
 
 .link:hover {
-    color: rgb(248, 8, 8);
-    transition: 0.3s;
+  color: rgb(248, 8, 8);
+  transition: color 0.3s ease;
 }
+
 </style>

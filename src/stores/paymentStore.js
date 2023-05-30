@@ -33,10 +33,14 @@ export const paymentStore = defineStore({
             try {
                 const response = await instance_axios.post('/newTransaction', nt)
                 console.log('Response desde el store de pago: ',response.data);
+                return response;
             } catch (error) {
-                console.log(error);
-            }
-        },
+                throw new Error(
+                  error.response ? error.response.data.message : "Ha ocurrido un error"
+                );
+        
+                }
+            },
         async getTransactions(nickname){
             try {
                 const response = await instance_axios.get(`/findTransaction/${nickname}`)

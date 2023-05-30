@@ -30,8 +30,7 @@
 
     <v-row>
       <TransitionGroup name="list">
-        <v-col
-          v-for="videogame in videogameStore.searchVideogame.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))"
+        <v-col v-for="videogame in videogameStore.searchVideogame.filter(game => game.status === 'En venta')"
           :key="videogame._id" cols="12" sm="6" md="4">
           <v-lazy :options="{ 'threshold': 0.5 }" transition="fade-transition">
             <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" min-height="570"
@@ -54,11 +53,11 @@
                     </router-link>
                   </div>
                   <div v-if="authenticated">
-                    <v-tooltip text="Añadir al carrito">
+                    <!-- <v-tooltip text="Añadir al carrito">
                       <template v-slot:activator="{ props }">
                         <i class="fa-solid fa-cart-shopping mr-2" v-bind="props"></i>
                       </template>
-                    </v-tooltip>
+                    </v-tooltip> -->
                     <v-tooltip text="Denunciar publicación">
                       <template v-slot:activator="{ props }">
                         <i class="fa-solid fa-flag" v-bind="props" @click.stop="reportVideogame(videogame._id);"></i>
@@ -75,13 +74,13 @@
     <v-row v-if="nuevoJuego">
       <v-col cols="12" sm="6" md="4">
         <v-dialog v-model="dialog" transition="dialog-bottom-transition" width="1400">
-  <v-card class="dialog-card">
-    <div class="d-inline">
-      <div class="d-flex justify-end mr-3 mt-5">
-        <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3 fa-xl" @click="dialog = false"></v-icon>
-      </div>
-    </div>
-    <v-row class="center mx-5">
+          <v-card class="dialog-card">
+            <div class="d-inline">
+              <div class="d-flex justify-end mr-3 mt-5">
+                <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3 fa-xl" @click="dialog = false"></v-icon>
+              </div>
+            </div>
+            <v-row class="center mx-5">
               <v-col cols="12" sm="6" md="4" xs="6" class="col-dialog">
                 <v-card-title class="text-center text-white text-h5">{{ nuevoJuego.name }}</v-card-title>
                 <img :src=nuevoJuego.image alt="Portada" class="d-flex mx-auto rounded">
@@ -93,7 +92,7 @@
                 <v-card-title class="text-center text-red-darken-2 text-h5 mb-3">Descripción</v-card-title>
                 <v-card-text class="text-subtitle-1 text-justify">{{ nuevoJuego.description }}.</v-card-text>
                 <v-card-title class="text-center text-red-darken-2 text-h5 mb-3">Género</v-card-title>
-                
+
                 <v-card-text class="text-subtitle-1 text-center text-body-1">
                   {{ nuevoJuego.genre.join(',').replace(/,\s*/g, ', ') }}
                 </v-card-text>
@@ -274,11 +273,9 @@ const sendReview = async () => {
 }
 
 
-const createOrder = async () => {
+const createOrder = async() => {
 
-  const user = await userStore.getUserByNickname()
-
-  newTransaction.description = `Transacción realizada entre el comprador ${user.nickname} y el vendedor ${nuevoJuego.value.nickname}`
+  // const response = await userStore.getUserByNickname()
   newTransaction.price = nuevoJuego.value.price,
     newTransaction.idSeller = nuevoJuego.value.userId
   newTransaction.nicknameSeller = nuevoJuego.value.nickname;
@@ -288,33 +285,33 @@ const createOrder = async () => {
 
   console.log('Plataforma: ' + nuevoJuego.value.platform);
 
+  await usePaymentStore.newTransaction(newTransaction).then((response) => {
+    if (response.status === 200) {
+      console.log('Lo que da response: ', response);
 
-  if (user.nickname === nuevoJuego.value.nickname) {
-    toast.error('No puedes comprar tus propios juegos', {
-      autoClose: 2000,
-      theme: 'colored'
-    })
-  } else if (user.number_namekoins < newTransaction.price) {
-    toast.error('Namekoins insuficientes', {
-      autoClose: 2000,
-      theme: 'colored'
-    })
-  } else {
-    await usePaymentStore.newTransaction(newTransaction)
+      toast.success(response.data.message, {
+        autoClose: 2000,
+        theme: 'colored'
+      })
 
-    toast.success('Transacción realizada correctamente', {
-      autoClose: 2000,
-      theme: 'colored'
-    })
+      dialog.value = false;
+      comprado.value = true;
 
-    dialog.value = false;
-    comprado.value = true;
+      if (comprado.value == true) {
+        review.value = true;
+      }
 
-    if (comprado.value == true) {
-      review.value = true;
+      videogameStore.getVideogames()
     }
-  }
+  }).catch((error) => {
+    toast.error(error.message, {
+        autoClose: 2000,
+        theme: 'colored'
+      })
+  })
 }
+
+
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
@@ -325,6 +322,12 @@ const createOrder = async () => {
 
 .user {
   text-align: right;
+}
+
+.card {
+  /* Estilos iniciales */
+  /* ... */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
@@ -384,8 +387,9 @@ const createOrder = async () => {
 .card:hover .card-overlay {
   opacity: 1;
 }
+
 .dialog-card {
-  height: 600px; /* Ajusta la altura según tus necesidades */
-  overflow-y: auto; /* Agrega un desbordamiento vertical si es necesario */
+  height: 600px;
+  overflow-y: auto;
 }
 </style>
