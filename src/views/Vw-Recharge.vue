@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <!-- <v-container>
+    <v-container>
       <v-row>
         <v-col cols="12">
           <v-card class="chat-app mt-10" style="height: 80vh;">
@@ -41,6 +41,7 @@
                 <li class="clearfix" v-for="item in data" :key="item.text" style="list-style: none;">
                   <div class="message-data text-right" v-if="item.from === 'others'">
                   </div>
+                  //Revisar esto
                   <div class="message other-message float-right" v-if="item.from === 'others'">{{ item.text }}</div>
                   <div class="message-data" v-else>
                   </div>
@@ -64,49 +65,50 @@
           </v-card>
         </v-col>
       </v-row>
-    </v-container> -->
+    </v-container>
   </div>
 </template>
 
 <script setup>
-// import { socket } from "../services/socket";
-// import { ref, onMounted } from 'vue';
+import { socket } from "../services/socket";
+import { ref, onMounted } from 'vue';
 
-// const messages = ref('');
-// const data = ref([]);
-// const nick = ref('Alejandro');
+const messages = ref('');
+const data = ref([]);
+const nick = ref('Alejandro');
 
-// const sendMessage = () => {
-//   if (messages.value !== '') {
-//     const message = {
-//       from: 'me',
-//       text: messages.value
-//     };
+const sendMessage = () => {
+  if (messages.value !== '') {
+    const message = {
+      from: 'me',
+      text: messages.value
+    };
 
-//     socket.emit('chat message', {
-//       nick: nick.value,
-//       message: message
-//     });
+    socket.emit('chat message', {
+      nick: nick.value,
+      message: message
+    });
 
-//     // Limpia el campo de mensajes después de enviarlo
-//     messages.value = '';
-//   }
-// };
+    // Limpia el campo de mensajes después de enviarlo
+    messages.value = '';
+  }
+};
 
-// onMounted(() => {
-//   socket.on('chat message', (message) => {
-//     data.value.push({
-//       from: 'others',
-//       text: message // Corregido para acceder directamente a message.text
-//     });
+onMounted(() => {
+  socket.on('chat message', (message) => {
+    data.value.push({
+      from: 'others',
+      text: message // Corregido para acceder directamente a message.text
+    });
 
-//     // Desplázate al final de la lista de mensajes después de recibir uno nuevo
-//     setTimeout(() => {
-//       const chatHistory = document.querySelector(".chat-history");
-//       chatHistory.scrollTop = chatHistory.scrollHeight;
-//     }, 0);
-//   });
-// });
+    console.log('Valor de data: ', data.value);
+    // Desplázate al final de la lista de mensajes después de recibir uno nuevo
+    setTimeout(() => {
+      const chatHistory = document.querySelector(".chat-history");
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+    }, 0);
+  });
+});
 </script>
 
 <style lang="css" scoped>
