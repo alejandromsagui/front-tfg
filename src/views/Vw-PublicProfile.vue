@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex justify-center align-center" style="background-image: url('../src/assets/images/zelda-modified.jpg');
+    <div class="d-flex justify-center align-center" style="background-image: url('../assets/images/zelda-modified.jpg');
                     background-size: cover;
                     background-position: center top;
                     background-repeat: no-repeat;
