@@ -10,10 +10,15 @@ export const paymentStore = defineStore({
         async createOrder(quantity) {
             try {
                 const response = await instance_axios.post('/create-order', {quantity})
+                console.log('Response data: ', response.data);
                 console.log(response.data.links[1].href);
                 window.open(response.data.links[1].href)
+                return response.data;
             } catch (error) {
                 console.log(error);
+                throw new Error(
+                    error.response ? error.response.data.message : 'Ha ocurrido un error'
+                  );
             }
         },
         async getUser(user){

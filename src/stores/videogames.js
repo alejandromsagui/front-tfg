@@ -46,6 +46,16 @@ export const useVideogameStore = defineStore({
         this.videogames = response.data.videogames;
         console.log(response.data.videogames);
         this.loading = false;
+        const token = localStorage.getItem('token');
+
+        if(token){
+          const [header, payload, signature] = token.split(".");
+          const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+        
+
+        this.userVideogames = this.videogames.filter(v => v.userId === decodedPayload.id)
+      }
+
         return this.videogames;
       } catch (error) {
         toast.error(error.response.data.message, {
@@ -68,22 +78,22 @@ export const useVideogameStore = defineStore({
 
         await this.getVideogames();
 
-        const token = localStorage.getItem('token');
-        const [header, payload, signature] = token.split(".");
-        const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+        // const token = localStorage.getItem('token');
+        // const [header, payload, signature] = token.split(".");
+        // const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
 
 
-        this.videogames.push(res.data.videogame)
-        console.log(this.videogames.find(v => v.userId === decodedPayload.id))
-        this.userVideogames = this.videogames.find(v => v.userId === decodedPayload.id)
-
+        // this.videogames.push(res.data.videogame)
+        // console.log(this.videogames.filter(v => v.userId === decodedPayload.id))
+        // this.userVideogames = this.videogames.filter(v => v.userId === decodedPayload.id)
+   
+        
         toast.success(res.data.message, {
           autoClose: 2000,
           theme: "colored",
         });
 
         this.dialog = false;
-
       } catch (error) {
         console.log(error);
         toast.error(error.response.data.message, {
@@ -132,7 +142,7 @@ export const useVideogameStore = defineStore({
         try {
           const response = await instance_axios.delete(`/deleteVideogame/${id}`)
         this.loading = false;
-        this.videogames= this.getVideogamesByUser() 
+        this.videogames = this.userVideogames; 
         return response.data;
         } catch (error) {
           console.log(error);

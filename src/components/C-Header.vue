@@ -43,7 +43,7 @@
           <CDialog />
 
           <v-btn class="link" text @click="goPerfil()">
-            <i class="fa-solid fa-user mr-1"></i> alejandro
+            <i class="fa-solid fa-user mr-1"></i> Perfil
           </v-btn>
 
           <!-- <v-btn class="link" text>
@@ -188,6 +188,7 @@ import { storeToRefs } from 'pinia';
 import { Buffer } from "buffer";
 import { CDialog, CMenu } from "../components";
 import { paymentStore } from "../stores/paymentStore"
+import { toast } from 'vue3-toastify';
 
 
 const userDataStore = userData();
@@ -197,6 +198,9 @@ let isActive = false;
 const openDialog = () => {
   isActive = true;
 };
+
+
+
 
 const router = useRouter()
 
@@ -242,11 +246,23 @@ onBeforeUnmount(async() => {
   console.log('Valor de nickname: ', nickname.value);
 })
 
-const recharge = async () => {
-  const usepaymentStore = paymentStore()
+const recharge = () => {
+  const usepaymentStore = paymentStore();
   console.log('Valor de namekoins seleccionados: ' + selectedAmount.value);
-  await usepaymentStore.createOrder(selectedAmount.value)
-}
+
+  usepaymentStore
+    .createOrder(selectedAmount.value)
+    .then((response) => {
+      console.log('Response data:', response.data);
+    })
+    .catch((error) => {
+      console.log('Error:', error);
+      toast.error('Ha ocurrido un error al realizar la recarga', {
+        theme: 'colored',
+        autoClose: 3000
+      })
+    });
+};
 const drawer = ref(false)
 const group = ref(null)
 

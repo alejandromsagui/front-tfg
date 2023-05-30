@@ -221,7 +221,6 @@ const item = reactive({
 
 onBeforeMount(async () => {
   await videogameStore.getVideogames();
-  datosPaginados.value.push(...videogameStore.userVideogames);
   getDataPage();
 });
 
@@ -252,9 +251,9 @@ const getDataPage = () => {
   datosPaginados.value = videogameStore.userVideogames.slice(startIndex, endIndex);
 };
 
-// watch(() => videogameStore.userVideogames, (newValue, oldValue) => {
-//   getDataPage()
-// });
+watch(() => videogameStore.userVideogames, (newValue, oldValue) => {
+  getDataPage()
+});
 
 // watch(() =>  videogameStore.userVideogames, (newX) => {
 //   console.log(videogameStore.userVideogames)
