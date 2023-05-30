@@ -6,5 +6,8 @@ export default defineConfig({
   plugins: [vue()],
   esbuild: {
     drop: ['console', 'debugger'],
+  }, 
+  server:  {
+    port: 8000
   }
 })

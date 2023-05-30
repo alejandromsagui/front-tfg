@@ -143,13 +143,13 @@
                                     y te enviaremos un correo electrónico de recuperación
                                 </h2>
                                 <v-form ref="form">
-                                    <v-text-field label="Email o nombre de usuario" name="user-data"
+                                    <v-text-field label="Email o nombre de usuario"
                                         prepend-icon="fa-solid fa-user" type="text"
                                         class="data-user text-center text-white mr-3"
                                         :rules="[v => !!v || 'Este campo es obligatorio']" />
 
                                     <div class="text-center mt-3">
-                                        <v-btn rounded dark class="button mb-6 mt-2" @click.prevent="sendEmailUser">Enviar
+                                        <v-btn rounded dark class="button mb-6 mt-2" @click="sendEmailUser">Enviar
                                         </v-btn>
                                     </div>
                                 </v-form>

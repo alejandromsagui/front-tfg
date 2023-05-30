@@ -102,6 +102,7 @@ const confirmCode = () => {
 
             })
             .catch((error) => {
+                console.log('Lo que retorna error: ', error.message);
                 toast.error(error.message, {
                     theme: "colored",
                     autoClose: 3000
@@ -113,37 +114,44 @@ const confirmCode = () => {
 
 
 const changePassword = () => {
-  let formIsValid = form.value.validate();
-  const nickname = emailStore.nickname;
-  const email = emailStore.email;
-  const code = emailStore.code;
+    let formIsValid = form.value.validate();
+    const nickname = emailStore.nickname;
+    const email = emailStore.email;
 
-  if (formIsValid) {
-    emailStore
-      .changePassword(nickname, email, userData.newPassword, userData.confirmPassword, userCode.code)
-      .then((response) => {
+    if (formIsValid) {
+        emailStore
+            .changePassword(nickname, email, userData.newPassword, userData.confirmPassword, userCode.code)
+            .then(response => {
+                console.log('Valor nickname: ', nickname);
+                console.log('Valor email: ', email);
+                console.log('Valor newpasswd: ', userData.newPassword);
+                console.log('Valor confirm: ', userData.confirmPassword);
+                console.log('Valor code: ', userCode.code);
+                console.log('Lo que da response status: ', response.status);
 
-        console.log('Valor nickname: ', nickname);
-        console.log('Valor newpasswd: ', userData.newPassword);
-        console.log('Valor confirm: ', userData.confirmPassword);
-        console.log('Valor code: ', userCode.code);
+                if (response.status === 200) {
+                    console.log('Response desde dentro: ', response);
+                    toast.success(response.message, {
+                        theme: "colored",
+                        autoClose: 3000
+                    });
+                    router.push({ path: '/' });
+                }
 
-
-        if (response) {
-          toast.success(response.message, {
-            theme: "colored",
-            autoClose: 3000
-          });
-
-          router.push({ path: '/acceso' })
-        }
-      })
-      .catch((error) => {
-     // Imprime el objeto de error completo en la consola
-        toast.error(error || "Ha ocurrido un error");
-      });
-  }
+                console.log('Response desde fuera: ', response);
+            })
+            .catch((error) => {
+                console.log('Lo que retorna error: ', error.message);
+                toast.error(error.message, {
+                    theme: "colored",
+                    autoClose: 3000
+                });
+            });
+    }
 };
+
+
+
 
 
 </script>

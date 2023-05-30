@@ -101,7 +101,7 @@ export const useEmailStore = defineStore({
         this.loading = false;
       }
     },
-    async changePassword(nickname, newPassword, confirmPassword, recoveryCode) {
+    async changePassword(nickname, email, newPassword, confirmPassword, recoveryCode) {
       this.loading = true;
       try {
         if (this.nickname !== "") {
@@ -121,12 +121,11 @@ export const useEmailStore = defineStore({
             recoveryCode,
           });
           this.loading = false;
-          return response.data;
+          return response;
         }
       } catch (error) {
-        console.log('Error desde pinia: ', error);
         throw new Error(
-          error.response ? error.response.data : "Ha ocurrido un error"
+          error.response ? error.response.data.message : "Ha ocurrido un error"
         );
       } finally {
         this.loading = false;
