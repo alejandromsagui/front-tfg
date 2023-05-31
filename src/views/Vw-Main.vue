@@ -34,7 +34,7 @@
           :key="videogame._id" cols="12" sm="6" md="4">
           <v-lazy :options="{ 'threshold': 0.5 }" transition="fade-transition">
             <v-card class="card mx-auto mt-7" :margin="16" elevation="10" max-width="500" min-height="570"
-              max-height="570" @click="verJuego(videogame)">
+              max-height="570" @click="verJuego(videogame); getLastReviews(videogame.nickname)">
 
               <div style="position: relative; height: 440px;">
                 <img :src="videogame.image" alt="videogame"
@@ -96,26 +96,22 @@
                 <v-card-text class="text-subtitle-1 text-center text-body-1">
                   {{ nuevoJuego.genre.join(',').replace(/,\s*/g, ', ') }}
                 </v-card-text>
-                <v-card elevation="10" class="bg-red-darken-3">
-                  <v-card-text class="text-white">Pepe: Lorem ipsum dolor sit amet consectetur adipiscing,
-                    elit eget magnis sociis et interdum,</v-card-text>
-                  <v-card-text class="text-white"> Pepe:Lorem ipsum dolor sit amet consectetur adipiscing,
-                    elit eget magnis sociis et interdum,</v-card-text>
-                  <v-card-text class="text-white">Manolo: Lorem ipsum dolor sit amet consectetur adipiscing,
-                    elit eget magnis sociis et interdum,</v-card-text>
+                <v-card elevation="10" class="bg-red-darken-3 mt-3" v-for="review in arrayReview" :key="review.nickname">
+                  <v-card-text class="text-white">{{ review.nickname }}: {{ review.comment }}</v-card-text>
                 </v-card>
                 <v-row>
-                  <v-col cols="6">
-                    <v-card-title class="text-center text-white text-h5 mb-2 my-6">Name<span
-                        class="text-red-darken-3 font-weight-bold">koins</span></v-card-title>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-card-title class="text-center text-white text-h6 mb-2 my-6">
+                      Name<span class="text-red-darken-3 font-weight-bold">koins</span>
+                    </v-card-title>
                     <v-card-text class="text-center my-6 text-body-1">{{ nuevoJuego.price }}</v-card-text>
                   </v-col>
-                  <v-col cols="6">
-                    <v-card-title class="text-center text-red-darken-2 text-h5 mb-2 my-6">Plataforma</v-card-title>
-                    <v-card-text class=" text-center my-6 text-body-1">{{ nuevoJuego.platform
-                    }}</v-card-text>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-card-title class="text-center text-red-darken-2 text-h6 mb-2 my-6">Plataforma</v-card-title>
+                    <v-card-text class="text-center my-6 text-body-1">{{ nuevoJuego.platform }}</v-card-text>
                   </v-col>
                 </v-row>
+
                 <v-dialog transition="dialog-top-transition" width="500">
                   <template v-slot:activator="{ props }">
                     <v-btn class="bg-red-darken-3 text-white font-weight-bold d-flex mx-auto" variant="outlined"
@@ -231,6 +227,7 @@ const reportVideogame = async (id) => {
   await useReportStore.reportGame(id)
 }
 const token = localStorage.getItem('token')
+
 onMounted(async () => {
   if (token) {
     authenticated.value = true
@@ -239,6 +236,25 @@ onMounted(async () => {
   }
 })
 
+const nicknameComment = ref()
+const comment = ref()
+const arrayReview = ref([])
+
+const getLastReviews = async (nickname) => {
+  const res = await useReviewStore.getReviews(nickname)
+
+  arrayReview.value = res;
+  arrayReview.value.slice(arrayReview.value - 3, 0)
+  arrayReview.value.forEach(review => {
+    nicknameComment.value = review.nickname; // Captura el nickname del comentario
+    comment.value = review.comment; // Captura el texto del comentario
+
+    // Aquí puedes hacer lo que necesites con el nicknameComment y el comment
+    console.log('Nickname comment: ', nicknameComment.value);
+    console.log('Comment: ', comment.value);
+  });
+
+}
 const rating = reactive({
   rating: null,
   idUserProfile: '',
@@ -273,7 +289,7 @@ const sendReview = async () => {
 }
 
 
-const createOrder = async() => {
+const createOrder = async () => {
 
   // const response = await userStore.getUserByNickname()
   newTransaction.price = nuevoJuego.value.price,
@@ -305,9 +321,9 @@ const createOrder = async() => {
     }
   }).catch((error) => {
     toast.error(error.message, {
-        autoClose: 2000,
-        theme: 'colored'
-      })
+      autoClose: 2000,
+      theme: 'colored'
+    })
   })
 }
 
