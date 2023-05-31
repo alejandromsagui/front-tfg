@@ -18,9 +18,14 @@ export const userData = defineStore({
         admin: false,
         form: '',
         loading: false,
+        numRegister: null,
         position: null
     }),
-
+    getters: {
+        getNumRegisters(){
+            return this.numRegister;
+        }
+    },
     actions: {
 
         async changeNickname(nickname, password) {
@@ -204,6 +209,15 @@ export const userData = defineStore({
                     })
                 } 
               });
+          }, 
+
+          async getRegisters(){
+            try {
+                const response = await instance_axios.get('/countRegister')
+                this.numRegister = response.data.numRegistros;
+            } catch (error) {
+                return error;
+            }
           }
     },
 

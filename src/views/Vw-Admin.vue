@@ -182,8 +182,7 @@ const items = reactive([
     { text: 'Principal', action: 'main', icon: 'fa-sharp fa-solid fa-house', selected: true },
     { text: 'Lista de usuarios', action: 'users', icon: 'fa-solid fa-user' },
     { text: 'Panel de alertas', action: 'alerts', icon: 'fa-sharp fa-solid fa-bell' },
-    { text: 'Videojuegos', action: 'videogames', icon: 'fa-sharp fa-solid fa-gamepad' },
-    { text: 'Transacciones', action: 'transactions', icon: 'fa-solid fa-shop' },
+    { text: 'Videojuegos', action: 'videogames', icon: 'fa-sharp fa-solid fa-gamepad' }
 ]);
 
 const ratings = reactive([])

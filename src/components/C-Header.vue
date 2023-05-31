@@ -189,8 +189,9 @@ import { Buffer } from "buffer";
 import { CDialog, CMenu } from "../components";
 import { paymentStore } from "../stores/paymentStore"
 import { toast } from 'vue3-toastify';
+import {useVideogameStore } from "../stores/videogames"
 
-
+const videogameStore = useVideogameStore()
 const userDataStore = userData();
 const emits = defineEmits(['open-modal']);
 
@@ -277,7 +278,15 @@ const items = [
 ]
 
 
-const itemsLogged = [{
+const itemsLogged = [
+{
+    title: 'Inicio',
+    value: 'Inicio',
+    icon: 'fa-solid fa-house',
+    action: 'home'
+  },  
+{
+  
   title: 'Perfil',
   value: 'perfil',
   icon: 'fa-solid fa-user',
@@ -287,7 +296,7 @@ const itemsLogged = [{
   title: 'Subir juego',
   value: 'subir',
   icon: 'fa-solid fa-upload',
-  action: '#'
+  action: 'upload'
 },
 {
   title: 'Saldo',
@@ -295,12 +304,6 @@ const itemsLogged = [{
   icon: 'fa-solid fa-coins',
   action: '#'
 },
-{
-  title: 'Historial de compras',
-  value: 'historial de compras',
-  icon: 'fa-sharp fa-solid fa-shop',
-  action: '#'
-}
 ]
 watch(group, () => {
   drawer.value = false
@@ -323,7 +326,12 @@ const menuActionClick = (action) => {
     router.push({ path: '/registro' })
   } else if (action === "profile") {
     router.push({ path: '/perfil' })
-  } else {
+  } else if (action === "upload"){
+    videogameStore.dialog = true;
+  } else if (action === "home"){
+    router.push({ path: '/' })
+  }
+  else {
     logout()
     router.push({ path: '/acceso' })
   }

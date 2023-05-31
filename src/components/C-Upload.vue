@@ -32,12 +32,12 @@
                         </v-row>
                     </div>
                     <v-row>
-                        <v-col cols="6" sm="6" md="6">
+                        <v-col cols="12" sm="6" md="6">
                             <v-file-input label="Portada" variant="underlined" required
                                 prepend-icon="fa-solid fa-camera-retro" name="image" @input="onChange" clearable
                                 :rules="[requiredField]" @click:clear="clear"></v-file-input>
                         </v-col>
-                        <v-col cols="6" sm="6" md="6">
+                        <v-col cols="12" sm="6" md="6">
                             <v-select chips variant="underlined" :items="['PC', 'PS5', 'PS4', 'PS3', 'PS2', 'PS1', 'XBOX', 'Nintendo Switch' 
                                 ]" label="Plataforma" required :rules="[requiredField]"
                                     v-model="newVideogame.platform"></v-select>

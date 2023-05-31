@@ -107,7 +107,7 @@
                     <v-select multiple chips variant="underlined" :items="['Acción', 'Carrera', 'Deportes', 'Exploración', 'Guerra', 'Lucha', 'Online', 'Rompecabezas', 'Simulador',
                       'Violento', 'Anime', 'Casual', 'Fantasía', 'Indie', 'Multijugador', 'Plataforma', 'Sandbox', 'Supervivencia', 'Zombies',
                       'Aventura', 'Cooperativo', 'Estrategia', 'FPS', 'JRPG', 'Mundo Abierto', 'Rol', 'Shooter', 'Terror'
-                    ]" label="Género" required :rules="[requiredField]" v-model="editarJuego.genre"></v-select>
+                    ]" label="Género" required :rules="[requiredField]" v-model="genresArray"></v-select>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field label="Precio" required variant="underlined" type="number"
@@ -184,11 +184,14 @@ const items = reactive({
   changeState: ''
 })
 
+const genresArray = ref([])
 const verJuego = (videogame) => {
   editarJuego.value = videogame
   edit.value = true
-  console.log(editarJuego.value.name);
-  console.log('id', editarJuego.value._id);
+  const genresString = editarJuego.value.genre[0];
+   genresArray.value = genresString.split(",");
+
+console.log(genresArray);
 }
 
 const deleteJuego = (videogame) => {
@@ -275,7 +278,7 @@ const editVideogame = (id) => {
   data.append("name", editarJuego.value.name)
   data.append("description", editarJuego.value.description)
   data.append("price", editarJuego.value.price)
-  data.append("genre", editarJuego.value.genre)
+  data.append("genre", genresArray.value)
   data.append("platform", editarJuego.value.platform)
   data.append("image", file.value);
   

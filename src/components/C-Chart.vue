@@ -5,28 +5,25 @@
 </template>
 
 <script setup>
-import { socket } from '../services/socket';
 import Chart from 'chart.js/auto';
-import { onMounted } from "vue"
+import { userData } from "../stores/userData"
+import { onBeforeMount, onMounted, ref, watch } from "vue"
 
-socket.on('documentCount', (count) => {
-  console.log('Número de documentos:', count);
-  // Actualiza la información en tu interfaz de usuario con el nuevo recuento de documentos
-});
+const count = ref(0)
+const useUserData = userData()
+
 const labels = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June'
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio'
 ]
 
 const data = {
   labels: labels,
   datasets: [{
     label: '', // Eliminado el valor del label
-    data: [65, 59, 80, 81, 56, 55, 40],
+    data: [1, 5, 6, count.value],
     fill: false,
     borderColor: '#C62828',
     tension: 0.1
@@ -45,34 +42,25 @@ const config = {
   }
 }
 
-//Lo del legend para poner lo de display a false:
+const countRef = ref(useUserData.numRegister)
 
-// var myChart = new Chart(ctx, {
-//    type: 'line',
-//    data: {
-//       labels: ['Point 1', 'Point 2', 'Point 3', 'Point 4'],
-//       datasets: [{
-//          labels: "This will be hide",
-//          data: [20, 50, 40, 30],
-//          backgroundColor: ["red", "blue", "orange", "green"]
-//       }]
-//    },
-//    options: {
-//       legend: {
-//          display: false //This will do the task
-//       }
-//    }
-// });
-onMounted(() => {
+const getData = () => {
+  data.datasets[0].data = [1, 5, 6, count.value]
+}
+
+onBeforeMount(async () => {
+  await useUserData.getRegisters()
+  count.value = useUserData.numRegister
+  getData()
+
   const myChart = new Chart(
-  document.getElementById('myChart'),
-  config
-)
+    document.getElementById('myChart'),
+    config
+  )
 })
 
-
+watch(countRef, () => {
+  count.value = countRef.value
+  getData()
+})
 </script>
-
-<style lang="css" scoped>
-
-</style>
