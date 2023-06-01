@@ -72,6 +72,15 @@ export const reportStore = defineStore({
           theme: "colored",
         });
       }
+    },
+
+    async getVideogamesReported(){
+      try {
+        const res = await instance_axios.get('/videogamesReported')
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
     }
   },
 });
