@@ -164,9 +164,9 @@ export const userData = defineStore({
             }
         },
 
-        async newRecommendation(message) {
+        async newRecommendation(details) {
             try {
-                const response = await instance_axios.post('/newRecommendation', { message })
+                const response = await instance_axios.post('/newRecommendation', { details })
                 toast.success(response.data.message, {
                     theme: "colored",
                     autoClose: 3000

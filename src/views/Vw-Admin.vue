@@ -24,7 +24,7 @@
     </v-navigation-drawer>
 
     <v-container fluid>
-        <template v-if="!showUsers && !showAlerts">
+        <template v-if="!showUsers && !showAlerts && !showVideogames">
             <v-row class="justify-center mt-5">
                 <v-col cols="12" md="6">
                     <v-card rounded>
@@ -149,6 +149,9 @@
         <template v-if="showAlerts">
             <CNotifications />
         </template>
+        <template v-if="showVideogames">
+            <CVideogamesReported></CVideogamesReported>
+        </template>
     </v-container>
 </template>
 
@@ -162,6 +165,7 @@ import { reviewStore } from "../stores/reviewStore"
 import { socket } from "../services/socket"
 import { router } from "../routes";
 import { toast } from 'vue3-toastify';
+import { CVideogamesReported } from '../components';
 import 'vue3-toastify/dist/index.css';
 
 const authStore = useLoginStore();
@@ -173,7 +177,7 @@ const showUsers = ref(false);
 const showAlerts = ref(false);
 const showMain = ref(false)
 const searchQuery = ref()
-
+const showVideogames = ref(false)
 
 
 const isMobile = computed(() => window.innerWidth <= 960)
@@ -249,6 +253,7 @@ const handleItemClick = async (item) => {
     if (item.action === 'users') {
         showUsers.value = true;
         showAlerts.value = false;
+        showVideogames.value = false;
 
         const getUsers = await userDataStore.getUsers()
 
@@ -260,9 +265,15 @@ const handleItemClick = async (item) => {
     } else if (item.action === 'alerts') {
         showAlerts.value = true;
         showUsers.value = false;
+        showVideogames.value = false;
     } else if (item.action === 'main') {
         showAlerts.value = false;
         showUsers.value = false;
+        showVideogames.value = false;
+    } else if(item.action === 'videogames'){
+        showAlerts.value = false;
+        showUsers.value = false;
+        showVideogames.value = true;
     }
 }
 

@@ -228,9 +228,9 @@
               Si tienes alguna sugerencia para mejorar la plataforma,
               escríbela aquí y lo tendremos en cuenta
             </p>
-            <v-textarea label="Recomendación" clearable no-resize v-model="message" variant="outlined"></v-textarea>
+            <v-textarea label="Recomendación" clearable no-resize v-model="details" variant="outlined"></v-textarea>
             <div style="width: 350px; margin-top: 20px; margin-left: auto; margin-right: auto; padding-bottom: 20px;">
-                    <v-btn variant="outlined" class="button text-white text-center font-weight-bold bg-red-darken-3" @click="newRecommendation(message)"
+                    <v-btn variant="outlined" class="button text-white text-center font-weight-bold bg-red-darken-3" @click="newRecommendation(details)"
                         block>ENVIAR RECOMENDACIÓN</v-btn>
                 </div>
           </v-col>
@@ -279,7 +279,7 @@ const data = reactive({
 });
 
 const showTransactions = ref(true);
-const message = ref();
+const details = ref();
 const getData = async () => {
     const token = localStorage.getItem("token");
     const [header, payload, signature] = token.split(".");
@@ -292,8 +292,9 @@ const getData = async () => {
 let exportingData = ref(false)
 const newRecommendation = (data) => {
   userDataStore.newRecommendation(data).then((r) => {
+    console.log('Lo que llega de data: ', data);
     if(r.status === 200){
-      message.value = ''
+      details.value = ''
     }
   }).catch((e) => {
 

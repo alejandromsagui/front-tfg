@@ -36,6 +36,7 @@ export const reportStore = defineStore({
           theme: "colored",
         });
       } catch (error) {
+        console.log(error);
         loginStore.logout()
         toast.error(error.response.data.message, {
           autoClose: 3000,
