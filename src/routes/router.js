@@ -4,6 +4,7 @@ import { instance_axios } from '../middlewares/axios';
 import { useLoginStore } from "../stores/login";
 import { useEmailStore } from '../stores/sendEmail';
 import { userData } from '../stores/userData'
+import { Buffer } from 'buffer';
 
 
 const routes = [
@@ -30,9 +31,11 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.meta.requiresAdmin) {
         try {
-            const response = await userDataStore.getPermission()
-            if (!response) {
-                next({ name: 'Home' });
+            const token = localStorage.getItem('token')
+            const [header, payload, signature] = token.split(".");
+            const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+            if(decodedPayload.rol != "Administrador"){
+                next({ name: 'Home'})
             } else {
                 next();
             }

@@ -23,7 +23,7 @@ const data = {
   labels: labels,
   datasets: [{
     label: '', // Eliminado el valor del label
-    data: [1, 5, 6, count.value],
+    data: [1, 5, 7, count.value],
     fill: false,
     borderColor: '#C62828',
     tension: 0.1

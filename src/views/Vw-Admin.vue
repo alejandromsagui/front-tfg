@@ -125,14 +125,14 @@
                                             <td>
                                                 <div class="d-flex justify-end">
                                                     <v-btn v-if="user.blocked == false"
-                                                        class="bg-amber-accent-4 text-white font-weight-bold mr-3"
-                                                        variant="outlined" @click="blockUser(user.nickname)">
+                                                        class="text-white font-weight-bold mr-3 btn-block"
+                                                        variant="outlined" @click="blockUser(user.nickname)" prepend-icon="fa-solid fa-hand">
                                                         Bloquear
                                                     </v-btn>
-                                                    <v-btn v-if="user.blocked == true">DESBLOQUEAR</v-btn>
-                                                    <v-btn class="bg-red-darken-1 text-white font-weight-bold"
+                                                    <v-btn v-if="user.blocked == true" class="text-white mr-3 btn btn-unblock" prepend-icon="fa-solid fa-unlock" variant="outlined">DESBLOQUEAR</v-btn>
+                                                    <v-btn class="text-white font-weight-bold btn-delete"
                                                         variant="outlined"
-                                                        @click="deleteUser(user.nickname); animationDelete(user)">
+                                                        @click="deleteUser(user.nickname); animationDelete(user)" prepend-icon="fa-solid fa-user-slash">
                                                         Borrar
                                                     </v-btn>
                                                 </div>
@@ -279,6 +279,11 @@ const animationDelete = (toRemove) => {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+* {
+    font-family: "Roboto", sans-serif;
+}
 .item-selected {
     background-color: #C62828;
     color: white;
@@ -299,5 +304,40 @@ canvas {
 .list-leave-to {
     opacity: 0;
     transform: translateX(30px);
+}
+.btn-block {
+    flex: 0 0 auto !important;
+    background: linear-gradient(to left, #FFAB00 50%, #fff 50%) right !important;
+    background-size: 200% !important;
+    transition: .3s ease-out !important;
+    font-weight: bold;
+}
+
+.btn-block:hover {
+    background-position: left !important;
+    color: #000 !important;
+}
+.btn-unblock {
+    flex: 0 0 auto !important;
+    background: linear-gradient(to left, #66BB6A 50%, #fff 50%) right !important;
+    background-size: 200% !important;
+    transition: .3s ease-out !important;
+    font-weight: bold;
+}
+
+.btn-unblock:hover {
+    background-position: left !important;
+    color: #000 !important;
+}
+.btn-delete{
+    flex: 0 0 auto !important;
+    background: linear-gradient(to left, #E53935 50%, #fff 50%) right !important;
+    background-size: 200% !important;
+    transition: .3s ease-out !important;
+    font-weight: bold;
+}
+.btn-delete:hover{
+    background-position: left !important;
+    color: #000 !important;
 }
 </style>
