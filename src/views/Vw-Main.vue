@@ -59,10 +59,39 @@
                       </template>
                     </v-tooltip> -->
                     <v-tooltip text="Denunciar publicación">
-                      <template v-slot:activator="{ props }">
-                        <i class="fa-solid fa-flag" v-bind="props" @click.stop="reportVideogame(videogame._id);"></i>
-                      </template>
-                    </v-tooltip>
+                        <template v-slot:activator="{ props }">
+                          <i class="fa-solid fa-flag" v-bind="props" >
+                        
+                            <v-dialog
+          v-model="reportGame"
+          activator="parent"
+          width="auto"
+        >
+          <!-- //Aqui va lo de la denuncia -->
+
+          <v-card class="mx-auto" max-width="800">
+                  <div class="d-flex justify-end mt-2 mr-3">
+                    <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3" @click="reportGame = false"></v-icon>
+                  </div>
+                  <v-card-title class="text-center" style="font-family: 'Roboto', sans-serif;">
+                    Denuncia</v-card-title>
+                  <v-card-text class="text-center">
+                    <v-row class="d-flex justify-center">
+    
+                      <h2>Hola</h2>
+               
+                    </v-row>
+                    <v-divider class="my-4"></v-divider>
+                  </v-card-text>
+                  <v-card-actions class="d-flex justify-center">
+                    <v-btn color="text-white bg-red-darken-3 font-weight-bold" variant="outlined" @click="reportGame = false">Denunciar</v-btn>
+                  </v-card-actions>
+                </v-card>
+        </v-dialog>
+                        
+                          </i>
+                        </template>
+                      </v-tooltip>
                   </div>
                 </div>
               </v-card-text>
@@ -198,7 +227,7 @@ const useReviewStore = reviewStore()
 const videogameStore = useVideogameStore()
 const usePaymentStore = paymentStore()
 const useReportStore = reportStore()
-
+const reportGame = ref(false)
 const userStore = userData()
 const nuevoJuego = ref()
 let videogames = reactive([]);

@@ -118,7 +118,7 @@
                                 </thead>
                                 <tbody>
                                     <TransitionGroup name="list">
-                                        <tr v-for="user in filteredUsers" :key="user.nickname">
+                                        <tr v-for="(user, index) in filteredUsers" :key="user.nickname">
                                             <td>{{ user.nickname }}</td>
                                             <td>{{ user.email }}</td>
                                             <td>{{ user.blocked ? 'Bloqueado' : 'Activo' }}</td>
@@ -126,10 +126,10 @@
                                                 <div class="d-flex justify-end">
                                                     <v-btn v-if="user.blocked == false"
                                                         class="text-white font-weight-bold mr-3 btn-block"
-                                                        variant="outlined" @click="blockUser(user.nickname)" prepend-icon="fa-solid fa-hand">
+                                                        variant="outlined" @click="blockUser(index)" prepend-icon="fa-solid fa-hand">
                                                         Bloquear
                                                     </v-btn>
-                                                    <v-btn v-if="user.blocked == true" class="text-white mr-3 btn btn-unblock" prepend-icon="fa-solid fa-unlock" variant="outlined">DESBLOQUEAR</v-btn>
+                                                    <v-btn v-if="user.blocked == true" class="text-white mr-3 btn btn-unblock" prepend-icon="fa-solid fa-unlock" variant="outlined" @click="unblockUser(index)">DESBLOQUEAR</v-btn>
                                                     <v-btn class="text-white font-weight-bold btn-delete"
                                                         variant="outlined"
                                                         @click="deleteUser(user.nickname); animationDelete(user)" prepend-icon="fa-solid fa-user-slash">
@@ -202,6 +202,7 @@ const filteredUsers = computed(() => {
     }
 });
 
+const blockUserRef = ref()
 onBeforeMount(() => {
     // if (!users.value) userDataStore.getUsers().then(r => {
     //     if (r.status === 200) {
@@ -265,8 +266,16 @@ const handleItemClick = async (item) => {
     }
 }
 
-const blockUser = async (nickname) => {
+const blockUser = async (index) => {
+    const nickname = filteredUsers.value[index].nickname;
     await useReportStore.reportUser(nickname)
+    filteredUsers.value[index].blocked = true
+}
+
+const unblockUser = async(index) => {
+    const nickname = filteredUsers.value[index].nickname;
+    await useReportStore.unblockUser(nickname)
+    filteredUsers.value[index].blocked = false
 }
 
 const deleteUser = async (nickname) => {

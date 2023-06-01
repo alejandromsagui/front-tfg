@@ -55,6 +55,22 @@ export const reportStore = defineStore({
           theme: "colored",
         });
       }
+    },
+    async unblockUser(nickname){
+      try {
+        const response = await instance_axios.put(`/unblock/${nickname}`);
+        console.log('Response: ', response);
+        toast.success(response.data.message, {
+          autoClose: 3000,
+          theme: "colored",
+        });
+      } catch (error) {
+        console.log('Error: ', error);
+        toast.error(error.response.data.message, {
+          autoClose: 3000,
+          theme: "colored",
+        });
+      }
     }
   },
 });
