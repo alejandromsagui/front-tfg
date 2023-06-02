@@ -179,6 +179,20 @@ export const useVideogameStore = defineStore({
         } finally {
           this.loading = false;
         }
+      },
+      async getVideogameById(id){
+        this.loading = true;
+        try {
+          const response = await instance_axios.get(`/getVideogameById/${id}`)
+          this.loading = false;
+          return response;
+        } catch (error) {
+          throw new Error(
+            error.response ? error.response.data.message : 'Ha ocurrido un error'
+          );
+        } finally {
+          this.loading = false;
+        }
       }
       }      
     }

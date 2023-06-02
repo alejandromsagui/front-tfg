@@ -40,8 +40,10 @@
                                         <v-tooltip text="Ver detalles">
                                             <template v-slot:activator="{ props }">
                                                 <i class="fa-regular fa-folder-open fa-lg icons text-blue-accent-4"
-                                                    v-bind="props"></i>
+                                                    v-bind="props" @click="getVideogameById(user.videogame);dialog = true; nuevoJuego = true"></i>
                                             </template>
+
+
                                         </v-tooltip>
                                         <v-tooltip text="Bloquear">
                                             <template v-slot:activator="{ props }">
@@ -52,7 +54,8 @@
 
                                         <v-tooltip text="Eliminar">
                                             <template v-slot:activator="{ props }">
-                                                <i v-bind="props" class="fa-solid fa-trash fa-lg ml-4 text-red icons" @click="deleteVideogame(user.videogame); animationDelete(user)"></i>
+                                                <i v-bind="props" class="fa-solid fa-trash fa-lg ml-4 text-red icons"
+                                                    @click="deleteVideogame(user.videogame); animationDelete(user)"></i>
                                             </template>
                                         </v-tooltip>
                                     </td>
@@ -60,6 +63,29 @@
                             </TransitionGroup>
                         </tbody>
                     </v-table>
+                    <v-dialog v-model="dialog" width="600" v-if="nuevoJuego">
+                        <v-card height=500>
+                            <div class="d-inline">
+                        <div class="d-flex justify-end mr-3 mt-5">
+                            <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3 fa-xl"
+                                @click="dialog = false"></v-icon>
+                        </div>
+                    </div>
+                            <v-card-title>Detalles del <span class="text-red-darken-3">videojuego</span></v-card-title>
+                            <v-card-subtitle>Nombre</v-card-subtitle>
+                            <p class="ml-5">{{ nuevoJuego.name }}</p>
+                            <v-card-subtitle >Género</v-card-subtitle>
+                            <p class="ml-5">{{ genre }}</p>
+                            <v-card-subtitle class="mt-2">Name<span class="text-red-darken-3">koins</span></v-card-subtitle>
+                            <p class="ml-5">{{ nuevoJuego.price }}</p>
+                            <v-card-subtitle class="mt-2">Plataforma</v-card-subtitle>
+                            <p class="ml-5"> {{ nuevoJuego.platform }}</p>
+                            <v-card-subtitle class="mt-2">Imagen</v-card-subtitle>
+                            <p class="ml-5">{{ nuevoJuego.image }}</p>
+                            <v-card-subtitle>Descripción</v-card-subtitle>
+                            <p class="ml-5">{{ nuevoJuego.description }}</p>
+                        </v-card>
+                    </v-dialog>
                 </v-col>
             </v-row>
         </v-container>
@@ -74,11 +100,15 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const searchQuery = ref()
+const dialog = ref(false)
 const videogameStore = useVideogameStore()
 const useReportStore = reportStore()
 const useReviewStore = reviewStore()
 
+const nuevoJuego = ref()
 const videogames = ref([])
+
+const genre = ref([])
 
 onBeforeMount(async () => {
     const res = await useReportStore.getVideogamesReported();
@@ -131,6 +161,16 @@ const deleteVideogame = async (id) => {
 const animationDelete = (toRemove) => {
     videogames.value = videogames.value.filter((game) => game !== toRemove)
 }
+
+const getVideogameById = async (id) => {
+    console.log('lo que llega de id: ', id);
+    const response = await videogameStore.getVideogameById(id)
+    console.log(response.data);
+    nuevoJuego.value = response.data;
+    console.log('Genero: ', nuevoJuego.value.genre);
+    genre.value = nuevoJuego.value.genre
+    genre.value = genre.value.join(",").replaceAll(',', ', ')
+}
 //Bloquear
 
 </script>
@@ -153,4 +193,6 @@ const animationDelete = (toRemove) => {
 
 .icons:hover {
     transform: scale(1.2);
-}</style>
+}
+
+</style>

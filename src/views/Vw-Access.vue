@@ -218,6 +218,8 @@ const authUser = async () => {
         console.log('Es email');
         isEmail.value = true
         await authStore.loginEmail(usuarioValue, userLogin.password)
+        userLogin.nickname = ''
+        userLogin.password = ''
     } else {
         console.log('No es email');
         isEmail.value = false
@@ -225,6 +227,8 @@ const authUser = async () => {
         await authStore.loginUser(usuarioValue, userLogin.password)
         console.log('No es email nickname: ' + userLogin.nickname);
         console.log('Passwd no es email:' + userLogin.password);
+        userLogin.nickname = ''
+        userLogin.password = ''
     }
 
 }
@@ -256,6 +260,9 @@ const sendEmailUser = async () => {
 const registerUser = async () => {
 
         const register =  await registerStore.signIn(userLogin.nickname, userLogin.email, userLogin.password)
+        userLogin.nickname = ''
+        userLogin.email = ''
+        userLogin.password = ''
     // registerStore.transition.value = 1;
     // form.value.reset();
     

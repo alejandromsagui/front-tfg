@@ -6,7 +6,7 @@
                 <v-text-field label="Nuevo nombre de usuario" variant="outlined" class="align-items-center mx-auto"
                     style="width: 350px;" type="text" :rules="[requiredField]"
                     v-model="userModifier.nickname"></v-text-field>
-                <v-text-field label="Nueva contraseña" variant="outlined" class="align-items-center mx-auto"
+                <v-text-field label="Contraseña" variant="outlined" class="align-items-center mx-auto"
                     style="width: 350px;" type="password" :rules="[requiredField, passwordLength]"
                     v-model="userModifier.password"></v-text-field>
                 <div style="width: 350px; margin-top: 20px; margin-left: auto; margin-right: auto; padding-bottom: 20px;">
@@ -23,7 +23,7 @@
                 <v-text-field label="Nuevo email" variant="outlined" class="align-items-center mx-auto"
                     style="width: 350px;" :rules="[requiredField, isValidEmailRule]"
                     v-model="userModifierEmail.email"></v-text-field>
-                <v-text-field label="Contraseña actual" variant="outlined" class="align-items-center mx-auto"
+                <v-text-field label="Contraseña" variant="outlined" class="align-items-center mx-auto"
                     style="width: 350px;" type="password" :rules="[requiredField, passwordLength]"
                     v-model="userModifierEmail.password"></v-text-field>
                 <div style="width: 350px; margin-top: 20px; margin-left: auto; margin-right: auto; padding-bottom: 20px;">

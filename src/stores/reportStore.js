@@ -100,6 +100,15 @@ export const reportStore = defineStore({
       } catch (error) {
         throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
       }
+    },
+
+    async editNotificationDetail(id, details){
+      try {
+        const response = instance_axios.put(`/editDetailsNotification/${id}`, {details})
+        return response;
+      } catch (error) {
+        throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
+      }
     }
   },
 });
