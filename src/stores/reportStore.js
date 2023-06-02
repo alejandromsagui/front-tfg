@@ -50,6 +50,7 @@ export const reportStore = defineStore({
         const response = await instance_axios.get('/reports')
         console.log('response data de reports ', response.data);
         this.notifications = response.data;
+        return response;
       } catch (error) {
         toast.error(error.response.data.message, {
           autoClose: 3000,
@@ -81,6 +82,24 @@ export const reportStore = defineStore({
     } catch (error) {
         console.log(error);
     }
+    },
+
+    async deleteNotification(id){
+      try {
+        const response = instance_axios.delete(`/deleteNotification/${id}`)
+        return response;
+      } catch (error) {
+        throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
+      }
+    },
+
+    async changeReaded(id){
+      try {
+        const response = instance_axios.put(`/changeReaded/${id}`)
+        return response;
+      } catch (error) {
+        throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
+      }
     }
   },
 });

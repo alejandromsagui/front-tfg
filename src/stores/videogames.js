@@ -66,7 +66,7 @@ export const useVideogameStore = defineStore({
 
         this.loading = false;
 
-        await this.getVideogames();
+        // await this.getVideogames();
 
         const token = localStorage.getItem('token');
         const [header, payload, signature] = token.split(".");
@@ -164,8 +164,22 @@ export const useVideogameStore = defineStore({
         } finally {
           this.loading = false;
         }
+      },
+
+      async deleteVideogameByAdmin(id){
+        this.loading = true;
+        try {
+          const response = await instance_axios.delete(`/deleteVideogameByAdmin/${id}`)
+          this.loading = false;
+          return response;
+        } catch (error) {
+          throw new Error(
+            error.response ? error.response.data.message : 'Ha ocurrido un error'
+          );
+        } finally {
+          this.loading = false;
+        }
       }
-    
       }      
     }
 )
