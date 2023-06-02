@@ -83,16 +83,23 @@ const videogames = ref([])
 onBeforeMount(async () => {
     const res = await useReportStore.getVideogamesReported();
     console.log(res);
-    videogames.value = res;
 
-    videogames.value = res.filter((user, index, self) =>
-        index === self.findIndex((u) => u.nameVideogame === user.nameVideogame)
-    ).map(user => ({
+    const uniqueVideogames = [];
+    const videogameNames = [];
+
+    res.forEach(user => {
+        if (!videogameNames.includes(user.nameVideogame)) {
+            videogameNames.push(user.nameVideogame);
+            uniqueVideogames.push(user);
+        }
+    });
+
+    videogames.value = uniqueVideogames.map(user => ({
         ...user,
         maxTimes: Math.max(...res.filter(u => u.nameVideogame === user.nameVideogame).map(u => u.times))
     }));
+});
 
-})
 
 //Eliminar y bloquear
 const blockUser = async (index) => {

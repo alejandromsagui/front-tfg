@@ -149,9 +149,9 @@ export const userData = defineStore({
             }
         },
 
-        async deleteUserByAdmin(nickname) {
+        async deleteUserByAdmin(id) {
             try {
-                const response = await instance_axios.delete(`deleteUserByAdmin/${nickname}`)
+                const response = await instance_axios.delete(`deleteUserByAdmin/${id}`)
                 toast.success(response.data.message, {
                     theme: "colored",
                     autoClose: 3000
@@ -184,32 +184,32 @@ export const userData = defineStore({
         async exportData() {
             this.loading = true
             try {
-              const response = await instance_axios.get('/export', {
-                responseType: 'blob',
-              });
-              this.loading = false
-              return response;
+                const response = await instance_axios.get('/export', {
+                    responseType: 'blob',
+                });
+                this.loading = false
+                return response;
             } catch (error) {
-              throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
+                throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
             }
-          },
+        },
 
-          getRanking(nickname) {
+        getRanking(nickname) {
             instance_axios
-              .get(`/findRanking/${nickname}`)
-              .then((response) => {
-                this.position = response.data.ranking.position;
-                console.log('Valor de position:', this.position);
-              })
-              .catch((error) => {
-                if (error.response && error.response.status === 500) {
-                    toast.error(error.response.data.message, {
-                        theme: "colored",
-                        autoClose: 3000
-                    })
-                } 
-              });
-          }, 
+                .get(`/findRanking/${nickname}`)
+                .then((response) => {
+                    this.position = response.data.ranking.position;
+                    console.log('Valor de position:', this.position);
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 500) {
+                        toast.error(error.response.data.message, {
+                            theme: "colored",
+                            autoClose: 3000
+                        })
+                    }
+                });
+        }, 
 
           async getRegisters(){
             try {

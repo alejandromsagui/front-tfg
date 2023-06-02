@@ -132,7 +132,7 @@
                                                     <v-btn v-if="user.blocked == true" class="text-white mr-3 btn btn-unblock" prepend-icon="fa-solid fa-unlock" variant="outlined" @click="unblockUser(index)">DESBLOQUEAR</v-btn>
                                                     <v-btn class="text-white font-weight-bold btn-delete"
                                                         variant="outlined"
-                                                        @click="deleteUser(user.nickname); animationDelete(user)" prepend-icon="fa-solid fa-user-slash">
+                                                        @click="deleteUser(user._id); animationDelete(user)" prepend-icon="fa-solid fa-user-slash">
                                                         Borrar
                                                     </v-btn>
                                                 </div>
@@ -289,8 +289,8 @@ const unblockUser = async(index) => {
     filteredUsers.value[index].blocked = false
 }
 
-const deleteUser = async (nickname) => {
-    await userDataStore.deleteUserByAdmin(nickname)
+const deleteUser = async (id) => {
+    await userDataStore.deleteUserByAdmin(id)
 }
 
 const animationDelete = (toRemove) => {
