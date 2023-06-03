@@ -43,12 +43,20 @@
                                     </v-alert>
                                 </td>
                                 <td class="text-center">
-                                    <v-tooltip text="Marcar como leído" v-if="user.type !== 'Reporte'">
+                                    <v-tooltip text="Marcar como leído" v-if="user.type !== 'Reporte' && user.readed === false">
                                         <template v-slot:activator="{ props }">
                                             <i v-bind="props" class="fas fa-check-circle fa-lg ml-3 text-green icons"
                                                 @click="markAsRead(index)"></i>
                                         </template>
                                     </v-tooltip>
+                                    
+                                    <v-tooltip text="Leído" v-if="user.type !== 'Reporte' && user.readed === true">
+                                        <template v-slot:activator="{ props }">
+                                            <i class="fas fa-envelope-open icons fa-lg" v-bind="props"></i>
+                                        </template>
+                                    </v-tooltip>
+                                    
+
 
                                     <v-tooltip text="Eliminar">
                                         <template v-slot:activator="{ props }">
@@ -70,6 +78,7 @@
                     </tbody>
                 </v-table>
             </v-card>
+            
             <v-dialog v-model="dialog" width="500" v-if="seeMessage">
                 <v-card heigth="500">
                     <div class="d-inline">
@@ -140,37 +149,37 @@ const deleteNotification = async (id) => {
 }
 
 const editNotificationDetails = async (id) => {
-    console.log('lo que da id: ', id);
-    const details = messageText.value;
+  console.log('lo que da id: ', id);
+  const details = messageText.value;
+  
+  // Buscar el objeto correspondiente en la matriz allReports
+  const user = allReports.value.find(user => user.id === id);
 
-    // Buscar el objeto correspondiente en la matriz allReports
-    const user = allReports.value.find(user => user.id === id);
+  if (user) {
+    // Actualizar el valor de messageText en el objeto user
+    user.details = details;
 
-    if (user) {
-        // Actualizar el valor de messageText en el objeto user
-        user.details = details;
+    await useReportStore.editNotificationDetail(id, details).then((r) => {
+      if (r.status === 200) {
+        console.log('res', r);
+        console.log('valor de details: ', details);
 
-        await useReportStore.editNotificationDetail(id, details).then((r) => {
-            if (r.status === 200) {
-                console.log('res', r);
-                console.log('valor de details: ', details);
-
-                toast.success(r.data.message, {
-                    theme: "colored",
-                    autoClose: 3000
-                });
-            }
-
-            dialog.value = false;
-        }).catch((e) => {
-            toast.error(e.message, {
-                autoClose: 2000,
-                theme: 'colored'
-            });
+        toast.success(r.data.message, {
+          theme: "colored",
+          autoClose: 3000
         });
-    } else {
-        console.log('No se encontró el objeto con el id:', id);
-    }
+      }
+
+      dialog.value = false;
+    }).catch((e) => {
+      toast.error(e.message, {
+        autoClose: 2000,
+        theme: 'colored'
+      });
+    });
+  } else {
+    console.log('No se encontró el objeto con el id:', id);
+  }
 }
 
 const deleteAnimation = (toRemove) => {
@@ -240,5 +249,4 @@ const markAsRead = async (index) => {
 .button:hover {
     background-position: left !important;
     color: red !important;
-}
-</style>
+}</style>
