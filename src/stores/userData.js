@@ -22,7 +22,7 @@ export const userData = defineStore({
         position: null
     }),
     getters: {
-        getNumRegisters(){
+        getNumRegisters() {
             return this.numRegister;
         }
     },
@@ -195,30 +195,40 @@ export const userData = defineStore({
         },
 
         getRanking(nickname) {
-            instance_axios
+            return new Promise((resolve, reject) => {
+              instance_axios
                 .get(`/findRanking/${nickname}`)
                 .then((response) => {
+                  if (response.data.ranking) {
                     this.position = response.data.ranking.position;
                     console.log('Valor de position:', this.position);
+                  } else {
+                    this.position = null;
+                  }
+                  resolve(response);
                 })
                 .catch((error) => {
-                    if (error.response && error.response.status === 500) {
-                        toast.error(error.response.data.message, {
-                            theme: "colored",
-                            autoClose: 3000
-                        })
-                    }
+                  if (error.response && error.response.status === 500) {
+                    toast.error(error.response.data.message, {
+                      theme: "colored",
+                      autoClose: 3000
+                    });
+                  }
+                  reject(error);
                 });
-        }, 
+            });
+          },
+          
 
-          async getRegisters(){
+
+        async getRegisters() {
             try {
                 const response = await instance_axios.get('/countRegister')
                 this.numRegister = response.data.numRegistros;
             } catch (error) {
                 return error;
             }
-          }
+        }
     },
 
 })

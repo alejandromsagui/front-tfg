@@ -1,118 +1,203 @@
 <template>
-  <div class="background">
-    <v-container>
-      <v-row>
-        <v-col cols="12">
-          <v-card class="chat-app mt-10" style="height: 80vh;">
-            <div id="plist" class="people-list">
-              <v-row class="input-group">
-                <v-col cols="12">
-                  <v-text-field placeholder="Search..." outlined></v-text-field>
+  <v-container fluid>
+    <div align="center">
+        <v-card class="chat-app mt-10" style="height: 80vh; width: 80%;">
+          <div id="plist" class="people-list">
+            <v-row class="input-group">
+              <v-col cols="12">
+                <v-text-field placeholder="Search..." outlined></v-text-field>
+              </v-col>
+            </v-row>
+            <ul class="list-unstyled chat-list mt-2 mb-0" style="height: calc(100% - 40px);">
+              <li v-for="username in usersShow" :key="username" class="clearfix" @click="selectUser(username.username); getConversationHtml(username.id);">
+                <img src="../assets/images/avatar.jpg" alt="avatar">
+                <div class="about">
+                  <div class="name">{{ username.username }}</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="chat" style="height: 80%">
+            <div class="chat-header clearfix">
+              <v-row align="center" style="width: 100%;">
+                <v-col cols="auto">
+                  <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
+                    <v-avatar size="40">
+                      <img src="../assets/images/avatar.jpg" alt="avatar">
+                    </v-avatar>
+                  </a>
+                </v-col>
+                <v-col>
+                  <div class="chat-about">
+                    <h4>{{ selectedUser }}</h4>
+                  </div>
                 </v-col>
               </v-row>
-              <ul class="list-unstyled chat-list mt-2 mb-0" style="height: calc(100% - 40px);">
-                <li class="clearfix">
-                  <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
-                  <div class="about">
-                    <div class="name">Vincent Porter</div>
-                  </div>
-                </li>
-              </ul>
             </div>
-            <div class="chat" style="height: 80%">
-              <div class="chat-header clearfix">
-                <v-row align="center" style="width: 100%;">
-                  <v-col cols="auto">
-                    <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                      <v-avatar size="30">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
-                      </v-avatar>
-                    </a>
-                  </v-col>
-                  <v-col>
-                    <div class="chat-about">
-                      <h4>Aiden Chavez</h4>
-                    </div>
-                  </v-col>
-                </v-row>
-              </div>
-              <ul class="chat-history"
-                style="border-left: 1px solid #efefef; border-top: 1px solid #efefef; border-bottom: 1px solid #efefef; padding: 20px; margin-left: 20px; height: calc(100% - 80px); overflow-y: auto;">
-                <li class="clearfix" v-for="item in data" :key="item.text" style="list-style: none;">
-                  <div class="message-data text-right" v-if="item.from === 'others'">
-                  </div>
-                  //Revisar esto
-                  <div class="message other-message float-right" v-if="item.from === 'others'">{{ item.text }}</div>
-                  <div class="message-data" v-else>
-                  </div>
-                  <div class="message my-message">{{ item.text }}</div>
-                </li>
-              </ul>
-              <div class="chat-message clearfix">
-                <v-row>
-                  <v-col cols="11">
-                    <v-text-field placeholder="Escribe un mensaje aquí..." variant="outlined" v-model="messages"
-                      @keyup.enter="sendMessage()"></v-text-field>
-                  </v-col>
-                  <v-col cols="1" class="mt-3">
-                    <v-btn prepend-icon="fa fa-paper-plane" @click="sendMessage()">
-                      ENVIAR
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </div>
+            <ul class="chat-history"
+              style="border-left: 1px solid #efefef; border-top: 1px solid #efefef; border-bottom: 1px solid #efefef; padding: 20px; margin-left: 20px; height: calc(100% - 80px); overflow-y: auto;">
+              <li class="clearfix" v-for="item in data" :key="item.text" style="list-style: none;">
+                <div class="message-data text-right" v-if="item.from === 'others'">
+                </div>
+                <div class="message other-message float-right">hola</div>
+                <!-- <div class="message-data" v-else>
+                </div> -->
+                <div class="message my-message">{{ item.text }}</div>
+              </li>
+            </ul>
+            <div class="chat-message clearfix">
+              <v-row>
+                <v-col cols="11">
+                  <v-text-field placeholder="Escribe un mensaje aquí..." variant="outlined" v-model="messages"
+                    @keyup.enter="sendMessage()"></v-text-field>
+                </v-col>
+                <v-col cols="1" class="mt-3">
+                  <v-btn prepend-icon="fa fa-paper-plane" @click="sendMessage()">
+                    ENVIAR
+                  </v-btn>
+                </v-col>
+              </v-row>
             </div>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+          </div>
+        </v-card>
+        </div>
+  </v-container>
 </template>
 
 <script setup>
 import { socket } from "../services/socket";
 import { ref, onMounted } from 'vue';
+import { Buffer } from "buffer";
+import { conversationStore } from "../stores/conversationStore"
 
+const useConversationStore = conversationStore()
 const messages = ref('');
 const data = ref([]);
-const nick = ref('Alejandro');
+const selectedUser = ref()
 
-const sendMessage = () => {
-  if (messages.value !== '') {
-    const message = {
-      from: 'me',
-      text: messages.value
-    };
+const selectUser = (username) => {
+  selectedUser.value = username;
+}
 
-    socket.emit('chat message', {
-      nick: nick.value,
-      message: message
+const decodeToken = () => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    const [header, payload, signature] = token.split(".");
+    const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString('ascii'));
+    return decodedPayload.id;
+  }
+}
+
+const conversation = ref([]);
+let otherMembersIds = ref([]);
+const usersShow = ref([])
+
+const getConversation = async (id) => {
+  id = await decodeToken();
+  const res = await useConversationStore.getConversations(id);
+  conversation.value = res;
+
+  console.log('Valor de conversacion: ', conversation.value);
+
+  const myId = id; 
+  const otherMembersIdsSet = new Set();
+
+  conversation.value.forEach(conversation => {
+    conversation.members.forEach(memberId => {
+      if (memberId !== myId) {
+        otherMembersIdsSet.add(memberId);
+      }
     });
+  });
 
-    // Limpia el campo de mensajes después de enviarlo
-    messages.value = '';
+  const otherMembersIds = Array.from(otherMembersIdsSet);
+  console.log('Otros miembros:', otherMembersIds);
+
+  await Promise.all(otherMembersIds.map(async (userId) => {
+    await getUsername(userId);
+  }));
+};
+
+const conversationId = ref()
+const getConversationHtml = async(id) => {
+  const res = await useConversationStore.getConversations(id);
+  console.log('id del usuario: ', id);
+  console.log('lo que da res: ', res[0]._id);
+  conversationId.value = res[0]._id;
+
+  await useConversationStore.getMessage(conversationId.value)
+}
+const getUsername = async (userId) => {
+  const id = await decodeToken();
+  if (userId !== id) {
+    const user = await useConversationStore.getUserById(userId);
+    const userData = {
+      id: userId,
+      username: user.username
+    };
+    usersShow.value.push(userData);
+    console.log('user show: ', usersShow.value);
   }
 };
 
-onMounted(() => {
-  socket.on('chat message', (message) => {
-    data.value.push({
-      from: 'others',
-      text: message // Corregido para acceder directamente a message.text
-    });
 
-    console.log('Valor de data: ', data.value);
-    // Desplázate al final de la lista de mensajes después de recibir uno nuevo
-    setTimeout(() => {
-      const chatHistory = document.querySelector(".chat-history");
-      chatHistory.scrollTop = chatHistory.scrollHeight;
-    }, 0);
-  });
-});
+
+const users = ref([])
+const getUser = async (id) => {
+  id = await decodeToken()
+
+}
+
+onMounted(async () => {
+  await getConversation()
+
+  const id = await decodeToken();
+  await getUsername(id)
+
+
+})
+// const nick = ref('Alejandro');
+
+// const sendMessage = () => {
+//   if (messages.value !== '') {
+//     const message = {
+//       from: 'me',
+//       text: messages.value
+//     };
+
+//     socket.emit('chat message', {
+//       nick: nick.value,
+//       message: message
+//     });
+
+//     // Limpia el campo de mensajes después de enviarlo
+//     messages.value = '';
+//   }
+// };
+
+// onMounted(() => {
+//   socket.on('chat message', (message) => {
+//     data.value.push({
+//       from: 'others',
+//       text: message // Corregido para acceder directamente a message.text
+//     });
+
+//     console.log('Valor de data: ', data.value);
+//     // Desplázate al final de la lista de mensajes después de recibir uno nuevo
+//     setTimeout(() => {
+//       const chatHistory = document.querySelector(".chat-history");
+//       chatHistory.scrollTop = chatHistory.scrollHeight;
+//     }, 0);
+//   });
+// });
 </script>
 
 <style lang="css" scoped>
 @import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@700&display=swap');
+
+* {
+  font-family: "Roboto", sans-serif;
+}
 
 .chat-app .people-list {
   width: 280px;

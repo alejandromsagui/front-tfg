@@ -18,7 +18,7 @@
                     </thead>
                     <tbody>
                         <TransitionGroup name="list">
-                            <tr v-for="(user, index) in allReports" :key="user.id">
+                            <tr v-for="(user, index) in allReports" :key="user.id" :class="{ 'readed': user.readed }">
                                 <td class="text-center">
                                     <router-link :to="`/perfil/${user.user}`" class="text-red-darken-1" target="_blank">
                                         {{ user.user }}
@@ -30,14 +30,15 @@
                                 <td class="text-center">
                                     {{ user.type }}
                                 </td>
-                                <td class="pa-1 text-center" v-if="user.type === 'Reporte'">
-                                    <v-alert variant="outlined" type="error" max-width="250" max-height="150"
+                                <td class="pa-1 text-center justify-center align-center" v-if="user.type === 'Recomendación'">
+                                    <v-alert variant="outlined" type="warning" max-width="250" max-height="150" v-if="user.readed === false"
                                         class="d-flex mx-auto">
                                         {{ user.message }}
                                     </v-alert>
+                                    <p class="text-red-darken-3" v-else>Leído</p>
                                 </td>
-                                <td class="pa-1 text-center justify-center align-center" v-else>
-                                    <v-alert variant="outlined" type="warning" max-width="250" max-height="150"
+                                <td class="pa-1 text-center" v-if="user.type === 'Reporte'">
+                                    <v-alert variant="outlined" type="error" max-width="250" max-height="150"
                                         class="d-flex mx-auto">
                                         {{ user.message }}
                                     </v-alert>
@@ -120,6 +121,19 @@ onBeforeMount(async () => {
     } catch (error) {
         console.log(error);
     }
+    // Ordenar el array allReports
+allReports.value.sort((a, b) => {
+  // Comparar la propiedad user.readed de cada objeto
+  if (a.readed && !b.readed) {
+    return 1; // a viene después de b
+  } else if (!a.readed && b.readed) {
+    return -1; // a viene antes de b
+  } else {
+    return 0; // No se cambia el orden
+  }
+});
+
+    
 });
 let messageText = ref()
 const notificationId = ref()
@@ -249,4 +263,10 @@ const markAsRead = async (index) => {
 .button:hover {
     background-position: left !important;
     color: red !important;
-}</style>
+}
+.readed {
+  /* Estilo que deseas aplicar cuando user.readed es true */
+  /* Por ejemplo, cambiar el color de fondo de la fila a gris */
+    color: gray;
+}
+</style>

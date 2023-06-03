@@ -10,12 +10,6 @@
             <v-col cols="auto" style="padding: 0" class="p-0">
                 <v-card-title class="font-italic text-start mr-7 pa-0">Lista de videojuegos denunciados</v-card-title>
             </v-col>
-            <v-col class="ml-auto d-flex" cols="3" style="flex-grow: 1; flex-shrink: 1;">
-                <v-text-field hide-details label="Buscar..." placeholder="Usuario o correo"
-                    append-inner-icon="fa-solid fa-search" filled rounded dense single-line class="shrink mt-2 mr-7"
-                    v-model="searchQuery" variant="outlined">
-                </v-text-field>
-            </v-col>
         </v-row>
         <v-container fluid>
             <v-row>

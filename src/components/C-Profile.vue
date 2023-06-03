@@ -35,7 +35,7 @@
                         <p class="subtitle-2 text-white text-center mt-1">Cambiar contraseña</p>
                     </v-card>
                 </div>
-                <div class="card" @click="showPassword = false; showEmail = false; showNickname = false; showRecommendations = true; showTransactions = false;">
+                <div class="card" v-if="ranking !== null" @click="showPassword = false; showEmail = false; showNickname = false; showRecommendations = true; showTransactions = false;">
                     <v-card class="bg-red-darken-3 d-flex align-center flex-column justify-center" height="100" width="150">
                         <div class="d-flex align-center justify-center">
                         <i class="fa-solid fa-lightbulb fa-3x"></i>
@@ -97,7 +97,7 @@
                         <p class="subtitle-2 text-white text-center mt-1">Cambiar contraseña</p>
                     </v-card>
                 </div>
-                <div class="card mr-5" @click="showPassword = false; showEmail = false; showNickname = false; showRecommendations = true; showTransactions = false;">
+                <div class="card mr-5" v-if="ranking" @click="showPassword = false; showEmail = false; showNickname = false; showRecommendations = true; showTransactions = false;">
                     <v-card class="bg-transparent d-flex align-center flex-column justify-center" height="100" width="150">
                         <div class="d-flex align-center justify-center">
                         <i class="fa-solid fa-lightbulb fa-3x"></i>
@@ -300,44 +300,33 @@ const newRecommendation = (data) => {
 
   })
 };
-onBeforeMount(async () => {
+
+
+onBeforeMount(async() => {
     const tokenData = await getData();
     data.nickname = tokenData.nickname;
     data.email = tokenData.email;
-
     getVideogames();
+    await getRanking()
+    console.log('Ranking: ', ranking.value);
 });
+
+const ranking = ref()
+
+const getRanking = async () => {
+    const res = await userDataStore.getRanking(data.nickname);
+    if (res.data.ranking) {
+      console.log('Valor de position:', res.data.ranking.position);
+      ranking.value = res.data.ranking.position;
+    } else {
+      ranking.value = null
+    }
+};
+
 
 const deleteUser = async () => {
     await userDataStore.deleteUser();
 };
-
-// const token = localStorage.getItem('token')
-
-// watch(() => data.nickname, (newNickname, oldNickname) => {
-//     console.log('Antiguo valor: ', oldNickname, 'Nuevo valor: ', newNickname);
-//    if (newNickname !== oldNickname) {
-//        console.log('Valor de nickname antiguo: ' + data.nickname);
-//        console.log('El nombre ha sido cambiado por: ' + newNickname);
-//        data.nickname = newNickname;
-//    }
-// });
-
-// watch(() => getData.getEmail, async (newEmail, oldEmail) => {
-//     if(newEmail !== oldEmail){
-//         console.log('Valor de getEmail: '+getData.getEmail);
-//         await getData.updateTokenByEmail(newEmail)
-//         console.log('El correo ha sido cambiado por: '+getData.getEmail);
-//         data.email = newEmail;
-//     }
-// })
-// watchEffect( async () => {
-//     const { getNickname, getEmail } = getData;
-//     data.nickname = getNickname;
-//     data.email = getEmail;
-//     console.log('Token desde whatchEffect: '+getData.newToken);
-
-// });
 
 const items = reactive([
     { text: "Modificar nombre de usuario", action: "username" },
@@ -382,11 +371,6 @@ const handleItemClick = (item) => {
     }
 };
 
-// console.log('response ', response);
-// var link = document.createElement('a');
-// link.href = response.data;
-// link.download = 'transaccion.pdf';
-// link.dispatchEvent(new MouseEvent('click'));
 
 const handleExportDataClick = () => {
     exportingData.value = true;
@@ -511,6 +495,15 @@ const getVideogames = async () => {
   background-position: left;
 }
 
+.button{
+  flex: 0 0 auto !important;
+    background: linear-gradient(to left, #C62828 50%, black 50%) right !important;
+    background-size: 200% !important;
+    transition: .3s ease-out !important
+}
+.button:hover{
+    background-position: left !important;
+}
 .scrolling-wrapper {
     -webkit-overflow-scrolling: touch;
 }
