@@ -6,7 +6,7 @@
     <section class="notFound">
         <div class="img">
        <h1>404<br> PÁGINA NO ENCONTRADA</h1>
-        <img src="https://assets.codepen.io/5647096/Delorean.png" alt="El Delorean, El Doc y Marti McFly"/>
+        <img src="../assets/images/404-removebg-preview.png" alt="El Delorean, El Doc y Marti McFly"/>
         <v-divider></v-divider>
         </div>
     </section>
@@ -63,17 +63,17 @@ div.text a:hover {
     text-decoration: underline; 
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 500px) {
     section.notFound {
         flex-direction: column;
         justify-content: space-around;
     }
     section.notFound div.img img {
-        width: 70vw;
+        width: 80vw;
         height: auto;
     }
     section.notFound h1 {
-        font-size: 50px;
+        font-size: 30px;
     }
     section.notFound h2 {
         font-size: 25px;

@@ -16,6 +16,7 @@ export const useLoginStore = defineStore({
     authenticated: false,
     nickname: '',
     email: '',
+    rol: '',
     loading: false
 
   }),
@@ -45,6 +46,7 @@ export const useLoginStore = defineStore({
         localStorage.setItem('token', tokenResponse)
         this.nickname = decodedPayload.nickname
         this.email = decodedPayload.email
+        this.rol = decodedPayload.rol;
         this.authenticated = true
 
         toast.success('¡Bienvenido de nuevo, ' + this.nickname + '!', {
@@ -72,6 +74,7 @@ export const useLoginStore = defineStore({
 
         this.nickname = decodedPayload.nickname
         this.email = decodedPayload.email
+        this.rol = decodedPayload.rol;
         this.authenticated = true
 
         toast.success('¡Bienvenido de nuevo, ' + this.nickname + '!', {

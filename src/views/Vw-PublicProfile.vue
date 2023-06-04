@@ -5,7 +5,7 @@
                     background-repeat: no-repeat;
                     height: 300px;">
         <v-avatar size="100" style="margin-top: -50px;" class="ml-2">
-            <img src="../assets/images/avatar.jpg" alt="Profile Picture" style="width: 100px">
+            <img src="https://storage.googleapis.com/namekiansgames/Avatares/avatar5.jpg" alt="Profile Picture" style="width: 100px">
         </v-avatar>
         <h3>{{ nickname }}</h3>
     </div>
@@ -24,16 +24,12 @@
                             </template>
                         </v-tooltip>
                     </v-col>
-                    <v-col cols="12" md="6" class="d-flex justify-center" v-else>
+                    <v-col cols="12" md="12" class="d-flex justify-center" v-else>
                         <i class="fa-solid fa-ranking-star fa-2xl" style="color: #ffff00;"></i>
                         <p class="ml-3 text-white font-weight-bold text-subtitle-1">{{ useUserStore.position }}</p>
                     </v-col>
 
 
-
-                    <v-col class="justify-center d-flex">
-                        <v-btn variant="outlined" class="bg-red-darken-3 text-white font-weight-bold">Iniciar Chat</v-btn>
-                    </v-col>
                 </v-row>
                 <v-row align="start" class="align-start">
                     <v-col cols="12" md="6" class="align-self-stretch">

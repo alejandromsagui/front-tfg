@@ -3,7 +3,7 @@
         <v-list dense>
             <v-list-item avatar class="text-center">
                 <v-avatar size="80" class="mt-3">
-                    <img src="../assets/images/avatar.jpg" style="width: 80px;" alt="avatar">
+                    <img src="https://storage.googleapis.com/namekiansgames/Avatares/avatar4.jpg" style="width: 80px;" alt="avatar">
                 </v-avatar>
                 <v-list-item-title class="align-self-center text-white mt-3 font-weight-bold text-h6">{{ nickname
                 }}</v-list-item-title>

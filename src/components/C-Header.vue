@@ -48,6 +48,10 @@
           </v-btn> -->
           <CDialog />
 
+          <v-btn class="link" text @click="goAdmin()" v-if="userStore.rol === 'Administrador'">
+            <i class="fa-solid fa-user mr-1"></i> Admin
+          </v-btn>
+
           <v-btn class="link" text @click="goPerfil()">
             <i class="fa-solid fa-user mr-1"></i> Perfil
           </v-btn>
@@ -184,7 +188,7 @@
         <v-row no-gutters>
           <v-col class="align-center" cols="auto">
             <v-list-item class="pa-0">
-              <v-avatar image="../src/assets/images/avatar.jpg" size="80" class="ml-6"></v-avatar>
+              <v-avatar image="https://storage.googleapis.com/namekiansgames/Avatares/avatar5.jpg" size="80" class="ml-6"></v-avatar>
             </v-list-item>
           </v-col>
           <v-col class="align-center" cols="auto">
@@ -414,6 +418,9 @@ const goPerfil = () => {
   router.push({ path: '/perfil' })
 }
 
+const goAdmin = () => {
+  router.push({ path: '/admin' })
+}
 
 </script>
 <style scoped>

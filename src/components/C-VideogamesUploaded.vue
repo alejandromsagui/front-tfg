@@ -60,7 +60,6 @@
   </v-col>
 </v-row>
 
- 
   <v-dialog v-model="deleteGame" max-width="500" v-if="borrarJuego">
     <v-card>
       <div class="bg-white text-black d-flex align-center pa-2">
