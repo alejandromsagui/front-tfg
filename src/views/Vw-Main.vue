@@ -91,7 +91,7 @@
                 <v-card-text class="text-subtitle-1 text-center text-body-1">
                   {{ nuevoJuego.genre.join(',').replace(/,\s*/g, ', ') }}
                 </v-card-text>
-                <v-card elevation="10" class="bg-red-darken-3 mt-3" v-for="review in arrayReview" :key="review.nickname">
+                <v-card elevation="10" class="bg-red-darken-3 mt-3" v-for="review in arrayReview.slice(-3).reverse()" :key="review.nickname">
                   <v-card-text class="text-white">{{ review.nickname }}: {{ review.comment }}</v-card-text>
                 </v-card>
                 <v-row>
@@ -290,7 +290,6 @@ const sendReview = async () => {
       }
     })
     .catch((error) => {
-      console.log('kkkkkkk: ', error);
       toast.error(error.response.data.message, {
         theme: 'colored',
         autoClose: 3000,

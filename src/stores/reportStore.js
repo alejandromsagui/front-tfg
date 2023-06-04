@@ -8,7 +8,8 @@ export const reportStore = defineStore({
   id: "report",
 
   state: () => ({
-    notifications: ''
+    notifications: '',
+    loading: false
   }),
 
   actions: {
@@ -108,6 +109,19 @@ export const reportStore = defineStore({
         return response;
       } catch (error) {
         throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
+      }
+    },
+
+    async exportReports(){
+      this.loading = true
+      try {
+          const response = await instance_axios.get('/exportReports', {
+              responseType: 'blob',
+          });
+          this.loading = false
+          return response;
+      } catch (error) {
+          throw new Error(error.response ? error.response.data.message : 'Ha ocurrido un error');
       }
     }
   },

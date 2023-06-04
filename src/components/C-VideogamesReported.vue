@@ -10,6 +10,9 @@
             <v-col cols="auto" style="padding: 0" class="p-0">
                 <v-card-title class="font-italic text-start mr-7 pa-0">Lista de videojuegos denunciados</v-card-title>
             </v-col>
+            <v-col cols="auto" class="ml-auto mr-3 icons">
+                <img src="../assets/images/icon-pdf.png" alt="export" style="width: 40px; height: 40px;" @click="handleExportDataClick()">
+            </v-col>    
         </v-row>
         <v-container fluid>
             <v-row>
@@ -151,6 +154,24 @@ const deleteVideogame = async (id) => {
         })
     })
 }
+const handleExportDataClick = () => {
+    useReportStore
+        .exportReports()
+        .then((response) => {
+            const blob = new Blob([response.data], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "reportes.pdf";
+            a.click();
+        })
+        .catch((error) => {
+            toast.error(error.message, {
+                theme: "colored",
+                autoClose: 3000,
+            });
+        });
+};
 
 const animationDelete = (toRemove) => {
     videogames.value = videogames.value.filter((game) => game !== toRemove)
