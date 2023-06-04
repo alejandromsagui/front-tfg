@@ -91,6 +91,7 @@ export const useLoginStore = defineStore({
       // map through that list and use the **$reset** fn to reset the state
       getActivePinia()._s.forEach(store => store.$reset());
       localStorage.removeItem('token')
+      delete instance_axios.defaults.headers.common['Authorization'];
       router.push('/acceso')
     },
 

@@ -219,7 +219,14 @@ export const userData = defineStore({
             });
           },
           
-
+          async rankingAll(){
+            try {
+                const response = await instance_axios.get('/ranking')
+                return response;
+            } catch (error) {
+                console.log(error);
+            }
+          },
 
         async getRegisters() {
             try {

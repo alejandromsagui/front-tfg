@@ -91,6 +91,7 @@
                 <v-card-text class="text-subtitle-1 text-center text-body-1">
                   {{ nuevoJuego.genre.join(',').replace(/,\s*/g, ', ') }}
                 </v-card-text>
+                <v-card-title class="text-white text-center text-h5 mb-3">Últimas <span class="text-center text-red-darken-2 text-h5 mb-3">valoraciones</span></v-card-title>
                 <v-card elevation="10" class="bg-red-darken-3 mt-3" v-for="review in arrayReview.slice(-3).reverse()" :key="review.nickname">
                   <v-card-text class="text-white">{{ review.nickname }}: {{ review.comment }}</v-card-text>
                 </v-card>

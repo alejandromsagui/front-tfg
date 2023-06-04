@@ -4,15 +4,17 @@
             <v-col cols="auto">
                 <v-sheet class="bg-red-darken-3 d-flex justify-center" width="70" height="70" style="align-items: center;"
                     rounded elevation="10">
-                    <v-icon icon="fa-solid fa-gamepad"></v-icon>
+                    <v-icon icon="fa-solid fa-gamepad" class="d-flex align-center"></v-icon>
                 </v-sheet>
             </v-col>
             <v-col cols="auto" style="padding: 0" class="p-0">
                 <v-card-title class="font-italic text-start mr-7 pa-0">Lista de videojuegos denunciados</v-card-title>
             </v-col>
+
             <v-col cols="auto" class="ml-auto mr-3 icons">
-                <img src="../assets/images/icon-pdf.png" alt="export" style="width: 40px; height: 40px;" @click="handleExportDataClick()">
-            </v-col>    
+                <img src="../assets/images/icon-pdf.png" alt="export" style="width: 40px; height: 40px;"
+                    @click="handleExportDataClick()">
+            </v-col>
         </v-row>
         <v-container fluid>
             <v-row>
@@ -37,7 +39,8 @@
                                         <v-tooltip text="Ver detalles">
                                             <template v-slot:activator="{ props }">
                                                 <i class="fa-regular fa-folder-open fa-lg icons text-blue-accent-4"
-                                                    v-bind="props" @click="getVideogameById(user.videogame);dialog = true; nuevoJuego = true"></i>
+                                                    v-bind="props"
+                                                    @click="getVideogameById(user.videogame); dialog = true; nuevoJuego = true"></i>
                                             </template>
 
 
@@ -63,15 +66,15 @@
                     <v-dialog v-model="dialog" width="600" v-if="nuevoJuego">
                         <v-card height=500>
                             <div class="d-inline">
-                        <div class="d-flex justify-end mr-3 mt-5">
-                            <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3 fa-xl"
-                                @click="dialog = false"></v-icon>
-                        </div>
-                    </div>
+                                <div class="d-flex justify-end mr-3 mt-5">
+                                    <v-icon icon="fa-solid fa-rectangle-xmark text-red-darken-3 fa-xl"
+                                        @click="dialog = false"></v-icon>
+                                </div>
+                            </div>
                             <v-card-title>Detalles del <span class="text-red-darken-3">videojuego</span></v-card-title>
                             <v-card-subtitle>Nombre</v-card-subtitle>
                             <p class="ml-5">{{ nuevoJuego.name }}</p>
-                            <v-card-subtitle >Género</v-card-subtitle>
+                            <v-card-subtitle>Género</v-card-subtitle>
                             <p class="ml-5">{{ genre }}</p>
                             <v-card-subtitle class="mt-2">Name<span class="text-red-darken-3">koins</span></v-card-subtitle>
                             <p class="ml-5">{{ nuevoJuego.price }}</p>
@@ -209,5 +212,4 @@ const getVideogameById = async (id) => {
 .icons:hover {
     transform: scale(1.2);
 }
-
 </style>

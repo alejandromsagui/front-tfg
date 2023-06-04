@@ -66,6 +66,36 @@
                   <v-card-text class="font-subtitle-1" style="font-family: 'Roboto', 'sans-serif';">Puedes recargar más
                     Namekoins <a class="text-red-darken-3 font-weight-bold text-body-2" v-bind="props"
                       style="cursor: pointer">aquí</a></v-card-text>
+
+
+                  <v-dialog v-model="ranking" width="auto">
+                    <template v-slot:activator="{ props }">
+                      <v-card-text class="font-subtitle-1" style="font-family: 'Roboto', 'sans-serif';">También puedes
+                        visualizar el <a class="text-red-darken-3 font-weight-bold text-body-2" style="cursor: pointer"
+                          @click="ranking = true" v-bind="props">ranking</a></v-card-text>
+                    </template>
+
+                    <v-card width="400" height="250" class="d-flex flex-column align-items-center justify-center mx-auto">
+                      <div class="text-center">
+                        <v-card-title class="mb-4">Finalistas del <span
+                            class="text-red-darken-3">ranking</span></v-card-title>
+                      </div>
+                      <div class="d-flex justify-between">
+                        <i class="fa-solid fa-ranking-star fa-3x ml-2" style="margin-right: auto; color: #C0C0C0"></i>
+                        <i class="fa-solid fa-ranking-star fa-3x" style="margin-right: auto; color: #FFD700"></i>
+                        <i class="fa-solid fa-ranking-star fa-3x mr-2" style="color: #CD7F32"></i>
+                      </div>
+                      <div class="d-flex justify-center mt-3" v-for="user in positionRanking.ranking"
+                        :key="user.nickname">
+                        <div class="text-center ml-7" v-if="user.position === 1">1º Posición - <span
+                            class="text-h6 text-red-darken-3">{{ user.nickname }}</span></div>
+                        <div class="text-center" v-else-if="user.position === 2"> 2º Posición - <span
+                            class="text-h6 text-red-darken-3">{{ user.nickname }}</span></div>
+                        <div class="text-center ml-7" v-else-if="user.position === 3">3º Posición - <span
+                            class="text-h6 text-red-darken-3">{{ user.nickname }}</span></div>
+                      </div>
+                    </v-card>
+                  </v-dialog>
                 </template>
                 <v-card class="mx-auto" max-width="800">
                   <div class="d-flex justify-end mt-2 mr-3">
@@ -115,6 +145,8 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+
+
             </v-card>
           </v-menu>
           <v-btn class="link mr-10" text @click="logout()">
@@ -149,7 +181,7 @@
           </v-col>
           <v-col class="align-center" cols="auto">
             <v-list-item class="pa-0 d-flex">
-              <p class="data ml-8 mt-4">{{nickname}}</p>
+              <p class="data ml-8 mt-4">{{ nicknameProfile }}</p>
               <p class="data ml-8">usuario@gmail.com</p>
             </v-list-item>
           </v-col>
@@ -180,7 +212,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router';
 import { useLoginStore } from '../stores/login';
 import { userData } from '../stores/userData'
@@ -189,8 +221,9 @@ import { Buffer } from "buffer";
 import { CDialog, CMenu } from "../components";
 import { paymentStore } from "../stores/paymentStore"
 import { toast } from 'vue3-toastify';
-import {useVideogameStore } from "../stores/videogames"
+import { useVideogameStore } from "../stores/videogames"
 
+const ranking = ref(false)
 const videogameStore = useVideogameStore()
 const userDataStore = userData();
 const emits = defineEmits(['open-modal']);
@@ -217,7 +250,9 @@ const isAdmin = ref()
 onMounted(async () => {
   if (token) {
     authenticated.value = true
-    
+
+    await getRanking()
+
     // const res = await userDataStore.getPermission()
     // console.log('Valor de res: ', res);
     // if (res) {
@@ -238,10 +273,34 @@ const getNamekoins = async () => {
   }
 }
 
+const nicknameProfile = ref()
+watch(token, (newToken) => {
+  if (newToken) {
+    const [header, payload, signature] = newToken.split(".");
+    const decodedPayload = JSON.parse(
+      Buffer.from(payload, 'base64').toString('ascii')
+    );
+    nicknameProfile.value = decodedPayload.nickname;
+  } else {
+    // Manejar el caso en el que el token sea nulo o esté vacío
+    // Por ejemplo, restablecer el valor de nicknameProfile
+    nicknameProfile.value = '';
+  }
+});
+const positionRanking = ref([])
+
+const getRanking = async () => {
+
+  const res = await userDataStore.rankingAll();
+  console.log('res de ranking: ', res.data);
+  positionRanking.value = res.data;
+  console.log('Position ranking: ', positionRanking.value);
+};
 const nickname = ref()
-onBeforeUnmount(async() => {
+onBeforeUnmount(async () => {
   if (!token) {
     router.push({ path: '/acceso' })
+    nicknameProfile.value = ''
   }
 
   console.log('Valor de nickname: ', nickname.value);
@@ -279,31 +338,31 @@ const items = [
 
 
 const itemsLogged = [
-{
+  {
     title: 'Inicio',
     value: 'Inicio',
     icon: 'fa-solid fa-house',
     action: 'home'
-  },  
-{
-  
-  title: 'Perfil',
-  value: 'perfil',
-  icon: 'fa-solid fa-user',
-  action: "profile"
-},
-{
-  title: 'Subir juego',
-  value: 'subir',
-  icon: 'fa-solid fa-upload',
-  action: 'upload'
-},
-{
-  title: 'Saldo',
-  value: 'saldo',
-  icon: 'fa-solid fa-coins',
-  action: '#'
-},
+  },
+  {
+
+    title: 'Perfil',
+    value: 'perfil',
+    icon: 'fa-solid fa-user',
+    action: "profile"
+  },
+  {
+    title: 'Subir juego',
+    value: 'subir',
+    icon: 'fa-solid fa-upload',
+    action: 'upload'
+  },
+  {
+    title: 'Saldo',
+    value: 'saldo',
+    icon: 'fa-solid fa-coins',
+    action: '#'
+  },
 ]
 watch(group, () => {
   drawer.value = false
@@ -326,9 +385,9 @@ const menuActionClick = (action) => {
     router.push({ path: '/registro' })
   } else if (action === "profile") {
     router.push({ path: '/perfil' })
-  } else if (action === "upload"){
+  } else if (action === "upload") {
     videogameStore.dialog = true;
-  } else if (action === "home"){
+  } else if (action === "home") {
     router.push({ path: '/' })
   }
   else {
