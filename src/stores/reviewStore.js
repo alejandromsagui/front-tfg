@@ -8,14 +8,15 @@ export const reviewStore = defineStore({
 
     }),
     actions: {
-        async newReview(review){
+        async newReview(review) {
             try {
-                const res = await instance_axios.post('/newRating', review)
-                console.log(res.data);
+              const response = await instance_axios.post('/newRating', review);
+              return response;
             } catch (error) {
-                console.log(error);
+              throw error;
             }
-        },
+          },
+          
 
         async getReviews(nickname){
             try {

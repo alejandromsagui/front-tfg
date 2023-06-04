@@ -121,15 +121,15 @@ onBeforeMount(async () => {
     } catch (error) {
         console.log(error);
     }
-    // Ordenar el array allReports
+ 
 allReports.value.sort((a, b) => {
-  // Comparar la propiedad user.readed de cada objeto
+
   if (a.readed && !b.readed) {
-    return 1; // a viene después de b
+    return 1; 
   } else if (!a.readed && b.readed) {
-    return -1; // a viene antes de b
+    return -1; 
   } else {
-    return 0; // No se cambia el orden
+    return 0; 
   }
 });
 

@@ -264,24 +264,38 @@ const verJuego = (videogame) => {
 }
 
 const sendReview = async () => {
-  const isValid = form.value.validate()
 
-  if (isValid) {
     rating.idUserProfile = nuevoJuego.value.userId
     rating.nicknameUserProfile = nuevoJuego.value.nickname
-    await useReviewStore.newReview(rating)
-    review.value = false;
 
-    toast.success('¡Gracias por aportar tu valoración', {
-      theme: 'colored',
-      autoClose: 3000
+  useReviewStore.newReview(rating)
+    .then((response) => {
+      console.log('aqui');
+      if (response.status === 200) {
+        toast.success(response.data.message, {
+          theme: 'colored',
+          autoClose: 3000
+        });
+
+        review.value = false;
+        rating.idUserProfile = ''
+        rating.nicknameUserProfile = ''
+        rating.rating = 0
+        rating.comment = ''
+      } else {
+        toast.error(response.data.message, {
+          theme: 'colored',
+          autoClose: 3000
+        });
+      }
     })
-  } else {
-    toast.error('¡Ha ocurrido un problema al validar tu valoración', {
-      theme: 'colored',
-      autoClose: 3000
-    })
-  }
+    .catch((error) => {
+      console.log('kkkkkkk: ', error);
+      toast.error(error.response.data.message, {
+        theme: 'colored',
+        autoClose: 3000,
+      });
+    });
 }
 
 
