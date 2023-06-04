@@ -51,7 +51,7 @@ export const useLoginStore = defineStore({
           autoClose: 2000,
           theme: 'colored'
         })
-        router.push('/')
+        router.push({ path: '/'})
       } catch (error) {
         toast.error(error.response.data.error, {
           autoClose: 2000,
@@ -78,7 +78,7 @@ export const useLoginStore = defineStore({
           autoClose: 2000,
           theme: 'colored'
         })
-        router.push('/')
+        router.push({ path: '/'})
       } catch (error) {
         toast.error(error.response.data.error, {
           autoClose: 2000,

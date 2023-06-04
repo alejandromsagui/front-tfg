@@ -1,5 +1,5 @@
 <template>
-<v-card elevation="10" class="mx-auto" max-width="700" min-width="auto" mt->
+      <v-card elevation="10" class="mx-auto" max-width="700" min-width="auto" mt->
   <div v-if="videogameStore.loading" class="d-flex justify-center align-center" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
     <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000"></half-circle-spinner>
   </div>

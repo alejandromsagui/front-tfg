@@ -1,4 +1,10 @@
 <template>
+ <div v-if="usepaymentStore.loading" class="d-flex justify-center align-center"
+        style="position: absolute; top: 0; right: 0; bottom: 0; left: 0">
+        <half-circle-spinner :animation-duration="1000" :size="60" color="#D50000">
+        </half-circle-spinner>
+    </div>
+
   <v-app-bar app color="transparent">
     <v-toolbar color="grey-darken-4" prominent clipped-left>
       <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" class="d-sm-flex d-md-none"></v-app-bar-nav-icon>
@@ -50,7 +56,7 @@
             <i class="fa-solid fa-cart-shopping mr-1"></i> Carrito
           </v-btn> -->
 
-          <v-menu transition="slide-x-transition">
+          <v-menu transition="slide-x-transition" v-model="mobile">
             <template v-slot:activator="{ props }">
               <v-btn class="link" text v-bind="props" @click="getNamekoins()">
                 <i class="fa-solid fa-coins mr-1"></i> Saldo
@@ -67,21 +73,20 @@
                     Namekoins <a class="text-red-darken-3 font-weight-bold text-body-2" v-bind="props"
                       style="cursor: pointer">aquí</a></v-card-text>
 
-
-                  <v-dialog v-model="ranking" width="auto">
+                    <v-dialog v-model="ranking" width="auto">
                     <template v-slot:activator="{ props }">
                       <v-card-text class="font-subtitle-1" style="font-family: 'Roboto', 'sans-serif';">También puedes
                         visualizar el <a class="text-red-darken-3 font-weight-bold text-body-2" style="cursor: pointer"
                           @click="ranking = true" v-bind="props">ranking</a></v-card-text>
                     </template>
-
-                    <v-card width="400" height="250" class="d-flex flex-column align-items-center justify-center mx-auto">
+                    <v-col cols="12" md="12" sm="12" xs="12">
+                      <v-card class="d-flex flex-column align-items-center justify-center mx-auto">
                       <div class="text-center">
                         <v-card-title class="mb-4">Finalistas del <span
                             class="text-red-darken-3">ranking</span></v-card-title>
                       </div>
                       <div class="d-flex justify-between">
-                        <i class="fa-solid fa-ranking-star fa-3x ml-2" style="margin-right: auto; color: #C0C0C0"></i>
+                        <i class="fa-solid fa-ranking-star fa-3x ml-2 " style="margin-right: auto; color: #C0C0C0"></i>
                         <i class="fa-solid fa-ranking-star fa-3x" style="margin-right: auto; color: #FFD700"></i>
                         <i class="fa-solid fa-ranking-star fa-3x mr-2" style="color: #CD7F32"></i>
                       </div>
@@ -95,7 +100,10 @@
                             class="text-h6 text-red-darken-3">{{ user.nickname }}</span></div>
                       </div>
                     </v-card>
+                    </v-col>
+
                   </v-dialog>
+
                 </template>
                 <v-card class="mx-auto" max-width="800">
                   <div class="d-flex justify-end mt-2 mr-3">
@@ -181,8 +189,8 @@
           </v-col>
           <v-col class="align-center" cols="auto">
             <v-list-item class="pa-0 d-flex">
-              <p class="data ml-8 mt-4">{{ nicknameProfile }}</p>
-              <p class="data ml-8">usuario@gmail.com</p>
+              <p class="data ml-8 mt-4">{{ userStore.nickname }}</p>
+              <p class="data ml-8">{{ userStore.email }}</p>
             </v-list-item>
           </v-col>
         </v-row>
@@ -222,6 +230,7 @@ import { CDialog, CMenu } from "../components";
 import { paymentStore } from "../stores/paymentStore"
 import { toast } from 'vue3-toastify';
 import { useVideogameStore } from "../stores/videogames"
+import { HalfCircleSpinner } from 'epic-spinners'
 
 const ranking = ref(false)
 const videogameStore = useVideogameStore()
@@ -234,7 +243,7 @@ const openDialog = () => {
 };
 
 
-
+const mobile = ref(false)
 
 const router = useRouter()
 
@@ -274,19 +283,7 @@ const getNamekoins = async () => {
 }
 
 const nicknameProfile = ref()
-watch(token, (newToken) => {
-  if (newToken) {
-    const [header, payload, signature] = newToken.split(".");
-    const decodedPayload = JSON.parse(
-      Buffer.from(payload, 'base64').toString('ascii')
-    );
-    nicknameProfile.value = decodedPayload.nickname;
-  } else {
-    // Manejar el caso en el que el token sea nulo o esté vacío
-    // Por ejemplo, restablecer el valor de nicknameProfile
-    nicknameProfile.value = '';
-  }
-});
+
 const positionRanking = ref([])
 
 const getRanking = async () => {
@@ -306,8 +303,9 @@ onBeforeUnmount(async () => {
   console.log('Valor de nickname: ', nickname.value);
 })
 
+const usepaymentStore = paymentStore();
 const recharge = () => {
-  const usepaymentStore = paymentStore();
+
   console.log('Valor de namekoins seleccionados: ' + selectedAmount.value);
 
   usepaymentStore
@@ -361,7 +359,7 @@ const itemsLogged = [
     title: 'Saldo',
     value: 'saldo',
     icon: 'fa-solid fa-coins',
-    action: '#'
+    action: 'credit'
   },
 ]
 watch(group, () => {
@@ -389,6 +387,11 @@ const menuActionClick = (action) => {
     videogameStore.dialog = true;
   } else if (action === "home") {
     router.push({ path: '/' })
+  } else if(action === "credit"){
+    mobile.value = true;
+    const res = userDataStore.getUserByNickname().then((r) => {
+      namekoins.value = r;
+    })
   }
   else {
     logout()

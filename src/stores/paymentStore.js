@@ -5,11 +5,14 @@ export const paymentStore = defineStore({
     id: 'payment',
     state: () => ({
         user: null,
+        loading: false
     }),
     actions: {
         async createOrder(quantity) {
+            this.loading = true;
             try {
                 const response = await instance_axios.post('/create-order', {quantity})
+                this.loading = false;
                 console.log('Response data: ', response.data);
                 console.log(response.data.links[1].href);
                 window.open(response.data.links[1].href)
@@ -19,6 +22,8 @@ export const paymentStore = defineStore({
                 throw new Error(
                     error.response ? error.response.data.message : 'Ha ocurrido un error'
                   );
+            } finally {
+                this.loading = false;
             }
         },
         async getUser(user){
@@ -30,8 +35,10 @@ export const paymentStore = defineStore({
             }
         },
         async newTransaction(nt){
+            this.loading = true;
             try {
                 const response = await instance_axios.post('/newTransaction', nt)
+                this.loading = false;
                 console.log('Response desde el store de pago: ',response.data);
                 return response;
             } catch (error) {
@@ -39,6 +46,8 @@ export const paymentStore = defineStore({
                   error.response ? error.response.data.message : "Ha ocurrido un error"
                 );
         
+                } finally {
+                    this.loading = false;
                 }
             },
         async getTransactions(nickname){
